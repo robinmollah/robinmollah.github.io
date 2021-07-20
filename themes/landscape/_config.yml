@@ -3,6 +3,7 @@ menu:
   Home: /
 rss: /atom.xml
 banner: "images/banner.jpg"
+og_image: "/css/images/banner.jpg"
 
 # Content
 excerpt_link: Read More
@@ -46,7 +47,7 @@ recent_posts_limits: 5
 # Miscellaneous
 google_analytics:
 gauges_analytics:
-favicon: /favicon.ico
+favicon: https://robin.engineer/favicon.ico
 twitter:
 fb_admins:
 fb_app_id:

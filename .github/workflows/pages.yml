@@ -18,7 +18,7 @@ jobs:
       - run: yarn install
       - run: yarn build
       - run: cat public/index.html
-      - run: echo -n blog.robin.engineer > CNAME
+      - run: echo -n blog.robin.engineer > ./public/CNAME
       - name: Deploy
         uses: peaceiris/actions-gh-pages@v3
         with:
