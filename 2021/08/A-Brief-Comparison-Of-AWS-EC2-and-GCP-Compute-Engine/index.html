@@ -4,30 +4,46 @@
   <meta charset="utf-8">
   
   
-  <title>Robin Mollah | Software Engineer &amp; Tech Enthusiast</title>
+  <title>A Detailed Comparison of AWS EC2 and GCP Compute Engine - Part 1 | Robin Mollah | Software Engineer &amp; Tech Enthusiast</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-  <meta name="description" content="I am Robin from Bangladesh. From very early age, I was amused by the inventions of science and so many wonderful happening around the world to make our imaginations true.">
-<meta property="og:type" content="website">
-<meta property="og:title" content="Robin Mollah | Software Engineer &amp; Tech Enthusiast">
-<meta property="og:url" content="https://blog.robin.engineer/">
+  <meta name="description" content="In this article, I will compare the features and issues offered by AWS and GCP for Virtual Machines. In this part, I will discuss machine creation and remoting features. From my experience, AWS has l">
+<meta property="og:type" content="article">
+<meta property="og:title" content="A Detailed Comparison of AWS EC2 and GCP Compute Engine - Part 1">
+<meta property="og:url" content="https://blog.robin.engineer/2021/08/A-Brief-Comparison-Of-AWS-EC2-and-GCP-Compute-Engine/">
 <meta property="og:site_name" content="Robin Mollah | Software Engineer &amp; Tech Enthusiast">
-<meta property="og:description" content="I am Robin from Bangladesh. From very early age, I was amused by the inventions of science and so many wonderful happening around the world to make our imaginations true.">
+<meta property="og:description" content="In this article, I will compare the features and issues offered by AWS and GCP for Virtual Machines. In this part, I will discuss machine creation and remoting features. From my experience, AWS has l">
 <meta property="og:locale" content="en_US">
 <meta property="og:image" content="https://blog.robin.engineer/css/images/banner.jpg">
+<meta property="article:published_time" content="2021-08-22T16:23:48.500Z">
+<meta property="article:modified_time" content="2021-08-22T16:23:48.500Z">
 <meta property="article:author" content="Robin Mollah">
-<meta property="article:tag" content="programming, technology">
+<meta property="article:tag" content="Cloud Computing">
+<meta property="article:tag" content="Compute Engine">
+<meta property="article:tag" content="EC2">
+<meta property="article:tag" content="AWS">
+<meta property="article:tag" content="GCP">
+<meta property="article:tag" content="Comparison">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:image" content="https://blog.robin.engineer/css/images/banner.jpg">
-  <meta name="description" content="I am Robin from Bangladesh. From very early age, I was amused by the inventions of science and so many wonderful happening around the world to make our imaginations true.">
-<meta property="og:type" content="website">
-<meta property="og:title" content="Robin Mollah | Software Engineer &amp; Tech Enthusiast">
-<meta property="og:url" content="https://blog.robin.engineer/">
+  <meta name="description" content="In this article, I will compare the features and issues offered by AWS and GCP for Virtual Machines. In this part, I will discuss machine creation and remoting features. From my experience, AWS has l">
+<meta property="og:type" content="article">
+<meta property="og:title" content="A Detailed Comparison of AWS EC2 and GCP Compute Engine - Part 1">
+<meta property="og:url" content="https://blog.robin.engineer/2021/08/A-Brief-Comparison-Of-AWS-EC2-and-GCP-Compute-Engine/">
 <meta property="og:site_name" content="Robin Mollah | Software Engineer &amp; Tech Enthusiast">
-<meta property="og:description" content="I am Robin from Bangladesh. From very early age, I was amused by the inventions of science and so many wonderful happening around the world to make our imaginations true.">
+<meta property="og:description" content="In this article, I will compare the features and issues offered by AWS and GCP for Virtual Machines. In this part, I will discuss machine creation and remoting features. From my experience, AWS has l">
 <meta property="og:locale" content="en_US">
+<meta property="og:image" content="http://localhost:4000/2021/08/A-Brief-Comparison-Of-AWS-EC2-and-GCP-Compute-Engine/AWS-vs-GCP.svg">
+<meta property="article:published_time" content="2021-08-22T16:23:48.500Z">
+<meta property="article:modified_time" content="2021-08-22T16:23:48.500Z">
 <meta property="article:author" content="Robin Mollah">
-<meta property="article:tag" content="programming, technology">
+<meta property="article:tag" content="Cloud Computing">
+<meta property="article:tag" content="Compute Engine">
+<meta property="article:tag" content="EC2">
+<meta property="article:tag" content="AWS">
+<meta property="article:tag" content="GCP">
+<meta property="article:tag" content="Comparison">
 <meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://localhost:4000/2021/08/A-Brief-Comparison-Of-AWS-EC2-and-GCP-Compute-Engine/AWS-vs-GCP.svg">
   
     <link rel="alternate" href="/atom.xml" title="Robin Mollah | Software Engineer & Tech Enthusiast" type="application/atom+xml">
   
@@ -86,9 +102,7 @@
 </header>
 
       <div class="outer">
-        <section id="main">
-  
-    <article id="post-A-Brief-Comparison-Of-AWS-EC2-and-GCP-Compute-Engine" class="h-entry article article-type-post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
+        <section id="main"><article id="post-A-Brief-Comparison-Of-AWS-EC2-and-GCP-Compute-Engine" class="h-entry article article-type-post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
   <div class="article-meta">
     <a href="/2021/08/A-Brief-Comparison-Of-AWS-EC2-and-GCP-Compute-Engine/" class="article-date">
   <time class="dt-published" datetime="2021-08-22T16:23:48.500Z" itemprop="datePublished">2021-08-22</time>
@@ -105,8 +119,8 @@
       <header class="article-header">
         
   
-    <h1 itemprop="name">
-      <a class="p-name article-title" href="/2021/08/A-Brief-Comparison-Of-AWS-EC2-and-GCP-Compute-Engine/">A Detailed Comparison of AWS EC2 and GCP Compute Engine - Part 1</a>
+    <h1 class="p-name article-title" itemprop="headline name">
+      A Detailed Comparison of AWS EC2 and GCP Compute Engine - Part 1
     </h1>
   
 
@@ -116,11 +130,16 @@
       
         <p><img src="http://localhost:4000/2021/08/A-Brief-Comparison-Of-AWS-EC2-and-GCP-Compute-Engine/AWS-vs-GCP.svg" alt="AWS &amp; GCP Icons"></p>
 <p>In this article, I will compare the features and issues offered by AWS and GCP for Virtual Machines. In this part, I will discuss machine creation and remoting features. From my experience, AWS has less productive instance management style then GCP. GCP provides ability to put SSH Public Key while creation and offers a way to retrieve passwords more efficiently when remoting. AWS keeps machines and keys separated in different regions that makes it complex to manage them.</p>
-        
-          <p class="article-more-link">
-            <a href="/2021/08/A-Brief-Comparison-Of-AWS-EC2-and-GCP-Compute-Engine/#more">Read More</a>
-          </p>
-        
+<span id="more"></span>
+<h2 id="Creation"><a href="#Creation" class="headerlink" title="Creation"></a>Creation</h2><h3 id="AWS"><a href="#AWS" class="headerlink" title="AWS"></a>AWS</h3><p>After logging in, you have to go to the region where you want to create a machine. Then, after clicking “Launch instances”, you will be prompted by 5-6 tabbed page to fill up a long form to select instance type, pieces of hardware, networking, security groups and so on. It is very customizable at the cost of lengthy form. I would suggest creating a script to do these tasks.</p>
+<h3 id="GCP"><a href="#GCP" class="headerlink" title="GCP"></a>GCP</h3><p>In GCP, it gives you a short form, and it contains the same thing necessary for 95% of the developers. The word choices are very easy to understand for entry level developers.<br>For example, In GCP, there is a checkbox to allow or reject HTTP or HTTPS. In AWS, you have to block port 80 and 443 from the <em>Networking</em> section. Unlike AWS, an equivalent command to do the same things is also generated for you.</p>
+<p><strong>Note:</strong> I have found one thing very annoying in AWS. In AWS Console, I have to change region each time to see the instances running in that region. We were working with 12 regions. Suppose, we want to search a particular type of instance, and we don’t know the region. We would need to check all the regions one by one. There is no way to see all the regions in same page. Switching region takes quite a long time. Later on, we have created our own AWS Console using the SDK’s to handle this issue.<br>In GCP, you can see all instances in the same page.</p>
+<h2 id="Remoting"><a href="#Remoting" class="headerlink" title="Remoting"></a>Remoting</h2><h3 id="In-AWS"><a href="#In-AWS" class="headerlink" title="In AWS"></a>In AWS</h3><h4 id="SSH-Keypairs"><a href="#SSH-Keypairs" class="headerlink" title="SSH Keypairs"></a>SSH Keypairs</h4><p>You can attach an AWS SSH Keypair while creating the instance. There is no way to put your own SSH Public Key. The AWS SSH keypair is only downloadable when creating the keypair. It is kept nowhere in the AWS. You can easily connect to the Linux instances using it as an SSH Private Key. But there are several issues when it comes to Windows. A downloadable RDP file and information of host and username is given in the connect page. Managing the RDP files are harder if there are good number of instances. Then comes another issue, maintaining the AWS keypairs. AWS keypair resources are region-specific resource. It means you cannot use <code>us-east-1</code>s AWS Keypair in any other region. So, you end up creating keypairs in all regions. Now, depending on the access level of different engineers you create more keypairs. These keypairs are retrievable if lost. So, managing this number of keypairs becomes a pain in the neck.</p>
+<h4 id="Login-credentials-retrieval"><a href="#Login-credentials-retrieval" class="headerlink" title="Login credentials retrieval"></a>Login credentials retrieval</h4><p>To login using RDP, you will need to paste the content of the private key or upload the private key file associated with the instance. This process takes time. Besides, to get the option to paste or upload the key, you will need to wait for 4 minutes at least to get the Windows up. The username is always Administrator. <em>You may create new user after logging into the machine[NOT TESTED]</em></p>
+<h3 id="In-GCP"><a href="#In-GCP" class="headerlink" title="In GCP"></a>In GCP</h3><h4 id="SSH-Keypairs-1"><a href="#SSH-Keypairs-1" class="headerlink" title="SSH Keypairs"></a>SSH Keypairs</h4><p>You can upload SSH public keys during creating machines. So, no hassle to manage SSH Keypairs. I would recommend you to make an image with the key and then always create machines from that image. Besides, you can use Google Cloud Shell to make quick changes or views.</p>
+<h4 id="Login-credentials"><a href="#Login-credentials" class="headerlink" title="Login credentials"></a>Login credentials</h4><p>You can set Windows username from the console without logging into the computer a password will be generated immediately.</p>
+<p>From years of experience in cloud computing, I think these parts could be a great improvement for AWS. In next article, I will give a detail comparison of networking features offered by AWS and GCP.</p>
+
       
     </div>
     <footer class="article-footer">
@@ -133,11 +152,9 @@
     </footer>
   </div>
   
-</article>
-
-
-
+    
   
+</article>
 
 
 </section>
