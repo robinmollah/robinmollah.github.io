@@ -1,6 +1,6 @@
 ---
 title: What you need to know about AWS Lambda before using it.
-date: date: 2021-08-25 17:11:46
+date: 2021-08-25 17:11:46
 tags:
   - AWS
   - Cloud Computing

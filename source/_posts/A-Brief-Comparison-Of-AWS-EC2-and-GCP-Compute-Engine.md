@@ -1,6 +1,5 @@
 ---
 title: A Detailed Comparison of AWS EC2 and GCP Compute Engine - Part 1
-date: date: 2021-08-21 17:11:46
 tags: 
   - Cloud Computing
   - Compute Engine
