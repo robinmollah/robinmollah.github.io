@@ -22,7 +22,7 @@ root/links/[short_link, long_link]
 #### 2. Browse a short_link and get a redirection to rule to long_link
 From NodeJS Express server 302 HTTP redirection
 
-#### 3. Log each entry to DynamoDB
+#### 3. Log each entry to Firebase
 root/links/[short_link, long_link, analytics{timestamp, ip, geo-location}]
 
 #### 4. Add login feature

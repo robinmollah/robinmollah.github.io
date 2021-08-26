@@ -1,6 +1,11 @@
 ---
 title: What you need to know about AWS Lambda before using it.
+date: date: 2021-08-25 17:11:46
 tags:
+  - AWS
+  - Cloud Computing
+  - Lambda
+  - Cloud Functions
 ---
 
 Lambda is a Function-as-a-Service program of AWS. It has a lot of awesome features. We deployed some of our API's that was 
