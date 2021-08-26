@@ -1,5 +1,6 @@
 ---
 title: A Detailed Comparison of AWS EC2 and GCP Compute Engine - Part 1
+date: date: 2021-08-21 17:11:46
 tags: 
   - Cloud Computing
   - Compute Engine
@@ -10,7 +11,7 @@ tags:
 categories:
   - Cloud computing
 ---
-![AWS & GCP Icons](http://localhost:4000/2021/08/A-Brief-Comparison-Of-AWS-EC2-and-GCP-Compute-Engine/AWS-vs-GCP.svg)
+![AWS & GCP Icons](http://blog.robin.engineer/2021/08/A-Brief-Comparison-Of-AWS-EC2-and-GCP-Compute-Engine/AWS-vs-GCP.svg)
 
 In this article, I will compare the features and issues offered by AWS and GCP for Virtual Machines. In this part, I will discuss machine creation and remoting features. From my experience, AWS has less productive instance management style then GCP. GCP provides ability to put SSH Public Key while creation and offers a way to retrieve passwords more efficiently when remoting. AWS keeps machines and keys separated in different regions that makes it complex to manage them.
 <!--more-->
