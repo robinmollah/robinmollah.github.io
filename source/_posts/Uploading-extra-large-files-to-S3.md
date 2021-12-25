@@ -82,3 +82,12 @@ If upload is interrupted due to network issues, we can resume the upload and upl
 #### Utilise all bandwidth from client side
 We will be able to create multiple connections to S3 at once. Creating more than 1500 connections at a time might create problem.
 From my experiments, I would recommend using around **15 connections**
+
+### More tunings
+We had to find optimum CHUNK SIZE and simultaneous connection number. Also, we have used Transfer Acceleration for the upload and download.
+The client side code was served by CloudFront.
+
+
+I would like to mention that later on we have moved to GCS(Google Cloud Storage) because of the speed of download. GCS
+download speed is almost 5 times faster than S3. GCS has a lot of advantages over S3 like Multi region, dual region and 
+specific regions. Also, depending on the interval of downloading files, there are 4 archive systems. Checkout this blog for more details.
