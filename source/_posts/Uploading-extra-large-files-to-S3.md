@@ -8,7 +8,7 @@ date: 2021-12-26 01:52:14
 
 
 In this article, I will be discussing 3 approaches we have followed to upload large files to S3.
-As requirements increased, we had to face some issues in different methods we have faced and finally came out with the highest possible
+As requirements increased, we had to face some issues in different methods we have faced and finally came out with the highest possible 
 performance in S3.
 We have tried the following methods
 - Streaming through multer-s3
@@ -49,10 +49,16 @@ If upload is failed due to network issues, we have to start from the beginning.
 Also, network needs to be stable for the duration of the upload. As the file size is long, the time period is also very long.
 #### File size limited to 2 GB
 #### Browser gets stuck when uploading large files
+It sends data by XMLHttpRequest. So, the browser loads the whole file in memory before uploading it.
 
 ## POST Request
 The process of generating signed URL is more like the PUT Request. In a single POST request we can send upto 2 GB/5 GB file. 
 Finally, we have used this method to upload the file to S3 in conjunction with multipart upload strategy.
+
+### Pros
+#### Browser don't get stuck when uploading large files
+Unlike PUT request using XMLHttpRequest(a javascript Object), we can use HTML Form method POST to upload the files. So, 
+the browser doesn't get stuck.
 
 ## Multipart Upload
 The multipart upload can utilize maximum bandwidth from client side by opening multiple connections to S3. The implementation is complexer than others.
@@ -73,4 +79,6 @@ https://docs.aws.amazon.com/AmazonS3/latest/userguide/qfacts.html
 #### No need to worry about the file size [upto * TB]
 #### Resumable upload
 If upload is interrupted due to network issues, we can resume the upload and upload specific.
-#### Browser gets stuck when uploading large files
+#### Utilise all bandwidth from client side
+We will be able to create multiple connections to S3 at once. Creating more than 1500 connections at a time might create problem.
+From my experiments, I would recommend using around **15 connections**
