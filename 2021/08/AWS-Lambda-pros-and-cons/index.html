@@ -26,7 +26,7 @@
 <meta property="og:locale" content="en_US">
 <meta property="og:image" content="https://blog.robin.engineer/css/images/banner.jpg">
 <meta property="article:published_time" content="2021-08-25T11:11:46.000Z">
-<meta property="article:modified_time" content="2022-02-20T10:33:16.108Z">
+<meta property="article:modified_time" content="2022-04-12T06:33:03.156Z">
 <meta property="article:author" content="Robin Mollah">
 <meta property="article:tag" content="Cloud Computing">
 <meta property="article:tag" content="AWS">
@@ -42,7 +42,7 @@
 <meta property="og:description" content="Lambda is a Function-as-a-Service program of AWS. It has a lot of awesome features. We deployed some of our API’s that waswritten in NodeJS to Lambda. In this article, I will share my experience of mi">
 <meta property="og:locale" content="en_US">
 <meta property="article:published_time" content="2021-08-25T11:11:46.000Z">
-<meta property="article:modified_time" content="2022-02-20T10:33:16.108Z">
+<meta property="article:modified_time" content="2022-04-12T06:33:03.156Z">
 <meta property="article:author" content="Robin Mollah">
 <meta property="article:tag" content="Cloud Computing">
 <meta property="article:tag" content="AWS">
@@ -136,9 +136,9 @@
 
 <p>Another approach is, practically breaking down the project into several parts. It is a time-consuming process if you have never<br>thought about it at the beginning of development. In most cases, every route will produce a new function.  </p>
 <h2 id="Benefits-of-Lambda"><a href="#Benefits-of-Lambda" class="headerlink" title="Benefits of Lambda"></a>Benefits of Lambda</h2><h3 id="Nice-collaboration-with-other-AWS-Services"><a href="#Nice-collaboration-with-other-AWS-Services" class="headerlink" title="Nice collaboration with other AWS Services"></a>Nice collaboration with other AWS Services</h3><p>I have used API Gateway and EventBridge with Lambda. But, Lambda function can be triggered from a large ranging sources<br>like SNS, SQS, S3 Events, DynamoDB, Apache Kafka, Several IoT and third party triggers. It also enables to add destinations to<br>another Lambda(chaining), SNS Topic, SQS Queue or EventBridge.</p>
-<h3 id="Fine-grip-on-the-execution-and-security"><a href="#Fine-grip-on-the-execution-and-security" class="headerlink" title="Fine grip on the execution and security"></a>Fine grip on the execution and security</h3><p>It takes a good amount of effort to make an API secure. Lambda gives wide range of control over the API including execution environment, time, authentication etc.</p>
-<h3 id="Team-collaboration"><a href="#Team-collaboration" class="headerlink" title="Team collaboration"></a>Team collaboration</h3><p>Lambda can be written in several languages and separately. So, a team with several distinct skill set </p>
-<h2 id="Disadvantages"><a href="#Disadvantages" class="headerlink" title="Disadvantages"></a>Disadvantages</h2><h3 id="Debugging"><a href="#Debugging" class="headerlink" title="Debugging"></a>Debugging</h3><p>I have to create a test event JSON in the Lambda’s console. Then I have to create another JSON to test in the API Gateway.<br>There are cases where Lambda function doesn’t </p>
+<h3 id="Fine-grip-on-the-execution-and-security"><a href="#Fine-grip-on-the-execution-and-security" class="headerlink" title="Fine grip on the execution and security"></a>Fine grip on the execution and security</h3><p>Lambda gives wide range of control over the API including authentication, execution environment and security. As, you can assign specific IAM<br>permissions to each function, you can also add a custom policy to the function. Usually, when running in the server,<br>the whole server is using a single API KEY of same IAM account. Also, Lambda offers several ways for authentication of API Gateways.</p>
+<h3 id="Team-collaboration"><a href="#Team-collaboration" class="headerlink" title="Team collaboration"></a>Team collaboration</h3><p>Lambda can be written in several languages and separately. Suppose, I love working with NodeJS. But, I want to have a simple function from my<br>friend who only works with Python or Java. He can write a Python function, and it works smoothly with other NodeJS applications.</p>
+<h2 id="Disadvantages"><a href="#Disadvantages" class="headerlink" title="Disadvantages"></a>Disadvantages</h2><h3 id="Debugging"><a href="#Debugging" class="headerlink" title="Debugging"></a>Debugging</h3><p>When other AWS Services are used in Lambda functions, there are some difficulties to debug. Lambda functions need to be provided some<br>roles and permissions. In local environment, usually permissions are Admin level. The easies way to debug Lambda function is to write a test<br>JSON file and run it using that JSON file. Now, creating and managing those test cases becomes another task. Then, when we are using<br>the Lambda function behind a API Gateway, we need to write a test case for each API. So, getting a properly unit tested environment requires<br>a good amount of management. It is possible to run the function in local docker environment, but that doesn’t take into account<br>the permissions of the function and it also takes a lot of time to run.</p>
 <h3 id="Management-of-functions"><a href="#Management-of-functions" class="headerlink" title="Management of functions"></a>Management of functions</h3><p>When your project grows, and the number of functions increases, it is very hard to maintain many functions separately. So, in this stage,<br>you can think about merging some functions together, because there is no option to make folders. But, you can make put as many Javascript function<br>you want then write some internal codes to execute them depending on the type of trigger. API Gateway has a nice looking<br>view to do that.</p>
 <h3 id="Version-Control-System"><a href="#Version-Control-System" class="headerlink" title="Version Control System"></a>Version Control System</h3><p>It is quite hard to manage Version Controls of Lambda. If your functions are small then a repository is a too large subject to maintain them.<br>Even, if you maintain a version control system, it doesn’t really help to move it to another AWS Account for easy deployment.<br>Because still you will need to go to the AWS Console to do other stuffs.</p>
 <p>To tackle this scenario, I have written another blog on <code>CloudFormation</code>.<br>For better decision-making you can see the differences between CloudFormation and Terraform in <a target="_blank" rel="noopener" href="https://cloudonaut.io/cloudformation-vs-terraform/">this blog</a>.</p>
@@ -146,7 +146,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://blog.robin.engineer/2021/08/AWS-Lambda-pros-and-cons/" data-id="ckzv4tda2000g9vn9bi871zca" data-title="What you need to know about AWS Lambda before using it." class="article-share-link">Share</a>
+      <a data-url="https://blog.robin.engineer/2021/08/AWS-Lambda-pros-and-cons/" data-id="cl1vroxd2000gaunfbu0b58lr" data-title="What you need to know about AWS Lambda before using it." class="article-share-link">Share</a>
       
       
       
