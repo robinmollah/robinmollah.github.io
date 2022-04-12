@@ -34,15 +34,22 @@ like SNS, SQS, S3 Events, DynamoDB, Apache Kafka, Several IoT and third party tr
 another Lambda(chaining), SNS Topic, SQS Queue or EventBridge.
 
 ### Fine grip on the execution and security
-It takes a good amount of effort to make an API secure. Lambda gives wide range of control over the API including execution environment, time, authentication etc.
+Lambda gives wide range of control over the API including authentication, execution environment and security. As, you can assign specific IAM 
+permissions to each function, you can also add a custom policy to the function. Usually, when running in the server, 
+the whole server is using a single API KEY of same IAM account. Also, Lambda offers several ways for authentication of API Gateways.
 
 ### Team collaboration
-Lambda can be written in several languages and separately. So, a team with several distinct skill set 
+Lambda can be written in several languages and separately. Suppose, I love working with NodeJS. But, I want to have a simple function from my 
+friend who only works with Python or Java. He can write a Python function, and it works smoothly with other NodeJS applications.
 
 ## Disadvantages
 ### Debugging
-I have to create a test event JSON in the Lambda's console. Then I have to create another JSON to test in the API Gateway.
-There are cases where Lambda function doesn't 
+When other AWS Services are used in Lambda functions, there are some difficulties to debug. Lambda functions need to be provided some
+roles and permissions. In local environment, usually permissions are Admin level. The easies way to debug Lambda function is to write a test
+JSON file and run it using that JSON file. Now, creating and managing those test cases becomes another task. Then, when we are using 
+the Lambda function behind a API Gateway, we need to write a test case for each API. So, getting a properly unit tested environment requires
+a good amount of management. It is possible to run the function in local docker environment, but that doesn't take into account 
+the permissions of the function and it also takes a lot of time to run.
 
 ### Management of functions
 When your project grows, and the number of functions increases, it is very hard to maintain many functions separately. So, in this stage, 
