@@ -1,5 +1,5 @@
 ---
-title: How RobinEngineer Systems are designed and developed
+title: How Robin.Engineer websites are designed and developed
 tags:
   - Software Architecture
   - Continuous Integration
@@ -37,5 +37,5 @@ A repository under same as username and Markdown file could be made visible in t
 
 ## How all these are interacting
 
-When I publish a blog in the **Blog Website**, a Action runs to publish to GitHub pages. The same action also notifies 
+When I publish a blog in the **Blog Website**, a GitHub Action runs to publish to GitHub pages. The same action also notifies 
 about the last posts to the portfolio website and downloads and runs a program to edit my GitHub Profile.
