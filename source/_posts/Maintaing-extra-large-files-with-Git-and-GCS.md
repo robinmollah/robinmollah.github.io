@@ -39,8 +39,8 @@ is still there.
 
 So, experiencing all above methods, I have found we can integrate GitHub with GCS and a bit of scripting to make it work seamlessly.
 
-### How it will work?
-In brief, binary files will be ignored from the Git system. But while comiting a change and tagged with `bin-updated`, it will be uploaded in GCS.
+### How it works?
+In brief, binary files are ignored from the Git system. But while committing a change and tagged with `bin-updated`, it get uploaded in a GCS bucket.
 
 Prerequisite knowledge:
 * Bash scripting
