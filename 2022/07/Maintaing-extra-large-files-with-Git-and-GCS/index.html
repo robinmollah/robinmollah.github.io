@@ -15,39 +15,41 @@
 <!-- End Google Analytics -->
 
   
-  <title>What you need to know about AWS Lambda before using it. | Robin Mollah | Software Engineer &amp; Tech Enthusiast</title>
+  <title>Maintaining extra large binary files with Git and GCS | Robin Mollah | Software Engineer &amp; Tech Enthusiast</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-  <meta name="description" content="Lambda is a Function-as-a-Service program of AWS. It has a lot of awesome features. We deployed some of our API’s that waswritten in NodeJS to Lambda. In this article, I will share my experience of mi">
+  <meta name="description" content="[Writing in progress]Index Overview Limits of existing git servers Gitea Method of integration with GCS  Git is not good for version controlling large binary files. Especially if they are frequently m">
 <meta property="og:type" content="article">
-<meta property="og:title" content="What you need to know about AWS Lambda before using it.">
-<meta property="og:url" content="https://blog.robin.engineer/2021/08/AWS-Lambda-pros-and-cons/">
+<meta property="og:title" content="Maintaining extra large binary files with Git and GCS">
+<meta property="og:url" content="https://blog.robin.engineer/2022/07/Maintaing-extra-large-files-with-Git-and-GCS/">
 <meta property="og:site_name" content="Robin Mollah | Software Engineer &amp; Tech Enthusiast">
-<meta property="og:description" content="Lambda is a Function-as-a-Service program of AWS. It has a lot of awesome features. We deployed some of our API’s that waswritten in NodeJS to Lambda. In this article, I will share my experience of mi">
+<meta property="og:description" content="[Writing in progress]Index Overview Limits of existing git servers Gitea Method of integration with GCS  Git is not good for version controlling large binary files. Especially if they are frequently m">
 <meta property="og:locale" content="en_US">
 <meta property="og:image" content="https://blog.robin.engineer/css/images/banner.jpg">
-<meta property="article:published_time" content="2021-08-25T11:11:46.000Z">
+<meta property="article:published_time" content="2022-07-22T10:29:21.000Z">
 <meta property="article:modified_time" content="2022-07-22T11:20:52.225Z">
 <meta property="article:author" content="Robin Mollah">
-<meta property="article:tag" content="Cloud Computing">
-<meta property="article:tag" content="AWS">
-<meta property="article:tag" content="Lambda">
-<meta property="article:tag" content="Cloud Functions">
+<meta property="article:tag" content="Version Control">
+<meta property="article:tag" content="Git">
+<meta property="article:tag" content="DevOps">
+<meta property="article:tag" content="GCS">
+<meta property="article:tag" content="Extra Large files">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:image" content="https://blog.robin.engineer/css/images/banner.jpg">
-  <meta name="description" content="Lambda is a Function-as-a-Service program of AWS. It has a lot of awesome features. We deployed some of our API’s that waswritten in NodeJS to Lambda. In this article, I will share my experience of mi">
+  <meta name="description" content="[Writing in progress]Index Overview Limits of existing git servers Gitea Method of integration with GCS  Git is not good for version controlling large binary files. Especially if they are frequently m">
 <meta property="og:type" content="article">
-<meta property="og:title" content="What you need to know about AWS Lambda before using it.">
-<meta property="og:url" content="https://blog.robin.engineer/2021/08/AWS-Lambda-pros-and-cons/">
+<meta property="og:title" content="Maintaining extra large binary files with Git and GCS">
+<meta property="og:url" content="https://blog.robin.engineer/2022/07/Maintaing-extra-large-files-with-Git-and-GCS/">
 <meta property="og:site_name" content="Robin Mollah | Software Engineer &amp; Tech Enthusiast">
-<meta property="og:description" content="Lambda is a Function-as-a-Service program of AWS. It has a lot of awesome features. We deployed some of our API’s that waswritten in NodeJS to Lambda. In this article, I will share my experience of mi">
+<meta property="og:description" content="[Writing in progress]Index Overview Limits of existing git servers Gitea Method of integration with GCS  Git is not good for version controlling large binary files. Especially if they are frequently m">
 <meta property="og:locale" content="en_US">
-<meta property="article:published_time" content="2021-08-25T11:11:46.000Z">
+<meta property="article:published_time" content="2022-07-22T10:29:21.000Z">
 <meta property="article:modified_time" content="2022-07-22T11:20:52.225Z">
 <meta property="article:author" content="Robin Mollah">
-<meta property="article:tag" content="Cloud Computing">
-<meta property="article:tag" content="AWS">
-<meta property="article:tag" content="Lambda">
-<meta property="article:tag" content="Cloud Functions">
+<meta property="article:tag" content="Version Control">
+<meta property="article:tag" content="Git">
+<meta property="article:tag" content="DevOps">
+<meta property="article:tag" content="GCS">
+<meta property="article:tag" content="Extra Large files">
 <meta name="twitter:card" content="summary">
   
     <link rel="alternate" href="/atom.xml" title="Robin Mollah | Software Engineer & Tech Enthusiast" type="application/atom+xml">
@@ -107,10 +109,10 @@
 </header>
 
       <div class="outer">
-        <section id="main"><article id="post-AWS-Lambda-pros-and-cons" class="h-entry article article-type-post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
+        <section id="main"><article id="post-Maintaing-extra-large-files-with-Git-and-GCS" class="h-entry article article-type-post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
   <div class="article-meta">
-    <a href="/2021/08/AWS-Lambda-pros-and-cons/" class="article-date">
-  <time class="dt-published" datetime="2021-08-25T11:11:46.000Z" itemprop="datePublished">2021-08-25</time>
+    <a href="/2022/07/Maintaing-extra-large-files-with-Git-and-GCS/" class="article-date">
+  <time class="dt-published" datetime="2022-07-22T10:29:21.000Z" itemprop="datePublished">2022-07-22</time>
 </a>
     
   </div>
@@ -121,7 +123,7 @@
         
   
     <h1 class="p-name article-title" itemprop="headline name">
-      What you need to know about AWS Lambda before using it.
+      Maintaining extra large binary files with Git and GCS
     </h1>
   
 
@@ -129,28 +131,70 @@
     
     <div class="e-content article-entry" itemprop="articleBody">
       
-        <p>Lambda is a Function-as-a-Service program of AWS. It has a lot of awesome features. We deployed some of our API’s that was<br>written in NodeJS to Lambda. In this article, I will share my experience of migrating frm Express also I will go through<br>the benefits and disadvantages of Lambda. Please note that, this article is not about introduction to Lambda rather than a review on it.</p>
-<h2 id="Migrating-from-Express-to-Lambda"><a href="#Migrating-from-Express-to-Lambda" class="headerlink" title="Migrating from Express to Lambda"></a>Migrating from Express to Lambda</h2><p>There are several ways you can migrate from Express to Lambda. The fastest way is using <strong>aws serverless express</strong> node module.<br>But using this method <strong>creates some difficulties to manage API Gateway tool</strong>. When using Express in Lambda, API Gateway tool<br>lose the ability to manage individuals routes. It redirects all requests to Express.<br>API Gateway tools provides a lot of benefits for managing routes including Authorization, staging, documentation, and easy<br>to add, delete or rename the routes by button clicks.</p>
+        <h5 id="Writing-in-progress"><a href="#Writing-in-progress" class="headerlink" title="[Writing in progress]"></a>[Writing in progress]</h5><h3 id="Index"><a href="#Index" class="headerlink" title="Index"></a>Index</h3><ul>
+<li>Overview</li>
+<li>Limits of existing git servers</li>
+<li>Gitea</li>
+<li>Method of integration with GCS</li>
+</ul>
+<p>Git is not good for version controlling large binary files. Especially if they are frequently making a huge historical changes.<br>The repository size increases rapidly. It exponentially increases the time to clone the repository to a new machine or instance.</p>
+<p>There is a maximum file and repository limits in Git systems as well.</p>
+<p>Besides, we don’t get a lot of benefits of Git for binary files. For example, we can’t merge the changes from different branches.<br>We cannot have a meaningful history of the changes.</p>
+<h3 id="In-this-article-I-will-be-discussing-the-size-issues-and-their-solutions-only"><a href="#In-this-article-I-will-be-discussing-the-size-issues-and-their-solutions-only" class="headerlink" title="In this article I will be discussing the size issues and their solutions only."></a>In this article I will be discussing the size issues and their solutions only.</h3><p>In this table, I am showing the comparison between some popular Git systems and their maximum allowed size.</p>
+<table>
+<thead>
+<tr>
+<th>x</th>
+<th>GitHub</th>
+<th>BitBucket</th>
+<th>GitLab</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Single file limit</td>
+<td>normally: <strong>100 MB</strong><br>With LFS: <strong>2GB</strong></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>Repository size</td>
+<td>Recommended: &lt;**1GB**<br>Strongly recommended: &lt;<strong>5GB</strong></td>
+<td>normally: <strong>2 GB</strong><br>With LFS and paid upto <strong>4GB</strong></td>
+<td></td>
+</tr>
+</tbody></table>
 <span id="more"></span>
-
-
-<p>Another approach is, practically breaking down the project into several parts. It is a time-consuming process if you have never<br>thought about it at the beginning of development. In most cases, every route will produce a new function.  </p>
-<h2 id="Benefits-of-Lambda"><a href="#Benefits-of-Lambda" class="headerlink" title="Benefits of Lambda"></a>Benefits of Lambda</h2><h3 id="Nice-collaboration-with-other-AWS-Services"><a href="#Nice-collaboration-with-other-AWS-Services" class="headerlink" title="Nice collaboration with other AWS Services"></a>Nice collaboration with other AWS Services</h3><p>I have used API Gateway and EventBridge with Lambda. But, Lambda function can be triggered from a large ranging sources<br>like SNS, SQS, S3 Events, DynamoDB, Apache Kafka, Several IoT and third party triggers. It also enables to add destinations to<br>another Lambda(chaining), SNS Topic, SQS Queue or EventBridge.</p>
-<h3 id="Fine-grip-on-the-execution-and-security"><a href="#Fine-grip-on-the-execution-and-security" class="headerlink" title="Fine grip on the execution and security"></a>Fine grip on the execution and security</h3><p>Lambda gives wide range of control over the API including authentication, execution environment and security. As, you can assign specific IAM<br>permissions to each function, you can also add a custom policy to the function. Usually, when running in the server,<br>the whole server is using a single API KEY of same IAM account. Also, Lambda offers several ways for authentication of API Gateways.</p>
-<h3 id="Team-collaboration"><a href="#Team-collaboration" class="headerlink" title="Team collaboration"></a>Team collaboration</h3><p>Lambda can be written in several languages and separately. Suppose, I love working with NodeJS. But, I want to have a simple function from my<br>friend who only works with Python or Java. He can write a Python function, and it works smoothly with other NodeJS applications.</p>
-<h2 id="Disadvantages"><a href="#Disadvantages" class="headerlink" title="Disadvantages"></a>Disadvantages</h2><h3 id="Debugging"><a href="#Debugging" class="headerlink" title="Debugging"></a>Debugging</h3><p>When other AWS Services are used in Lambda functions, there are some difficulties to debug. Lambda functions need to be provided some<br>roles and permissions. In local environment, usually permissions are Admin level. The easies way to debug Lambda function is to write a test<br>JSON file and run it using that JSON file. Now, creating and managing those test cases becomes another task. Then, when we are using<br>the Lambda function behind a API Gateway, we need to write a test case for each API. So, getting a properly unit tested environment requires<br>a good amount of management. It is possible to run the function in local docker environment, but that doesn’t take into account<br>the permissions of the function and it also takes a lot of time to run.</p>
-<h3 id="Management-of-functions"><a href="#Management-of-functions" class="headerlink" title="Management of functions"></a>Management of functions</h3><p>When your project grows, and the number of functions increases, it is very hard to maintain many functions separately. So, in this stage,<br>you can think about merging some functions together, because there is no option to make folders. But, you can make put as many Javascript function<br>you want then write some internal codes to execute them depending on the type of trigger. API Gateway has a nice looking<br>view to do that.</p>
-<h3 id="Version-Control-System"><a href="#Version-Control-System" class="headerlink" title="Version Control System"></a>Version Control System</h3><p>It is quite hard to manage Version Controls of Lambda. If your functions are small then a repository is a too large subject to maintain them.<br>Even, if you maintain a version control system, it doesn’t really help to move it to another AWS Account for easy deployment.<br>Because still you will need to go to the AWS Console to do other stuffs.</p>
-<p>To tackle this scenario, I have written another blog on <code>CloudFormation</code>.<br>For better decision-making you can see the differences between CloudFormation and Terraform in <a target="_blank" rel="noopener" href="https://cloudonaut.io/cloudformation-vs-terraform/">this blog</a>.</p>
+<p>However, one solution could be deploying your own git server. It is very easy to deploy your own git server, without the above<br>limits using <a target="_blank" rel="noopener" href="https://gitea.io/">Gitea</a>. You will still need to use Git LFS for extra large files and the issue of cloning and maintaining<br>is still there.</p>
+<p>So, experiencing all above methods, I have found we can integrate GitHub with GCS and a bit of scripting to make it work seamlessly.</p>
+<h3 id="How-it-will-work"><a href="#How-it-will-work" class="headerlink" title="How it will work?"></a>How it will work?</h3><p>In brief, binary files will be ignored from the Git system. But while comiting a change and tagged with <code>bin-updated</code>, it will be uploaded in GCS.</p>
+<p>Prerequisite knowledge:</p>
+<ul>
+<li>Bash scripting</li>
+<li><a target="_blank" rel="noopener" href="https://git-scm.com/book/en/v2/Customizing-Git-Git-Hooks">Git Hooks</a> : Used to run script before and after a commit.</li>
+<li>gcloud : Used to authenticate to gcloud.</li>
+<li>gsutil : Upload file to GCS.</li>
+</ul>
+<h3 id="Setting-up-GCS"><a href="#Setting-up-GCS" class="headerlink" title="Setting up GCS"></a>Setting up GCS</h3><ul>
+<li>Login to GCS<br><code>gcloud auth login</code></li>
+<li><a target="_blank" rel="noopener" href="https://cloud.google.com/storage/docs/creating-buckets#storage-create-bucket-cli">Create a bucket</a><br><code>gsutil mb gs://BUCKET_NAME</code></li>
+<li><a target="_blank" rel="noopener" href="https://cloud.google.com/storage/docs/uploading-objects#gsutil">Upload to GCS</a><br><code>gsutil cp &lt;file_path&gt; gs://&lt;bucket_name&gt;/&lt;file_name&gt;</code></li>
+<li><a target="_blank" rel="noopener" href="https://cloud.google.com/storage/docs/downloading-objects#gsutil">Download from GCS</a><br><code>gsutil cp gs://&lt;bucket_name&gt;/&lt;file_name&gt; &lt;file_path&gt;</code></li>
+</ul>
+<h3 id="Scripting-Git-Hooks"><a href="#Scripting-Git-Hooks" class="headerlink" title="Scripting Git Hooks"></a>Scripting Git Hooks</h3><h4 id="On-client-side"><a href="#On-client-side" class="headerlink" title="On client side:"></a>On client side:</h4><p><strong><a target="_blank" rel="noopener" href="https://stackoverflow.com/questions/4196148/git-pre-push-hooks">pre-push hook</a>:</strong><br>The script uploads the file to GCS and leaves a text file in that files location with extension <code>.cloud</code> containing the gcs path of the file.</p>
+<h4 id="On-server-side"><a href="#On-server-side" class="headerlink" title="On server side:"></a>On server side:</h4><p><strong><a target="_blank" rel="noopener" href="https://stackoverflow.com/questions/28106011/understanding-git-hook-post-receive-hook">post-receive hook</a>:</strong><br>The script finds all files with <code>.cloud</code> extension and downloads from the gcs bucket in that folder.</p>
+<h4 id="Reference"><a href="#Reference" class="headerlink" title="Reference"></a>Reference</h4><ul>
+<li><a target="_blank" rel="noopener" href="https://docs.github.com/en/repositories/working-with-files/managing-large-files/about-large-files-on-github">GitHub limits</a></li>
+<li><a target="_blank" rel="noopener" href="https://support.atlassian.com/bitbucket-cloud/docs/reduce-repository-size/">BitBucket limits</a></li>
+</ul>
 
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://blog.robin.engineer/2021/08/AWS-Lambda-pros-and-cons/" data-id="cl5wdg1t6000ghwoybzx14lp1" data-title="What you need to know about AWS Lambda before using it." class="article-share-link">Share</a>
+      <a data-url="https://blog.robin.engineer/2022/07/Maintaing-extra-large-files-with-Git-and-GCS/" data-id="cl5wdg1ts001qhwoy24cmgilg" data-title="Maintaining extra large binary files with Git and GCS" class="article-share-link">Share</a>
       
       
       
-  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/AWS/" rel="tag">AWS</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Cloud-Computing/" rel="tag">Cloud Computing</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Cloud-Functions/" rel="tag">Cloud Functions</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Lambda/" rel="tag">Lambda</a></li></ul>
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/DevOps/" rel="tag">DevOps</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Extra-Large-files/" rel="tag">Extra Large files</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/GCS/" rel="tag">GCS</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Git/" rel="tag">Git</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Version-Control/" rel="tag">Version Control</a></li></ul>
 
     </footer>
   </div>
@@ -158,19 +202,10 @@
     
 <nav id="article-nav">
   
-    <a href="/2021/12/Uploading-extra-large-files-to-S3/" id="article-nav-newer" class="article-nav-link-wrap">
-      <strong class="article-nav-caption">Newer</strong>
-      <div class="article-nav-title">
-        
-          Uploading extra large files to S3
-        
-      </div>
-    </a>
   
-  
-    <a href="/2021/08/A-Brief-Comparison-Of-AWS-EC2-and-GCP-Compute-Engine/" id="article-nav-older" class="article-nav-link-wrap">
+    <a href="/2022/07/Mistakes-should-be-appreciated/" id="article-nav-older" class="article-nav-link-wrap">
       <strong class="article-nav-caption">Older</strong>
-      <div class="article-nav-title">A Detailed Comparison of AWS EC2 and GCP Compute Engine - Part 1</div>
+      <div class="article-nav-title">Dare to make mistake, Dare to do things you can&#39;t</div>
     </a>
   
 </nav>
