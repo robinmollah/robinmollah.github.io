@@ -15,39 +15,39 @@
 <!-- End Google Analytics -->
 
   
-  <title>What you need to know about AWS Lambda before using it. | Robin Mollah | Software Engineer &amp; Tech Enthusiast</title>
+  <title>Deploying third party SSL in the GKE | Robin Mollah | Software Engineer &amp; Tech Enthusiast</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-  <meta name="description" content="Lambda is a Function-as-a-Service program of AWS. It has a lot of awesome features. We deployed some of our API’s that waswritten in NodeJS to Lambda. In this article, I will share my experience of mi">
+  <meta name="description" content="PrerequisiteYou already have the fullchain and private key of the SSL certificate. How to use them to access a deployment. Kubernetes resourcesWe will need the following resources:  A deployment (WebS">
 <meta property="og:type" content="article">
-<meta property="og:title" content="What you need to know about AWS Lambda before using it.">
-<meta property="og:url" content="https://blog.robin.engineer/2021/08/AWS-Lambda-pros-and-cons/">
+<meta property="og:title" content="Deploying third party SSL in the GKE">
+<meta property="og:url" content="https://blog.robin.engineer/2022/11/Deploying-third-party-SSL-in-the-GKE/">
 <meta property="og:site_name" content="Robin Mollah | Software Engineer &amp; Tech Enthusiast">
-<meta property="og:description" content="Lambda is a Function-as-a-Service program of AWS. It has a lot of awesome features. We deployed some of our API’s that waswritten in NodeJS to Lambda. In this article, I will share my experience of mi">
+<meta property="og:description" content="PrerequisiteYou already have the fullchain and private key of the SSL certificate. How to use them to access a deployment. Kubernetes resourcesWe will need the following resources:  A deployment (WebS">
 <meta property="og:locale" content="en_US">
 <meta property="og:image" content="https://blog.robin.engineer/css/images/banner.jpg">
-<meta property="article:published_time" content="2021-08-25T11:11:46.000Z">
+<meta property="article:published_time" content="2022-11-08T07:45:39.000Z">
 <meta property="article:modified_time" content="2022-11-12T23:44:17.974Z">
 <meta property="article:author" content="Robin Mollah">
-<meta property="article:tag" content="Cloud Computing">
-<meta property="article:tag" content="AWS">
-<meta property="article:tag" content="Lambda">
-<meta property="article:tag" content="Cloud Functions">
+<meta property="article:tag" content="SSL">
+<meta property="article:tag" content="GKE">
+<meta property="article:tag" content="Kubernetes">
+<meta property="article:tag" content="Ingress">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:image" content="https://blog.robin.engineer/css/images/banner.jpg">
-  <meta name="description" content="Lambda is a Function-as-a-Service program of AWS. It has a lot of awesome features. We deployed some of our API’s that waswritten in NodeJS to Lambda. In this article, I will share my experience of mi">
+  <meta name="description" content="PrerequisiteYou already have the fullchain and private key of the SSL certificate. How to use them to access a deployment. Kubernetes resourcesWe will need the following resources:  A deployment (WebS">
 <meta property="og:type" content="article">
-<meta property="og:title" content="What you need to know about AWS Lambda before using it.">
-<meta property="og:url" content="https://blog.robin.engineer/2021/08/AWS-Lambda-pros-and-cons/">
+<meta property="og:title" content="Deploying third party SSL in the GKE">
+<meta property="og:url" content="https://blog.robin.engineer/2022/11/Deploying-third-party-SSL-in-the-GKE/">
 <meta property="og:site_name" content="Robin Mollah | Software Engineer &amp; Tech Enthusiast">
-<meta property="og:description" content="Lambda is a Function-as-a-Service program of AWS. It has a lot of awesome features. We deployed some of our API’s that waswritten in NodeJS to Lambda. In this article, I will share my experience of mi">
+<meta property="og:description" content="PrerequisiteYou already have the fullchain and private key of the SSL certificate. How to use them to access a deployment. Kubernetes resourcesWe will need the following resources:  A deployment (WebS">
 <meta property="og:locale" content="en_US">
-<meta property="article:published_time" content="2021-08-25T11:11:46.000Z">
+<meta property="article:published_time" content="2022-11-08T07:45:39.000Z">
 <meta property="article:modified_time" content="2022-11-12T23:44:17.974Z">
 <meta property="article:author" content="Robin Mollah">
-<meta property="article:tag" content="Cloud Computing">
-<meta property="article:tag" content="AWS">
-<meta property="article:tag" content="Lambda">
-<meta property="article:tag" content="Cloud Functions">
+<meta property="article:tag" content="SSL">
+<meta property="article:tag" content="GKE">
+<meta property="article:tag" content="Kubernetes">
+<meta property="article:tag" content="Ingress">
 <meta name="twitter:card" content="summary">
   
     <link rel="alternate" href="/atom.xml" title="Robin Mollah | Software Engineer & Tech Enthusiast" type="application/atom+xml">
@@ -107,10 +107,10 @@
 </header>
 
       <div class="outer">
-        <section id="main"><article id="post-AWS-Lambda-pros-and-cons" class="h-entry article article-type-post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
+        <section id="main"><article id="post-Deploying-third-party-SSL-in-the-GKE" class="h-entry article article-type-post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
   <div class="article-meta">
-    <a href="/2021/08/AWS-Lambda-pros-and-cons/" class="article-date">
-  <time class="dt-published" datetime="2021-08-25T11:11:46.000Z" itemprop="datePublished">2021-08-25</time>
+    <a href="/2022/11/Deploying-third-party-SSL-in-the-GKE/" class="article-date">
+  <time class="dt-published" datetime="2022-11-08T07:45:39.000Z" itemprop="datePublished">2022-11-08</time>
 </a>
     
   </div>
@@ -121,7 +121,7 @@
         
   
     <h1 class="p-name article-title" itemprop="headline name">
-      What you need to know about AWS Lambda before using it.
+      Deploying third party SSL in the GKE
     </h1>
   
 
@@ -129,28 +129,39 @@
     
     <div class="e-content article-entry" itemprop="articleBody">
       
-        <p>Lambda is a Function-as-a-Service program of AWS. It has a lot of awesome features. We deployed some of our API’s that was<br>written in NodeJS to Lambda. In this article, I will share my experience of migrating frm Express also I will go through<br>the benefits and disadvantages of Lambda. Please note that, this article is not about introduction to Lambda rather than a review on it.</p>
-<h2 id="Migrating-from-Express-to-Lambda"><a href="#Migrating-from-Express-to-Lambda" class="headerlink" title="Migrating from Express to Lambda"></a>Migrating from Express to Lambda</h2><p>There are several ways you can migrate from Express to Lambda. The fastest way is using <strong>aws serverless express</strong> node module.<br>But using this method <strong>creates some difficulties to manage API Gateway tool</strong>. When using Express in Lambda, API Gateway tool<br>lose the ability to manage individuals routes. It redirects all requests to Express.<br>API Gateway tools provides a lot of benefits for managing routes including Authorization, staging, documentation, and easy<br>to add, delete or rename the routes by button clicks.</p>
+        <h2 id="Prerequisite"><a href="#Prerequisite" class="headerlink" title="Prerequisite"></a>Prerequisite</h2><p>You already have the fullchain and private key of the SSL certificate. How to use them to access a deployment.</p>
+<h3 id="Kubernetes-resources"><a href="#Kubernetes-resources" class="headerlink" title="Kubernetes resources"></a>Kubernetes resources</h3><p>We will need the following resources:</p>
+<ul>
+<li>A deployment (WebServer) <strong>[Pre-requisite]</strong></li>
+<li>A NodePort pointing to the deployment</li>
+<li>An Ingress pointing to the NodePort</li>
+<li>An SSL certificate [You can get free from nginx as well]</li>
+</ul>
 <span id="more"></span>
 
 
-<p>Another approach is, practically breaking down the project into several parts. It is a time-consuming process if you have never<br>thought about it at the beginning of development. In most cases, every route will produce a new function.  </p>
-<h2 id="Benefits-of-Lambda"><a href="#Benefits-of-Lambda" class="headerlink" title="Benefits of Lambda"></a>Benefits of Lambda</h2><h3 id="Nice-collaboration-with-other-AWS-Services"><a href="#Nice-collaboration-with-other-AWS-Services" class="headerlink" title="Nice collaboration with other AWS Services"></a>Nice collaboration with other AWS Services</h3><p>I have used API Gateway and EventBridge with Lambda. But, Lambda function can be triggered from a large ranging sources<br>like SNS, SQS, S3 Events, DynamoDB, Apache Kafka, Several IoT and third party triggers. It also enables to add destinations to<br>another Lambda(chaining), SNS Topic, SQS Queue or EventBridge.</p>
-<h3 id="Fine-grip-on-the-execution-and-security"><a href="#Fine-grip-on-the-execution-and-security" class="headerlink" title="Fine grip on the execution and security"></a>Fine grip on the execution and security</h3><p>Lambda gives wide range of control over the API including authentication, execution environment and security. As, you can assign specific IAM<br>permissions to each function, you can also add a custom policy to the function. Usually, when running in the server,<br>the whole server is using a single API KEY of same IAM account. Also, Lambda offers several ways for authentication of API Gateways.</p>
-<h3 id="Team-collaboration"><a href="#Team-collaboration" class="headerlink" title="Team collaboration"></a>Team collaboration</h3><p>Lambda can be written in several languages and separately. Suppose, I love working with NodeJS. But, I want to have a simple function from my<br>friend who only works with Python or Java. He can write a Python function, and it works smoothly with other NodeJS applications.</p>
-<h2 id="Disadvantages"><a href="#Disadvantages" class="headerlink" title="Disadvantages"></a>Disadvantages</h2><h3 id="Debugging"><a href="#Debugging" class="headerlink" title="Debugging"></a>Debugging</h3><p>When other AWS Services are used in Lambda functions, there are some difficulties to debug. Lambda functions need to be provided some<br>roles and permissions. In local environment, usually permissions are Admin level. The easies way to debug Lambda function is to write a test<br>JSON file and run it using that JSON file. Now, creating and managing those test cases becomes another task. Then, when we are using<br>the Lambda function behind a API Gateway, we need to write a test case for each API. So, getting a properly unit tested environment requires<br>a good amount of management. It is possible to run the function in local docker environment, but that doesn’t take into account<br>the permissions of the function and it also takes a lot of time to run.</p>
-<h3 id="Management-of-functions"><a href="#Management-of-functions" class="headerlink" title="Management of functions"></a>Management of functions</h3><p>When your project grows, and the number of functions increases, it is very hard to maintain many functions separately. So, in this stage,<br>you can think about merging some functions together, because there is no option to make folders. But, you can make put as many Javascript function<br>you want then write some internal codes to execute them depending on the type of trigger. API Gateway has a nice looking<br>view to do that.</p>
-<h3 id="Version-Control-System"><a href="#Version-Control-System" class="headerlink" title="Version Control System"></a>Version Control System</h3><p>It is quite hard to manage Version Controls of Lambda. If your functions are small then a repository is a too large subject to maintain them.<br>Even, if you maintain a version control system, it doesn’t really help to move it to another AWS Account for easy deployment.<br>Because still you will need to go to the AWS Console to do other stuffs.</p>
-<p>To tackle this scenario, I have written another blog on <code>CloudFormation</code>.<br>For better decision-making you can see the differences between CloudFormation and Terraform in <a target="_blank" rel="noopener" href="https://cloudonaut.io/cloudformation-vs-terraform/">this blog</a>.</p>
+<h4 id="Upload-SSL-Certificate-as-secret"><a href="#Upload-SSL-Certificate-as-secret" class="headerlink" title="Upload SSL Certificate as secret"></a>Upload SSL Certificate as secret</h4><p>Example of HAML:<br><br>ssl.yml</p>
+<figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">apiVersion:</span> <span class="string">v1</span></span><br><span class="line"><span class="attr">data:</span></span><br><span class="line">  <span class="attr">tls.crt:</span> &#123;&#123;<span class="string">fullchain.pem_content_base64_encoded</span>&#125;&#125;</span><br><span class="line">  <span class="attr">tls.key:</span> &#123;&#123;<span class="string">privkey.pem_content_base64_encoded</span>&#125;&#125;</span><br><span class="line"><span class="attr">kind:</span> <span class="string">Secret</span></span><br><span class="line"><span class="attr">metadata:</span></span><br><span class="line">  <span class="attr">name:</span> <span class="string">secret_name_for_ssl</span></span><br><span class="line">  <span class="attr">namespace:</span> <span class="string">default</span></span><br><span class="line"><span class="attr">type:</span> <span class="string">kubernetes.io/tls</span></span><br></pre></td></tr></table></figure>
+
+<p>In the <code>tls.crt</code> and <code>tls.key</code> value, put base64 encoded string of fullchain.pem and privkey.pem files contents.</p>
+<p>Run <code>kubectl apply -f ssl.yml</code><br><strong>Do not add this file in the git, as it contains sensitive certificate credentials.</strong></p>
+<h4 id="NodePort-Service-gt-Deployment"><a href="#NodePort-Service-gt-Deployment" class="headerlink" title="NodePort Service -&gt; Deployment"></a>NodePort Service -&gt; Deployment</h4><p>Example HAML:<br>nodeport.yml</p>
+<figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">apiVersion:</span> <span class="string">&quot;v1&quot;</span></span><br><span class="line"><span class="attr">kind:</span> <span class="string">&quot;Service&quot;</span></span><br><span class="line"><span class="attr">metadata:</span></span><br><span class="line">  <span class="attr">name:</span> <span class="string">&quot;nodeport_service_name&quot;</span></span><br><span class="line">  <span class="attr">namespace:</span> <span class="string">&quot;default&quot;</span></span><br><span class="line">  <span class="attr">labels:</span></span><br><span class="line">    <span class="attr">app:</span> <span class="string">&quot;deployment_name&quot;</span></span><br><span class="line"><span class="attr">spec:</span></span><br><span class="line">  <span class="attr">ports:</span></span><br><span class="line">    <span class="bullet">-</span> <span class="attr">protocol:</span> <span class="string">&quot;TCP&quot;</span></span><br><span class="line">      <span class="attr">port:</span> <span class="number">80</span></span><br><span class="line">      <span class="attr">targetPort:</span> <span class="number">80</span></span><br><span class="line">  <span class="attr">selector:</span></span><br><span class="line">    <span class="attr">app:</span> <span class="string">&quot;deployment_name&quot;</span></span><br><span class="line">  <span class="attr">type:</span> <span class="string">&quot;NodePort&quot;</span></span><br></pre></td></tr></table></figure>
+
+<p>Run <code>kubectl apply -f nodeport.yml</code></p>
+<h4 id="Ingress-gt-NodePort-Service"><a href="#Ingress-gt-NodePort-Service" class="headerlink" title="Ingress -&gt; NodePort Service"></a>Ingress -&gt; NodePort Service</h4><p>Example HAML:<br>ingress.yml</p>
+<figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">apiVersion:</span> <span class="string">networking.k8s.io/v1</span></span><br><span class="line"><span class="attr">kind:</span> <span class="string">Ingress</span></span><br><span class="line"><span class="attr">metadata:</span></span><br><span class="line">  <span class="attr">name:</span> <span class="string">&quot;ingress_name&quot;</span></span><br><span class="line"><span class="attr">spec:</span></span><br><span class="line">  <span class="attr">tls:</span></span><br><span class="line">    <span class="bullet">-</span> <span class="attr">secretName:</span> <span class="string">secret_name_for_ssl</span></span><br><span class="line">  <span class="attr">defaultBackend:</span></span><br><span class="line">    <span class="attr">service:</span></span><br><span class="line">      <span class="attr">name:</span> <span class="string">nodeport_service_name</span></span><br><span class="line">      <span class="attr">port:</span></span><br><span class="line">        <span class="attr">number:</span> <span class="number">80</span></span><br></pre></td></tr></table></figure>
+<p>Run <code>kubectl apply -f ingress.yml</code></p>
+<h4 id="Known-issues"><a href="#Known-issues" class="headerlink" title="Known issues"></a>Known issues</h4><p>It takes some time to get the SSL certificate available to the ingress.</p>
 
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://blog.robin.engineer/2021/08/AWS-Lambda-pros-and-cons/" data-id="claekrefo000ebjoqg89x97sb" data-title="What you need to know about AWS Lambda before using it." class="article-share-link">Share</a>
+      <a data-url="https://blog.robin.engineer/2022/11/Deploying-third-party-SSL-in-the-GKE/" data-id="claekrefu000hbjoq7e2ohkt8" data-title="Deploying third party SSL in the GKE" class="article-share-link">Share</a>
       
       
       
-  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/AWS/" rel="tag">AWS</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Cloud-Computing/" rel="tag">Cloud Computing</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Cloud-Functions/" rel="tag">Cloud Functions</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Lambda/" rel="tag">Lambda</a></li></ul>
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/GKE/" rel="tag">GKE</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Ingress/" rel="tag">Ingress</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Kubernetes/" rel="tag">Kubernetes</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/SSL/" rel="tag">SSL</a></li></ul>
 
     </footer>
   </div>
@@ -158,19 +169,10 @@
     
 <nav id="article-nav">
   
-    <a href="/2021/12/Uploading-extra-large-files-to-S3/" id="article-nav-newer" class="article-nav-link-wrap">
-      <strong class="article-nav-caption">Newer</strong>
-      <div class="article-nav-title">
-        
-          Uploading extra large files to S3
-        
-      </div>
-    </a>
   
-  
-    <a href="/2021/08/A-Brief-Comparison-Of-AWS-EC2-and-GCP-Compute-Engine/" id="article-nav-older" class="article-nav-link-wrap">
+    <a href="/2022/07/Maintaing-extra-large-files-with-Git-and-GCS/" id="article-nav-older" class="article-nav-link-wrap">
       <strong class="article-nav-caption">Older</strong>
-      <div class="article-nav-title">A Detailed Comparison of AWS EC2 and GCP Compute Engine - Part 1</div>
+      <div class="article-nav-title">Maintaining extra large binary files with Git and GCS</div>
     </a>
   
 </nav>
