@@ -99,6 +99,58 @@
       <div class="outer">
         <section id="main">
   
+    <article id="post-Nginx-essentials-commands-and-routes" class="h-entry article article-type-post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
+  <div class="article-meta">
+    <a href="/2022/12/Nginx-essentials-commands-and-routes/" class="article-date">
+  <time class="dt-published" datetime="2022-12-05T18:45:09.000Z" itemprop="datePublished">2022-12-06</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="p-name article-title" href="/2022/12/Nginx-essentials-commands-and-routes/">Nginx essential cheatsheet</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="e-content article-entry" itemprop="articleBody">
+      
+        <p>Nginx saves it’s logs, configs, binaries in different folder in different operating system. Every time I struggle to find them in different locations.<br>Also, the commands are different. I have curated these in this document based on Ubuntu, Macbook and CentOS(coming soon).</p>
+<h3 id="Root-config-file-location"><a href="#Root-config-file-location" class="headerlink" title="Root config file location"></a>Root config file location</h3><p>Mac: <code>/usr/local/etc/nginx/nginx.conf</code><br><br>Ubuntu: <code>/etc/nginx/nginx.conf</code></p>
+<h3 id="Log-file-location"><a href="#Log-file-location" class="headerlink" title="Log file location"></a>Log file location</h3><p>You may need to uncomment a line in the config file to actually get error dump in the file. You may wish to keep it clean periodically.</p>
+<p>Mac: <code>/usr/local/Cellar/nginx/1.23.2/logs/error.log</code><br><br>Ubuntu: <code>access_log /var/log/nginx/access.log</code><br><code>error_log /var/log/nginx/error.log</code></p>
+<h3 id="Commands"><a href="#Commands" class="headerlink" title="Commands"></a>Commands</h3><h4 id="Test-config-files"><a href="#Test-config-files" class="headerlink" title="Test config files"></a>Test config files</h4><p>Mac: <code>sudo nginx -t</code></p>
+<h4 id="Reload-config-files"><a href="#Reload-config-files" class="headerlink" title="Reload config files"></a>Reload config files</h4><p>Mac: <code>sudo nginx -s reload</code><br><br><code>sudo systemctl reload nginx</code><br><br><code>sudo service nginx reload</code></p>
+<h4 id="Stop-nginx"><a href="#Stop-nginx" class="headerlink" title="Stop nginx"></a>Stop nginx</h4><p><code>sudo systemctl start nginx</code></p>
+<h4 id="Start-nginx"><a href="#Start-nginx" class="headerlink" title="Start nginx"></a>Start nginx</h4><p>Mac: <code>sudo nginx</code><br><br><code>sudo systemctl start nginx</code></p>
+<h4 id="Restart-nginx"><a href="#Restart-nginx" class="headerlink" title="Restart nginx"></a>Restart nginx</h4><p><code>sudo systemctl restart nginx</code><br><br><code>sudo /etc/init.d/nginx restart</code></p>
+<h3 id="Troubleshooting"><a href="#Troubleshooting" class="headerlink" title="Troubleshooting"></a>Troubleshooting</h3><h4 id="upstream-sent-too-big-header-while-reading-response-header-from-upstream"><a href="#upstream-sent-too-big-header-while-reading-response-header-from-upstream" class="headerlink" title="upstream sent too big header while reading response header from upstream"></a>upstream sent too big header while reading response header from upstream</h4><p>It occurs in a reverse proxy block. To fix this issue, find the reverse proxy block and add the following statements.</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">location / &#123;</span><br><span class="line">    proxy_pass http://127.0.0.1:8080;</span><br><span class="line">    proxy_busy_buffers_size 512k;</span><br><span class="line">    proxy_buffers 4 512k;</span><br><span class="line">    proxy_buffer_size 256k;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h4 id="Rewrite-based-on-a-part-of-URL"><a href="#Rewrite-based-on-a-part-of-URL" class="headerlink" title="Rewrite based on a part of URL"></a>Rewrite based on a part of URL</h4><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">location ~ /server1/(.*)$ &#123;</span><br><span class="line">    proxy_pass http://127.0.0.1:3050/$1;</span><br><span class="line">    proxy_http_version 1.1;</span><br><span class="line">    proxy_set_header Upgrade $http_upgrade;</span><br><span class="line">    proxy_set_header Connection &quot;upgrade&quot;;</span><br><span class="line">    proxy_read_timeout 86400s;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">location ~ /server2/(.*)$ &#123;</span><br><span class="line">    proxy_pass http://127.0.0.1:3052/$1;</span><br><span class="line">    proxy_http_version 1.1;</span><br><span class="line">    proxy_set_header Upgrade $http_upgrade;</span><br><span class="line">    proxy_set_header Connection &quot;upgrade&quot;;</span><br><span class="line">    proxy_read_timeout 86400s;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>Above config sends <code>http://example.com/server1/robin</code> request to a service running in the 3050 port, like <code>LOCALHOST:3050/robin</code>.<br>Also, sends <code>http://example.com/server2/robin</code> request to a service running in the 3052 port, like <code>LOCALHOST:3052/robin</code>.<br>Note: It’s not redirection.</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://blog.robin.engineer/2022/12/Nginx-essentials-commands-and-routes/" data-id="clbb60m2g001tetop4m1sa1lc" data-title="Nginx essential cheatsheet" class="article-share-link">Share</a>
+      
+      
+      
+    </footer>
+  </div>
+  
+</article>
+
+
+
+  
     <article id="post-Generating-SSL-certificate-using-certbot" class="h-entry article article-type-post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
   <div class="article-meta">
     <a href="/2022/11/Generating-SSL-certificate-using-certbot/" class="article-date">
@@ -130,7 +182,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://blog.robin.engineer/2022/11/Generating-SSL-certificate-using-certbot/" data-id="claelmaci000kb3oqd8u0hmfz" data-title="Generating SSL certificate using Certbot and Lets Encrypt" class="article-share-link">Share</a>
+      <a data-url="https://blog.robin.engineer/2022/11/Generating-SSL-certificate-using-certbot/" data-id="clbb60m1x000ketophfgo6vdx" data-title="Generating SSL certificate using Certbot and Lets Encrypt" class="article-share-link">Share</a>
       
       
       
@@ -182,7 +234,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://blog.robin.engineer/2022/11/Deploying-third-party-SSL-in-the-GKE/" data-id="claelmacg000jb3oq00d8e1gi" data-title="Deploying third party SSL in the GKE" class="article-share-link">Share</a>
+      <a data-url="https://blog.robin.engineer/2022/11/Deploying-third-party-SSL-in-the-GKE/" data-id="clbb60m1w000jetop1gop6dm9" data-title="Deploying third party SSL in the GKE" class="article-share-link">Share</a>
       
       
       
@@ -258,7 +310,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://blog.robin.engineer/2022/07/Maintaing-extra-large-files-with-Git-and-GCS/" data-id="claelmadc0029b3oq23l3hpwv" data-title="Maintaining extra large binary files with Git and GCS" class="article-share-link">Share</a>
+      <a data-url="https://blog.robin.engineer/2022/07/Maintaing-extra-large-files-with-Git-and-GCS/" data-id="clbb60m2i001wetophpd2d1ol" data-title="Maintaining extra large binary files with Git and GCS" class="article-share-link">Share</a>
       
       
       
@@ -305,7 +357,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://blog.robin.engineer/2022/07/Mistakes-should-be-appreciated/" data-id="claelmad2001vb3oqfz842vwi" data-title="Dare to make mistake, Dare to do things you can&#39;t" class="article-share-link">Share</a>
+      <a data-url="https://blog.robin.engineer/2022/07/Mistakes-should-be-appreciated/" data-id="clbb60m2l001zetopdppe0eaz" data-title="Dare to make mistake, Dare to do things you can&#39;t" class="article-share-link">Share</a>
       
       
       
@@ -351,7 +403,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://blog.robin.engineer/2022/05/How-to-avoid-endup-with-a-legacy-system/" data-id="claelmad4001wb3oq9ztk9ple" data-title="How to avoid ending up with a legacy system" class="article-share-link">Share</a>
+      <a data-url="https://blog.robin.engineer/2022/05/How-to-avoid-endup-with-a-legacy-system/" data-id="clbb60m2j001xetop90wq2meo" data-title="How to avoid ending up with a legacy system" class="article-share-link">Share</a>
       
       
       
@@ -394,7 +446,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://blog.robin.engineer/2022/02/How-I-add-a-new-skill-or-experience-in-Robin-Engineer/" data-id="claelmad0001sb3oqg992a7zr" data-title="How I add a new skill or experience in Robin.Engineer" class="article-share-link">Share</a>
+      <a data-url="https://blog.robin.engineer/2022/02/How-I-add-a-new-skill-or-experience-in-Robin-Engineer/" data-id="clbb60m2f001setopcwhy7nwv" data-title="How I add a new skill or experience in Robin.Engineer" class="article-share-link">Share</a>
       
       
       
@@ -444,7 +496,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://blog.robin.engineer/2021/12/Uploading-extra-large-files-to-S3/" data-id="claelmad1001tb3oq51v1f7tb" data-title="Uploading extra large files to S3" class="article-share-link">Share</a>
+      <a data-url="https://blog.robin.engineer/2021/12/Uploading-extra-large-files-to-S3/" data-id="clbb60m2i001vetop3jlm0yrf" data-title="Uploading extra large files to S3" class="article-share-link">Share</a>
       
       
       
@@ -490,7 +542,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://blog.robin.engineer/2021/08/AWS-Lambda-pros-and-cons/" data-id="claelmace000hb3oqcrwd1q53" data-title="What you need to know about AWS Lambda before using it." class="article-share-link">Share</a>
+      <a data-url="https://blog.robin.engineer/2021/08/AWS-Lambda-pros-and-cons/" data-id="clbb60m1t000getop8dou4zhw" data-title="What you need to know about AWS Lambda before using it." class="article-share-link">Share</a>
       
       
       
@@ -540,7 +592,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://blog.robin.engineer/2021/08/A-Brief-Comparison-Of-AWS-EC2-and-GCP-Compute-Engine/" data-id="claelmacb000fb3oq99i080a7" data-title="A Detailed Comparison of AWS EC2 and GCP Compute Engine - Part 1" class="article-share-link">Share</a>
+      <a data-url="https://blog.robin.engineer/2021/08/A-Brief-Comparison-Of-AWS-EC2-and-GCP-Compute-Engine/" data-id="clbb60m1r000fetopejom8icy" data-title="A Detailed Comparison of AWS EC2 and GCP Compute Engine - Part 1" class="article-share-link">Share</a>
       
       
       
@@ -593,7 +645,7 @@
   <div class="widget-wrap">
     <h3 class="widget-title">Archives</h3>
     <div class="widget">
-      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2022/11/">November 2022</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2022/07/">July 2022</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2022/05/">May 2022</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2022/02/">February 2022</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/12/">December 2021</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/08/">August 2021</a></li></ul>
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2022/12/">December 2022</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2022/11/">November 2022</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2022/07/">July 2022</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2022/05/">May 2022</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2022/02/">February 2022</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/12/">December 2021</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/08/">August 2021</a></li></ul>
     </div>
   </div>
 
@@ -604,6 +656,10 @@
     <h3 class="widget-title">Recent Posts</h3>
     <div class="widget">
       <ul>
+        
+          <li>
+            <a href="/2022/12/Nginx-essentials-commands-and-routes/">Nginx essential cheatsheet</a>
+          </li>
         
           <li>
             <a href="/2022/11/Generating-SSL-certificate-using-certbot/">Generating SSL certificate using Certbot and Lets Encrypt</a>
@@ -619,10 +675,6 @@
         
           <li>
             <a href="/2022/07/Mistakes-should-be-appreciated/">Dare to make mistake, Dare to do things you can&#39;t</a>
-          </li>
-        
-          <li>
-            <a href="/2022/05/How-to-avoid-endup-with-a-legacy-system/">How to avoid ending up with a legacy system</a>
           </li>
         
       </ul>
