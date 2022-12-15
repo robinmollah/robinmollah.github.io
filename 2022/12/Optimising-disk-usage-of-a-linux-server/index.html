@@ -1,0 +1,299 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+<!-- Global site tag (gtag.js) - Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=UA-58579844-1"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'UA-58579844-1');
+</script>
+<!-- End Google Analytics -->
+
+  
+  <title>Optimising disk usage of a linux server | Robin Mollah | Software Engineer &amp; Tech Enthusiast</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <meta name="description" content="Finding out which files, folders or tools are consuming disk size might be tricky. In this article, I am going to discuss somebasic commands and tools those are helpful for finding out the issues and">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Optimising disk usage of a linux server">
+<meta property="og:url" content="https://blog.robin.engineer/2022/12/Optimising-disk-usage-of-a-linux-server/">
+<meta property="og:site_name" content="Robin Mollah | Software Engineer &amp; Tech Enthusiast">
+<meta property="og:description" content="Finding out which files, folders or tools are consuming disk size might be tricky. In this article, I am going to discuss somebasic commands and tools those are helpful for finding out the issues and">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://blog.robin.engineer/css/images/banner.jpg">
+<meta property="article:published_time" content="2022-12-15T13:33:26.000Z">
+<meta property="article:modified_time" content="2022-12-15T14:13:21.282Z">
+<meta property="article:author" content="Robin Mollah">
+<meta property="article:tag" content="Linux">
+<meta property="article:tag" content="Optimisation">
+<meta property="article:tag" content="Bash">
+<meta property="article:tag" content="Server">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://blog.robin.engineer/css/images/banner.jpg">
+  <meta name="description" content="Finding out which files, folders or tools are consuming disk size might be tricky. In this article, I am going to discuss somebasic commands and tools those are helpful for finding out the issues and">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Optimising disk usage of a linux server">
+<meta property="og:url" content="https://blog.robin.engineer/2022/12/Optimising-disk-usage-of-a-linux-server/">
+<meta property="og:site_name" content="Robin Mollah | Software Engineer &amp; Tech Enthusiast">
+<meta property="og:description" content="Finding out which files, folders or tools are consuming disk size might be tricky. In this article, I am going to discuss somebasic commands and tools those are helpful for finding out the issues and">
+<meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2022-12-15T13:33:26.000Z">
+<meta property="article:modified_time" content="2022-12-15T14:13:21.282Z">
+<meta property="article:author" content="Robin Mollah">
+<meta property="article:tag" content="Linux">
+<meta property="article:tag" content="Optimisation">
+<meta property="article:tag" content="Bash">
+<meta property="article:tag" content="Server">
+<meta name="twitter:card" content="summary">
+  
+    <link rel="alternate" href="/atom.xml" title="Robin Mollah | Software Engineer & Tech Enthusiast" type="application/atom+xml">
+  
+  
+    <link rel="shortcut icon" href="https://robin.engineer/favicon.ico">
+  
+  
+    
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/typeface-source-code-pro@0.0.71/index.min.css">
+
+  
+  
+<link rel="stylesheet" href="/css/style.css">
+
+  
+    
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.min.css">
+
+  
+<meta name="generator" content="Hexo 5.4.0"></head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">Robin Mollah | Software Engineer &amp; Tech Enthusiast</a>
+      </h1>
+      
+        <h2 id="subtitle-wrap">
+          <a href="/" id="subtitle">It&#39;s been decade since I am in love with coding and technology to make a future that doesn&#39;t sound like a reality.</a>
+        </h2>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">Home</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+          <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="RSS Feed"></a>
+        
+        <a id="nav-search-btn" class="nav-icon" title="Search"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="https://blog.robin.engineer"></form>
+      </div>
+    </div>
+  </div>
+</header>
+
+      <div class="outer">
+        <section id="main"><article id="post-Optimising-disk-usage-of-a-linux-server" class="h-entry article article-type-post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
+  <div class="article-meta">
+    <a href="/2022/12/Optimising-disk-usage-of-a-linux-server/" class="article-date">
+  <time class="dt-published" datetime="2022-12-15T13:33:26.000Z" itemprop="datePublished">2022-12-15</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="p-name article-title" itemprop="headline name">
+      Optimising disk usage of a linux server
+    </h1>
+  
+
+      </header>
+    
+    <div class="e-content article-entry" itemprop="articleBody">
+      
+        <p>Finding out which files, folders or tools are consuming disk size might be tricky. In this article, I am going to discuss some<br>basic commands and tools those are helpful for finding out the issues and some measures that can prevent unnecessary disk usage.</p>
+<h3 id="Get-started"><a href="#Get-started" class="headerlink" title="Get started"></a>Get started</h3><p>The following command prints the folders with disk usage greater than a Gigabyte.</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">du -h / 2&gt;/dev/null | grep &#x27;[0-9\,]\+G\s&#x27;</span><br></pre></td></tr></table></figure>
+<h4 id="Explanation"><a href="#Explanation" class="headerlink" title="Explanation"></a>Explanation</h4><p><code>du /</code> lists all the folders and their disk usage<br><code>-h</code> flag prints the sizes in human-readable format<br><code>|</code> pipe operator<br><code>grep &#39;[0-9\,]\+G\s&#39;</code> runs a regular expression pattern in each line. The pattern means anyword that starts with at least one digit followed by a comma, then followed by a letter <code>G</code><br><code>2&gt;/dev/null</code> (This phrase suppresses all errors.) In this case, filters out all the “permission denied” error.</p>
+<h4 id="Sample-output"><a href="#Sample-output" class="headerlink" title="Sample output:"></a>Sample output:</h4><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">2.1G	/usr/lib</span><br><span class="line">3.6G	/usr</span><br><span class="line">1.1G	/var/log/journal/15fbb9d7d55f2ef0bcfb758634f17574</span><br><span class="line">1.1G	/var/log/journal</span><br><span class="line">1.1G	/var/log</span><br><span class="line">2.0G	/var</span><br><span class="line">1.2G	/home/robinmollah/.cache/yarn/v6</span><br><span class="line">1.2G	/home/robinmollah/.cache/yarn</span><br><span class="line">1.2G	/home/robinmollah/.cache</span><br><span class="line">3.4G	/home/robinmollah</span><br><span class="line">3.6G	/home</span><br><span class="line">9.3G	/</span><br></pre></td></tr></table></figure>
+<span id="more"></span>
+
+<p>There are some repetition of same folder. So, we can use <code>--max-depth=2</code> to suppress some of them.</p>
+<p>Sample output:</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">2.1G	/usr/lib</span><br><span class="line">3.6G	/usr</span><br><span class="line">1.1G	/var/log</span><br><span class="line">2.0G	/var</span><br><span class="line">3.4G	/home/robinmollah</span><br><span class="line">3.6G	/home</span><br></pre></td></tr></table></figure>
+
+<p>From the above two outputs, we can see two interesting points of disk consumption. One is yarn cache and another is var/log/journal.</p>
+<h2 id="Configuring-journal-for-storage-optimisation"><a href="#Configuring-journal-for-storage-optimisation" class="headerlink" title="Configuring journal for storage optimisation"></a>Configuring journal for storage optimisation</h2><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">sudo bash -c &#x27;echo &quot;SystemMaxUse=100M&quot; &gt;&gt; /etc/systemd/journald.conf&#x27;</span><br><span class="line">sudo systemctl restart systemd-journald</span><br></pre></td></tr></table></figure>
+<p>You can execute the above commands to limit the journal size to 100MB. For more detailed configuration, you can edit /etc/systemd/journald/conf file.<br>Here is the content of that file, you may uncomment and edit any variable that suits you.</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><span class="line">[Journal]</span><br><span class="line"><span class="meta">#</span><span class="bash">Storage=auto</span></span><br><span class="line"><span class="meta">#</span><span class="bash">Compress=yes</span></span><br><span class="line"><span class="meta">#</span><span class="bash">Seal=yes</span></span><br><span class="line"><span class="meta">#</span><span class="bash">SplitMode=uid</span></span><br><span class="line"><span class="meta">#</span><span class="bash">SyncIntervalSec=5m</span></span><br><span class="line"><span class="meta">#</span><span class="bash">RateLimitIntervalSec=30s</span></span><br><span class="line"><span class="meta">#</span><span class="bash">RateLimitBurst=10000</span></span><br><span class="line"><span class="meta">#</span><span class="bash">SystemMaxUse=</span></span><br><span class="line"><span class="meta">#</span><span class="bash">SystemKeepFree=</span></span><br><span class="line"><span class="meta">#</span><span class="bash">SystemMaxFileSize=</span></span><br><span class="line"><span class="meta">#</span><span class="bash">SystemMaxFiles=100</span></span><br><span class="line"><span class="meta">#</span><span class="bash">RuntimeMaxUse=</span></span><br><span class="line"><span class="meta">#</span><span class="bash">RuntimeKeepFree=</span></span><br><span class="line"><span class="meta">#</span><span class="bash">RuntimeMaxFileSize=</span></span><br><span class="line"><span class="meta">#</span><span class="bash">RuntimeMaxFiles=100</span></span><br><span class="line"><span class="meta">#</span><span class="bash">MaxRetentionSec=</span></span><br><span class="line"><span class="meta">#</span><span class="bash">MaxFileSec=1month</span></span><br><span class="line"><span class="meta">#</span><span class="bash">ForwardToSyslog=yes</span></span><br><span class="line"><span class="meta">#</span><span class="bash">ForwardToKMsg=no</span></span><br><span class="line"><span class="meta">#</span><span class="bash">ForwardToConsole=no</span></span><br><span class="line"><span class="meta">#</span><span class="bash">ForwardToWall=yes</span></span><br><span class="line"><span class="meta">#</span><span class="bash">TTYPath=/dev/console</span></span><br><span class="line"><span class="meta">#</span><span class="bash">MaxLevelStore=debug</span></span><br><span class="line"><span class="meta">#</span><span class="bash">MaxLevelSyslog=debug</span></span><br><span class="line"><span class="meta">#</span><span class="bash">MaxLevelKMsg=notice</span></span><br><span class="line"><span class="meta">#</span><span class="bash">MaxLevelConsole=info</span></span><br><span class="line"><span class="meta">#</span><span class="bash">MaxLevelWall=emerg</span></span><br><span class="line"><span class="meta">#</span><span class="bash">LineMax=48K</span></span><br><span class="line"><span class="meta">#</span><span class="bash">ReadKMsg=yes</span></span><br><span class="line"><span class="meta">#</span><span class="bash">Audit=no</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="Configuring-logrotate-files"><a href="#Configuring-logrotate-files" class="headerlink" title="Configuring logrotate files"></a>Configuring logrotate files</h2><p>In the <code>/etc/logrotate.d</code> folder, some configuration files can be found. In our case, we have 2 relevant files. One is nginx.<br>Nginx stores all access logs and error logs that becomes large gradually. All files starts with the name(s) of the log file,<br>where it is storing the logs. After one file, it compresses the old files into gzip format. Here is the default nginx log config file.</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">/var/log/nginx/*.log &#123;</span><br><span class="line">	daily</span><br><span class="line">	missingok</span><br><span class="line">	rotate 14</span><br><span class="line">	compress</span><br><span class="line">	delaycompress</span><br><span class="line">	notifempty</span><br><span class="line">	create 0640 www-data adm</span><br><span class="line">	sharedscripts</span><br><span class="line">	prerotate</span><br><span class="line">		if [ -d /etc/logrotate.d/httpd-prerotate ]; then \</span><br><span class="line">			run-parts /etc/logrotate.d/httpd-prerotate; \</span><br><span class="line">		fi \</span><br><span class="line">	endscript</span><br><span class="line">	postrotate</span><br><span class="line">		invoke-rc.d nginx rotate &gt;/dev/null 2&gt;&amp;1</span><br><span class="line">	endscript</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>Here <code>/var/log/nginx/*.log</code> is the name of the log file. So, to determine the disk consumed by that you can run:</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ls /var/log/nginx/*.log -lh</span><br></pre></td></tr></table></figure>
+<p>Output:</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">-rw-r----- 1 www-data adm 29K Dec 15 14:05 /var/log/nginx/access.log</span><br><span class="line">-rw-r----- 1 www-data adm 45K Dec 15 14:05 /var/log/nginx/error.log</span><br></pre></td></tr></table></figure>
+<p>Here, I see access.log file size is 29K and error.log size is 45K. You may see some .tar.gz files those are compressed old logs.</p>
+<p>You can limit the number of files to store in the value of <code>rotate 14</code> to <code>rotate 1</code> so that it keeps only one file.<br>From the above script you may wish to run any prerotate and postrotate script for more advanced clean up.<br>You may have mariadb, rabbitmq server log configs in this folder.</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://blog.robin.engineer/2022/12/Optimising-disk-usage-of-a-linux-server/" data-id="clbp5w8jv0014cap85ulia55l" data-title="Optimising disk usage of a linux server" class="article-share-link">Share</a>
+      
+      
+      
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Bash/" rel="tag">Bash</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Linux/" rel="tag">Linux</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Optimisation/" rel="tag">Optimisation</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Server/" rel="tag">Server</a></li></ul>
+
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+  
+    <a href="/2022/12/Nginx-essentials-commands-and-routes/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">Nginx essential cheatsheet</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Categories</h3>
+    <div class="widget">
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/Cloud-computing/">Cloud computing</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tags</h3>
+    <div class="widget">
+      <ul class="tag-list" itemprop="keywords"><li class="tag-list-item"><a class="tag-list-link" href="/tags/AWS/" rel="tag">AWS</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Bangla/" rel="tag">Bangla</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Bash/" rel="tag">Bash</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Cloud-Computing/" rel="tag">Cloud Computing</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Cloud-Functions/" rel="tag">Cloud Functions</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Comparison/" rel="tag">Comparison</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Compute-Engine/" rel="tag">Compute Engine</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/DevOps/" rel="tag">DevOps</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/EC2/" rel="tag">EC2</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Extra-Large-files/" rel="tag">Extra Large files</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/GCP/" rel="tag">GCP</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/GCS/" rel="tag">GCS</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/GKE/" rel="tag">GKE</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Git/" rel="tag">Git</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/HTML/" rel="tag">HTML</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Ingress/" rel="tag">Ingress</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/IntelliJ-IDEA/" rel="tag">IntelliJ IDEA</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/JavaScript/" rel="tag">JavaScript</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Kubernetes/" rel="tag">Kubernetes</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Lambda/" rel="tag">Lambda</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Linux/" rel="tag">Linux</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Optimisation/" rel="tag">Optimisation</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Pug/" rel="tag">Pug</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/S3/" rel="tag">S3</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/SSL/" rel="tag">SSL</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Server/" rel="tag">Server</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Version-Control/" rel="tag">Version Control</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tag Cloud</h3>
+    <div class="widget tagcloud">
+      <a href="/tags/AWS/" style="font-size: 20px;">AWS</a> <a href="/tags/Bangla/" style="font-size: 10px;">Bangla</a> <a href="/tags/Bash/" style="font-size: 10px;">Bash</a> <a href="/tags/Cloud-Computing/" style="font-size: 15px;">Cloud Computing</a> <a href="/tags/Cloud-Functions/" style="font-size: 10px;">Cloud Functions</a> <a href="/tags/Comparison/" style="font-size: 10px;">Comparison</a> <a href="/tags/Compute-Engine/" style="font-size: 10px;">Compute Engine</a> <a href="/tags/DevOps/" style="font-size: 10px;">DevOps</a> <a href="/tags/EC2/" style="font-size: 10px;">EC2</a> <a href="/tags/Extra-Large-files/" style="font-size: 10px;">Extra Large files</a> <a href="/tags/GCP/" style="font-size: 10px;">GCP</a> <a href="/tags/GCS/" style="font-size: 10px;">GCS</a> <a href="/tags/GKE/" style="font-size: 10px;">GKE</a> <a href="/tags/Git/" style="font-size: 10px;">Git</a> <a href="/tags/HTML/" style="font-size: 10px;">HTML</a> <a href="/tags/Ingress/" style="font-size: 10px;">Ingress</a> <a href="/tags/IntelliJ-IDEA/" style="font-size: 10px;">IntelliJ IDEA</a> <a href="/tags/JavaScript/" style="font-size: 10px;">JavaScript</a> <a href="/tags/Kubernetes/" style="font-size: 10px;">Kubernetes</a> <a href="/tags/Lambda/" style="font-size: 10px;">Lambda</a> <a href="/tags/Linux/" style="font-size: 10px;">Linux</a> <a href="/tags/Optimisation/" style="font-size: 10px;">Optimisation</a> <a href="/tags/Pug/" style="font-size: 10px;">Pug</a> <a href="/tags/S3/" style="font-size: 10px;">S3</a> <a href="/tags/SSL/" style="font-size: 15px;">SSL</a> <a href="/tags/Server/" style="font-size: 10px;">Server</a> <a href="/tags/Version-Control/" style="font-size: 10px;">Version Control</a>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Archives</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2022/12/">December 2022</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2022/11/">November 2022</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2022/07/">July 2022</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2022/05/">May 2022</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2022/02/">February 2022</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/12/">December 2021</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/08/">August 2021</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Recent Posts</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/2022/12/Optimising-disk-usage-of-a-linux-server/">Optimising disk usage of a linux server</a>
+          </li>
+        
+          <li>
+            <a href="/2022/12/Nginx-essentials-commands-and-routes/">Nginx essential cheatsheet</a>
+          </li>
+        
+          <li>
+            <a href="/2022/11/Generating-SSL-certificate-using-certbot/">Generating SSL certificate using Certbot and Lets Encrypt</a>
+          </li>
+        
+          <li>
+            <a href="/2022/11/Deploying-third-party-SSL-in-the-GKE/">Deploying third party SSL in the GKE</a>
+          </li>
+        
+          <li>
+            <a href="/2022/07/Maintaing-extra-large-files-with-Git-and-GCS/">Maintaining extra large binary files with Git and GCS</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      
+      &copy; 2022 Robin Mollah<br>
+    </div>
+  </div>
+</footer>
+
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+</nav>
+    
+
+
+<script src="/js/jquery-3.4.1.min.js"></script>
+
+
+
+  
+<script src="/fancybox/jquery.fancybox.min.js"></script>
+
+
+
+
+<script src="/js/script.js"></script>
+
+
+
+
+
+  </div>
+</body>
+</html>

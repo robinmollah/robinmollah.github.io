@@ -99,6 +99,55 @@
       <div class="outer">
         <section id="main">
   
+    <article id="post-Optimising-disk-usage-of-a-linux-server" class="h-entry article article-type-post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
+  <div class="article-meta">
+    <a href="/2022/12/Optimising-disk-usage-of-a-linux-server/" class="article-date">
+  <time class="dt-published" datetime="2022-12-15T13:33:26.000Z" itemprop="datePublished">2022-12-15</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="p-name article-title" href="/2022/12/Optimising-disk-usage-of-a-linux-server/">Optimising disk usage of a linux server</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="e-content article-entry" itemprop="articleBody">
+      
+        <p>Finding out which files, folders or tools are consuming disk size might be tricky. In this article, I am going to discuss some<br>basic commands and tools those are helpful for finding out the issues and some measures that can prevent unnecessary disk usage.</p>
+<h3 id="Get-started"><a href="#Get-started" class="headerlink" title="Get started"></a>Get started</h3><p>The following command prints the folders with disk usage greater than a Gigabyte.</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">du -h / 2&gt;/dev/null | grep &#x27;[0-9\,]\+G\s&#x27;</span><br></pre></td></tr></table></figure>
+<h4 id="Explanation"><a href="#Explanation" class="headerlink" title="Explanation"></a>Explanation</h4><p><code>du /</code> lists all the folders and their disk usage<br><code>-h</code> flag prints the sizes in human-readable format<br><code>|</code> pipe operator<br><code>grep &#39;[0-9\,]\+G\s&#39;</code> runs a regular expression pattern in each line. The pattern means anyword that starts with at least one digit followed by a comma, then followed by a letter <code>G</code><br><code>2&gt;/dev/null</code> (This phrase suppresses all errors.) In this case, filters out all the “permission denied” error.</p>
+<h4 id="Sample-output"><a href="#Sample-output" class="headerlink" title="Sample output:"></a>Sample output:</h4><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">2.1G	/usr/lib</span><br><span class="line">3.6G	/usr</span><br><span class="line">1.1G	/var/log/journal/15fbb9d7d55f2ef0bcfb758634f17574</span><br><span class="line">1.1G	/var/log/journal</span><br><span class="line">1.1G	/var/log</span><br><span class="line">2.0G	/var</span><br><span class="line">1.2G	/home/robinmollah/.cache/yarn/v6</span><br><span class="line">1.2G	/home/robinmollah/.cache/yarn</span><br><span class="line">1.2G	/home/robinmollah/.cache</span><br><span class="line">3.4G	/home/robinmollah</span><br><span class="line">3.6G	/home</span><br><span class="line">9.3G	/</span><br></pre></td></tr></table></figure>
+        
+          <p class="article-more-link">
+            <a href="/2022/12/Optimising-disk-usage-of-a-linux-server/#more">Read More</a>
+          </p>
+        
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://blog.robin.engineer/2022/12/Optimising-disk-usage-of-a-linux-server/" data-id="clbp5w8jv0014cap85ulia55l" data-title="Optimising disk usage of a linux server" class="article-share-link">Share</a>
+      
+      
+      
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Bash/" rel="tag">Bash</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Linux/" rel="tag">Linux</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Optimisation/" rel="tag">Optimisation</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Server/" rel="tag">Server</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+
+  
     <article id="post-Nginx-essentials-commands-and-routes" class="h-entry article article-type-post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
   <div class="article-meta">
     <a href="/2022/12/Nginx-essentials-commands-and-routes/" class="article-date">
@@ -130,7 +179,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://blog.robin.engineer/2022/12/Nginx-essentials-commands-and-routes/" data-id="clbp4f4fl001tctouh55f24q5" data-title="Nginx essential cheatsheet" class="article-share-link">Share</a>
+      <a data-url="https://blog.robin.engineer/2022/12/Nginx-essentials-commands-and-routes/" data-id="clbp5w8jt0013cap8e6msg9r9" data-title="Nginx essential cheatsheet" class="article-share-link">Share</a>
       
       
       
@@ -173,7 +222,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://blog.robin.engineer/2022/11/Generating-SSL-certificate-using-certbot/" data-id="clbp4f4f3000kctouay78ghyn" data-title="Generating SSL certificate using Certbot and Lets Encrypt" class="article-share-link">Share</a>
+      <a data-url="https://blog.robin.engineer/2022/11/Generating-SSL-certificate-using-certbot/" data-id="clbp5w8jr000zcap85b2e0zo6" data-title="Generating SSL certificate using Certbot and Lets Encrypt" class="article-share-link">Share</a>
       
       
       
@@ -225,7 +274,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://blog.robin.engineer/2022/11/Deploying-third-party-SSL-in-the-GKE/" data-id="clbp4f4f2000jctou63rl9ctc" data-title="Deploying third party SSL in the GKE" class="article-share-link">Share</a>
+      <a data-url="https://blog.robin.engineer/2022/11/Deploying-third-party-SSL-in-the-GKE/" data-id="clbp5w8jq000ycap846hjh2qt" data-title="Deploying third party SSL in the GKE" class="article-share-link">Share</a>
       
       
       
@@ -301,7 +350,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://blog.robin.engineer/2022/07/Maintaing-extra-large-files-with-Git-and-GCS/" data-id="clbp4f4fo001wctou0i5v1cr1" data-title="Maintaining extra large binary files with Git and GCS" class="article-share-link">Share</a>
+      <a data-url="https://blog.robin.engineer/2022/07/Maintaing-extra-large-files-with-Git-and-GCS/" data-id="clbp5w8k9002dcap8f9i7ayg1" data-title="Maintaining extra large binary files with Git and GCS" class="article-share-link">Share</a>
       
       
       
@@ -348,7 +397,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://blog.robin.engineer/2022/07/Mistakes-should-be-appreciated/" data-id="clbp4f4fq001zctoudf1b6u7n" data-title="Dare to make mistake, Dare to do things you can&#39;t" class="article-share-link">Share</a>
+      <a data-url="https://blog.robin.engineer/2022/07/Mistakes-should-be-appreciated/" data-id="clbp5w8ka002ecap8aq2oc9q6" data-title="Dare to make mistake, Dare to do things you can&#39;t" class="article-share-link">Share</a>
       
       
       
@@ -394,7 +443,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://blog.robin.engineer/2022/05/How-to-avoid-endup-with-a-legacy-system/" data-id="clbp4f4fp001xctoucmvg81xj" data-title="How to avoid ending up with a legacy system" class="article-share-link">Share</a>
+      <a data-url="https://blog.robin.engineer/2022/05/How-to-avoid-endup-with-a-legacy-system/" data-id="clbp5w8kb002gcap8fmng9y1v" data-title="How to avoid ending up with a legacy system" class="article-share-link">Share</a>
       
       
       
@@ -437,7 +486,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://blog.robin.engineer/2022/02/How-I-add-a-new-skill-or-experience-in-Robin-Engineer/" data-id="clbp4f4fk001sctou1rsyabhb" data-title="How I add a new skill or experience in Robin.Engineer" class="article-share-link">Share</a>
+      <a data-url="https://blog.robin.engineer/2022/02/How-I-add-a-new-skill-or-experience-in-Robin-Engineer/" data-id="clbp5w8js0010cap87jh8cckc" data-title="How I add a new skill or experience in Robin.Engineer" class="article-share-link">Share</a>
       
       
       
@@ -487,7 +536,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://blog.robin.engineer/2021/12/Uploading-extra-large-files-to-S3/" data-id="clbp4f4fn001vctoufqlshin6" data-title="Uploading extra large files to S3" class="article-share-link">Share</a>
+      <a data-url="https://blog.robin.engineer/2021/12/Uploading-extra-large-files-to-S3/" data-id="clbp5w8jw0017cap8a0430zyl" data-title="Uploading extra large files to S3" class="article-share-link">Share</a>
       
       
       
@@ -533,7 +582,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://blog.robin.engineer/2021/08/AWS-Lambda-pros-and-cons/" data-id="clbp4f4f0000gctoudgjd60hr" data-title="What you need to know about AWS Lambda before using it." class="article-share-link">Share</a>
+      <a data-url="https://blog.robin.engineer/2021/08/AWS-Lambda-pros-and-cons/" data-id="clbp5w8jo000vcap8dd3bg3z2" data-title="What you need to know about AWS Lambda before using it." class="article-share-link">Share</a>
       
       
       
@@ -547,57 +596,12 @@
 
 
   
-    <article id="post-A-Brief-Comparison-Of-AWS-EC2-and-GCP-Compute-Engine" class="h-entry article article-type-post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
-  <div class="article-meta">
-    <a href="/2021/08/A-Brief-Comparison-Of-AWS-EC2-and-GCP-Compute-Engine/" class="article-date">
-  <time class="dt-published" datetime="2021-08-21T19:52:14.000Z" itemprop="datePublished">2021-08-22</time>
-</a>
+
+
+  <nav id="page-nav">
     
-  <div class="article-category">
-    <a class="article-category-link" href="/categories/Cloud-computing/">Cloud computing</a>
-  </div>
-
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="p-name article-title" href="/2021/08/A-Brief-Comparison-Of-AWS-EC2-and-GCP-Compute-Engine/">A Detailed Comparison of AWS EC2 and GCP Compute Engine - Part 1</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="e-content article-entry" itemprop="articleBody">
-      
-        <p><img src="http://blog.robin.engineer/2021/08/A-Brief-Comparison-Of-AWS-EC2-and-GCP-Compute-Engine/AWS-vs-GCP.svg" alt="AWS &amp; GCP Icons"></p>
-<p>In this article, I will compare the features and issues offered by AWS and GCP for Virtual Machines. In this part, I will discuss machine creation and remoting features. From my experience, AWS has less productive instance management style then GCP. GCP provides ability to put SSH Public Key while creation and offers a way to retrieve passwords more efficiently when remoting. AWS keeps machines and keys separated in different regions that makes it complex to manage them.</p>
-        
-          <p class="article-more-link">
-            <a href="/2021/08/A-Brief-Comparison-Of-AWS-EC2-and-GCP-Compute-Engine/#more">Read More</a>
-          </p>
-        
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="https://blog.robin.engineer/2021/08/A-Brief-Comparison-Of-AWS-EC2-and-GCP-Compute-Engine/" data-id="clbp4f4ey000fctouclphchav" data-title="A Detailed Comparison of AWS EC2 and GCP Compute Engine - Part 1" class="article-share-link">Share</a>
-      
-      
-      
-  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/AWS/" rel="tag">AWS</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Cloud-Computing/" rel="tag">Cloud Computing</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Comparison/" rel="tag">Comparison</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Compute-Engine/" rel="tag">Compute Engine</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/EC2/" rel="tag">EC2</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/GCP/" rel="tag">GCP</a></li></ul>
-
-    </footer>
-  </div>
-  
-</article>
-
-
-
-  
-
+    <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><a class="extend next" rel="next" href="/page/2/">Next &raquo;</a>
+  </nav>
 
 </section>
         
@@ -617,7 +621,7 @@
   <div class="widget-wrap">
     <h3 class="widget-title">Tags</h3>
     <div class="widget">
-      <ul class="tag-list" itemprop="keywords"><li class="tag-list-item"><a class="tag-list-link" href="/tags/AWS/" rel="tag">AWS</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Bangla/" rel="tag">Bangla</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Cloud-Computing/" rel="tag">Cloud Computing</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Cloud-Functions/" rel="tag">Cloud Functions</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Comparison/" rel="tag">Comparison</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Compute-Engine/" rel="tag">Compute Engine</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/DevOps/" rel="tag">DevOps</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/EC2/" rel="tag">EC2</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Extra-Large-files/" rel="tag">Extra Large files</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/GCP/" rel="tag">GCP</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/GCS/" rel="tag">GCS</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/GKE/" rel="tag">GKE</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Git/" rel="tag">Git</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/HTML/" rel="tag">HTML</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Ingress/" rel="tag">Ingress</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/IntelliJ-IDEA/" rel="tag">IntelliJ IDEA</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/JavaScript/" rel="tag">JavaScript</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Kubernetes/" rel="tag">Kubernetes</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Lambda/" rel="tag">Lambda</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Pug/" rel="tag">Pug</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/S3/" rel="tag">S3</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/SSL/" rel="tag">SSL</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Version-Control/" rel="tag">Version Control</a></li></ul>
+      <ul class="tag-list" itemprop="keywords"><li class="tag-list-item"><a class="tag-list-link" href="/tags/AWS/" rel="tag">AWS</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Bangla/" rel="tag">Bangla</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Bash/" rel="tag">Bash</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Cloud-Computing/" rel="tag">Cloud Computing</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Cloud-Functions/" rel="tag">Cloud Functions</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Comparison/" rel="tag">Comparison</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Compute-Engine/" rel="tag">Compute Engine</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/DevOps/" rel="tag">DevOps</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/EC2/" rel="tag">EC2</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Extra-Large-files/" rel="tag">Extra Large files</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/GCP/" rel="tag">GCP</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/GCS/" rel="tag">GCS</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/GKE/" rel="tag">GKE</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Git/" rel="tag">Git</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/HTML/" rel="tag">HTML</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Ingress/" rel="tag">Ingress</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/IntelliJ-IDEA/" rel="tag">IntelliJ IDEA</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/JavaScript/" rel="tag">JavaScript</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Kubernetes/" rel="tag">Kubernetes</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Lambda/" rel="tag">Lambda</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Linux/" rel="tag">Linux</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Optimisation/" rel="tag">Optimisation</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Pug/" rel="tag">Pug</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/S3/" rel="tag">S3</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/SSL/" rel="tag">SSL</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Server/" rel="tag">Server</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Version-Control/" rel="tag">Version Control</a></li></ul>
     </div>
   </div>
 
@@ -627,7 +631,7 @@
   <div class="widget-wrap">
     <h3 class="widget-title">Tag Cloud</h3>
     <div class="widget tagcloud">
-      <a href="/tags/AWS/" style="font-size: 20px;">AWS</a> <a href="/tags/Bangla/" style="font-size: 10px;">Bangla</a> <a href="/tags/Cloud-Computing/" style="font-size: 15px;">Cloud Computing</a> <a href="/tags/Cloud-Functions/" style="font-size: 10px;">Cloud Functions</a> <a href="/tags/Comparison/" style="font-size: 10px;">Comparison</a> <a href="/tags/Compute-Engine/" style="font-size: 10px;">Compute Engine</a> <a href="/tags/DevOps/" style="font-size: 10px;">DevOps</a> <a href="/tags/EC2/" style="font-size: 10px;">EC2</a> <a href="/tags/Extra-Large-files/" style="font-size: 10px;">Extra Large files</a> <a href="/tags/GCP/" style="font-size: 10px;">GCP</a> <a href="/tags/GCS/" style="font-size: 10px;">GCS</a> <a href="/tags/GKE/" style="font-size: 10px;">GKE</a> <a href="/tags/Git/" style="font-size: 10px;">Git</a> <a href="/tags/HTML/" style="font-size: 10px;">HTML</a> <a href="/tags/Ingress/" style="font-size: 10px;">Ingress</a> <a href="/tags/IntelliJ-IDEA/" style="font-size: 10px;">IntelliJ IDEA</a> <a href="/tags/JavaScript/" style="font-size: 10px;">JavaScript</a> <a href="/tags/Kubernetes/" style="font-size: 10px;">Kubernetes</a> <a href="/tags/Lambda/" style="font-size: 10px;">Lambda</a> <a href="/tags/Pug/" style="font-size: 10px;">Pug</a> <a href="/tags/S3/" style="font-size: 10px;">S3</a> <a href="/tags/SSL/" style="font-size: 15px;">SSL</a> <a href="/tags/Version-Control/" style="font-size: 10px;">Version Control</a>
+      <a href="/tags/AWS/" style="font-size: 20px;">AWS</a> <a href="/tags/Bangla/" style="font-size: 10px;">Bangla</a> <a href="/tags/Bash/" style="font-size: 10px;">Bash</a> <a href="/tags/Cloud-Computing/" style="font-size: 15px;">Cloud Computing</a> <a href="/tags/Cloud-Functions/" style="font-size: 10px;">Cloud Functions</a> <a href="/tags/Comparison/" style="font-size: 10px;">Comparison</a> <a href="/tags/Compute-Engine/" style="font-size: 10px;">Compute Engine</a> <a href="/tags/DevOps/" style="font-size: 10px;">DevOps</a> <a href="/tags/EC2/" style="font-size: 10px;">EC2</a> <a href="/tags/Extra-Large-files/" style="font-size: 10px;">Extra Large files</a> <a href="/tags/GCP/" style="font-size: 10px;">GCP</a> <a href="/tags/GCS/" style="font-size: 10px;">GCS</a> <a href="/tags/GKE/" style="font-size: 10px;">GKE</a> <a href="/tags/Git/" style="font-size: 10px;">Git</a> <a href="/tags/HTML/" style="font-size: 10px;">HTML</a> <a href="/tags/Ingress/" style="font-size: 10px;">Ingress</a> <a href="/tags/IntelliJ-IDEA/" style="font-size: 10px;">IntelliJ IDEA</a> <a href="/tags/JavaScript/" style="font-size: 10px;">JavaScript</a> <a href="/tags/Kubernetes/" style="font-size: 10px;">Kubernetes</a> <a href="/tags/Lambda/" style="font-size: 10px;">Lambda</a> <a href="/tags/Linux/" style="font-size: 10px;">Linux</a> <a href="/tags/Optimisation/" style="font-size: 10px;">Optimisation</a> <a href="/tags/Pug/" style="font-size: 10px;">Pug</a> <a href="/tags/S3/" style="font-size: 10px;">S3</a> <a href="/tags/SSL/" style="font-size: 15px;">SSL</a> <a href="/tags/Server/" style="font-size: 10px;">Server</a> <a href="/tags/Version-Control/" style="font-size: 10px;">Version Control</a>
     </div>
   </div>
 
@@ -649,6 +653,10 @@
       <ul>
         
           <li>
+            <a href="/2022/12/Optimising-disk-usage-of-a-linux-server/">Optimising disk usage of a linux server</a>
+          </li>
+        
+          <li>
             <a href="/2022/12/Nginx-essentials-commands-and-routes/">Nginx essential cheatsheet</a>
           </li>
         
@@ -662,10 +670,6 @@
         
           <li>
             <a href="/2022/07/Maintaing-extra-large-files-with-Git-and-GCS/">Maintaining extra large binary files with Git and GCS</a>
-          </li>
-        
-          <li>
-            <a href="/2022/07/Mistakes-should-be-appreciated/">Dare to make mistake, Dare to do things you can&#39;t</a>
           </li>
         
       </ul>
