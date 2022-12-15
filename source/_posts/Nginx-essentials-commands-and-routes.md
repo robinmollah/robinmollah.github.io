@@ -6,7 +6,8 @@ tags:
 
 Nginx saves it's logs, configs, binaries in different folder in different operating system. Every time I struggle to find them in different locations.
 Also, the commands are different. I have curated these in this document based on Ubuntu, Macbook and CentOS(coming soon).
-
+Moreover, there are some frequently encountered issues and solution.
+<!--more-->
 ### Root config file location
 Mac: `/usr/local/etc/nginx/nginx.conf`<br>
 Ubuntu: `/etc/nginx/nginx.conf`
@@ -21,15 +22,15 @@ Ubuntu: `access_log /var/log/nginx/access.log`
 Mac: `sudo nginx -t`
 #### Reload config files
 Mac: `sudo nginx -s reload`<br>
-`sudo systemctl reload nginx`<br>
+Linux: `sudo systemctl reload nginx`<br>
 `sudo service nginx reload`
 #### Stop nginx
 `sudo systemctl start nginx`
 #### Start nginx
 Mac: `sudo nginx`<br>
-`sudo systemctl start nginx`
+Linux: `sudo systemctl start nginx`
 #### Restart nginx
-`sudo systemctl restart nginx`<br>
+Linux: `sudo systemctl restart nginx`<br>
 `sudo /etc/init.d/nginx restart`
 
 ### Troubleshooting
