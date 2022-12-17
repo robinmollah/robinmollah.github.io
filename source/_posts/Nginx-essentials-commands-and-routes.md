@@ -25,7 +25,8 @@ Mac: `sudo nginx -s reload`<br>
 Linux: `sudo systemctl reload nginx`<br>
 `sudo service nginx reload`
 #### Stop nginx
-`sudo systemctl start nginx`
+Mac: `sudo nginx -s stop`
+Ubuntu: `sudo systemctl start nginx`
 #### Start nginx
 Mac: `sudo nginx`<br>
 Linux: `sudo systemctl start nginx`
@@ -47,6 +48,8 @@ location / {
 ```
 
 #### Rewrite based on a part of URL
+I actually don't try to use the `rewrite` statement until it's really necessary. Here are some examples, that can be achieved using `rewrite` and regex based location block both.
+
 ```
 location ~ /server1/(.*)$ {
     proxy_pass http://127.0.0.1:3050/$1;
@@ -64,6 +67,33 @@ location ~ /server2/(.*)$ {
     proxy_read_timeout 86400s;
 }
 ```
+#### Rewrite
+```shell
+rewrite regex URL [flag];
+```
+Using `rewrite` URL(not tested),
+
+```shell
+location /server1/ {
+    rewrite ^/server1/(.*)$ /$1 last;
+    proxy_pass http://127.0.0.1:3050/;
+    proxy_http_version 1.1;
+    proxy_set_header Upgrade $http_upgrade;
+    proxy_set_header Connection "upgrade";
+    proxy_read_timeout 86400s;
+}
+
+location /server2/ {
+    rewrite ^/server2/(.*)$ /$1 last;
+    proxy_pass http://127.0.0.1:3052/;
+    proxy_http_version 1.1;
+    proxy_set_header Upgrade $http_upgrade;
+    proxy_set_header Connection "upgrade";
+    proxy_read_timeout 86400s;
+}
+```
+Above blocks can be merged, will update it later.
+
 Above config sends `http://example.com/server1/robin` request to a service running in the 3050 port, like `LOCALHOST:3050/robin`.
 Also, sends `http://example.com/server2/robin` request to a service running in the 3052 port, like `LOCALHOST:3052/robin`.
 Note: It's not redirection.
