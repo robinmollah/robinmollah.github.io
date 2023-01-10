@@ -15,31 +15,31 @@
 <!-- End Google Analytics -->
 
   
-  <title>Generating SSL certificate using Certbot and Lets Encrypt | Robin Mollah | Software Engineer &amp; Tech Enthusiast</title>
+  <title>Generating Lets Encrypt SSL certificate using Certbot | Robin Mollah | Software Engineer &amp; Tech Enthusiast</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-  <meta name="description" content="Lets Encrypt allows to generate a free SSL certificate for almost anyone who owns a domain. Generating an SSL certificateis very easy when you are behind a NGINX server or the IP Address is directly p">
+  <meta name="description" content="Let’s Encrypt allows to generate a free SSL certificate for almost anyone who owns a domain. Generating an SSL certificateis very easy when you are behind a NGINX server or the IP Address is directly">
 <meta property="og:type" content="article">
-<meta property="og:title" content="Generating SSL certificate using Certbot and Lets Encrypt">
+<meta property="og:title" content="Generating Lets Encrypt SSL certificate using Certbot">
 <meta property="og:url" content="https://blog.robin.engineer/2022/11/Generating-SSL-certificate-using-certbot/">
 <meta property="og:site_name" content="Robin Mollah | Software Engineer &amp; Tech Enthusiast">
-<meta property="og:description" content="Lets Encrypt allows to generate a free SSL certificate for almost anyone who owns a domain. Generating an SSL certificateis very easy when you are behind a NGINX server or the IP Address is directly p">
+<meta property="og:description" content="Let’s Encrypt allows to generate a free SSL certificate for almost anyone who owns a domain. Generating an SSL certificateis very easy when you are behind a NGINX server or the IP Address is directly">
 <meta property="og:locale" content="en_US">
 <meta property="og:image" content="https://blog.robin.engineer/css/images/banner.jpg">
 <meta property="article:published_time" content="2022-11-12T23:45:08.000Z">
-<meta property="article:modified_time" content="2022-12-17T18:51:34.067Z">
+<meta property="article:modified_time" content="2023-01-10T03:01:47.584Z">
 <meta property="article:author" content="Robin Mollah">
 <meta property="article:tag" content="SSL">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:image" content="https://blog.robin.engineer/css/images/banner.jpg">
-  <meta name="description" content="Lets Encrypt allows to generate a free SSL certificate for almost anyone who owns a domain. Generating an SSL certificateis very easy when you are behind a NGINX server or the IP Address is directly p">
+  <meta name="description" content="Let’s Encrypt allows to generate a free SSL certificate for almost anyone who owns a domain. Generating an SSL certificateis very easy when you are behind a NGINX server or the IP Address is directly">
 <meta property="og:type" content="article">
-<meta property="og:title" content="Generating SSL certificate using Certbot and Lets Encrypt">
+<meta property="og:title" content="Generating Lets Encrypt SSL certificate using Certbot">
 <meta property="og:url" content="https://blog.robin.engineer/2022/11/Generating-SSL-certificate-using-certbot/">
 <meta property="og:site_name" content="Robin Mollah | Software Engineer &amp; Tech Enthusiast">
-<meta property="og:description" content="Lets Encrypt allows to generate a free SSL certificate for almost anyone who owns a domain. Generating an SSL certificateis very easy when you are behind a NGINX server or the IP Address is directly p">
+<meta property="og:description" content="Let’s Encrypt allows to generate a free SSL certificate for almost anyone who owns a domain. Generating an SSL certificateis very easy when you are behind a NGINX server or the IP Address is directly">
 <meta property="og:locale" content="en_US">
 <meta property="article:published_time" content="2022-11-12T23:45:08.000Z">
-<meta property="article:modified_time" content="2022-12-17T18:51:34.067Z">
+<meta property="article:modified_time" content="2023-01-10T03:01:47.584Z">
 <meta property="article:author" content="Robin Mollah">
 <meta property="article:tag" content="SSL">
 <meta name="twitter:card" content="summary">
@@ -115,7 +115,7 @@
         
   
     <h1 class="p-name article-title" itemprop="headline name">
-      Generating SSL certificate using Certbot and Lets Encrypt
+      Generating Lets Encrypt SSL certificate using Certbot
     </h1>
   
 
@@ -123,7 +123,7 @@
     
     <div class="e-content article-entry" itemprop="articleBody">
       
-        <p>Lets Encrypt allows to generate a free SSL certificate for almost anyone who owns a domain. Generating an SSL certificate<br>is very easy when you are behind a NGINX server or the IP Address is directly pointing to the server you are IN.<br>It gets a bit tricky in other cases. You have to use the certbot’s DNS challenge verifying ownership of the domain. Here<br>are the steps:</p>
+        <p>Let’s Encrypt allows to generate a free SSL certificate for almost anyone who owns a domain. Generating an SSL certificate<br>is very easy when you are behind a NGINX server or the IP Address is directly pointing to the server you are IN.<br>It gets a bit tricky in other cases. You have to use the certbot’s DNS challenge verifying ownership of the domain. Here<br>are the steps:</p>
 <span id="more"></span>
 
 <h3 id="Install-certbot"><a href="#Install-certbot" class="headerlink" title="Install certbot"></a>Install certbot</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">sudo apt-add-repository ppa:certbot/certbot</span><br><span class="line">sudo apt install certbot</span><br></pre></td></tr></table></figure>
@@ -135,12 +135,15 @@
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">Requesting a certificate for *.robin.engineer</span><br><span class="line"></span><br><span class="line">- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -</span><br><span class="line">Please deploy a DNS TXT record under the name:</span><br><span class="line"></span><br><span class="line">_acme-challenge.robin.engineer.</span><br><span class="line"></span><br><span class="line">with the following value:</span><br><span class="line"></span><br><span class="line">YFIQf3EDS1PG17pJ3hGiAS3xEtwr4CSA2noBbFYe2Yc</span><br><span class="line"></span><br><span class="line">Before continuing, verify the TXT record has been deployed. Depending on the DNS</span><br><span class="line">provider, this may take some time, from a few seconds to multiple minutes. You can</span><br><span class="line">check if it has finished deploying with aid of online tools, such as the Google</span><br><span class="line">Admin Toolbox: https://toolbox.googleapps.com/apps/dig/#TXT/_acme-challenge.robin.engineer.</span><br><span class="line">Look for one or more bolded line(s) below the line &#x27;;ANSWER&#x27;. It should show the</span><br><span class="line">value(s) you&#x27;ve just added.</span><br></pre></td></tr></table></figure>
 
 <h3 id="Automation-of-adding-DNS-record"><a href="#Automation-of-adding-DNS-record" class="headerlink" title="Automation of adding DNS record"></a>Automation of adding DNS record</h3><p>In my case, I needed to add DNS record to the Azure platform. To add DNS record, you can run the following command:</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">az network dns record-set txt add-record --resource-group myresourcegroup --zone-name robin.engineer --record-set-name _acme-challenge.robin.engineer. --value &quot;YFIQf3EDS1PG17pJ3hGiAS3xEtwr4CSA2noBbFYe2Yc&quot;</span><br></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">az network dns record-set txt add-record --resource-group myresourcegroup --zone-name robin.engineer --record-set-name _acme-challenge.robin.engineer --value &quot;YFIQf3EDS1PG17pJ3hGiAS3xEtwr4CSA2noBbFYe2Yc&quot;</span><br></pre></td></tr></table></figure>
+
+<h4 id="Helpful-commands-regarding-DNS-record-automation"><a href="#Helpful-commands-regarding-DNS-record-automation" class="headerlink" title="Helpful commands regarding DNS record automation"></a>Helpful commands regarding DNS record automation</h4><p>List zone list:</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">az network dns zone list --query &quot;[].name&quot;</span><br></pre></td></tr></table></figure>
 
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://blog.robin.engineer/2022/11/Generating-SSL-certificate-using-certbot/" data-id="clbsapoko000kdinc9hnic1sr" data-title="Generating SSL certificate using Certbot and Lets Encrypt" class="article-share-link">Share</a>
+      <a data-url="https://blog.robin.engineer/2022/11/Generating-SSL-certificate-using-certbot/" data-id="clcpncrgn000keindh0g0ds12" data-title="Generating Lets Encrypt SSL certificate using Certbot" class="article-share-link">Share</a>
       
       
       
@@ -231,7 +234,7 @@
           </li>
         
           <li>
-            <a href="/2022/11/Generating-SSL-certificate-using-certbot/">Generating SSL certificate using Certbot and Lets Encrypt</a>
+            <a href="/2022/11/Generating-SSL-certificate-using-certbot/">Generating Lets Encrypt SSL certificate using Certbot</a>
           </li>
         
           <li>
@@ -255,7 +258,7 @@
   <div class="outer">
     <div id="footer-info" class="inner">
       
-      &copy; 2022 Robin Mollah<br>
+      &copy; 2023 Robin Mollah<br>
     </div>
   </div>
 </footer>
