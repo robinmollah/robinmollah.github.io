@@ -1,11 +1,11 @@
 ---
-title: Generating SSL certificate using Certbot and Lets Encrypt
+title: Generating Lets Encrypt SSL certificate using Certbot
 date: 2022-11-13 05:45:08
 tags:
     - SSL
 ---
 
-Lets Encrypt allows to generate a free SSL certificate for almost anyone who owns a domain. Generating an SSL certificate
+Let's Encrypt allows to generate a free SSL certificate for almost anyone who owns a domain. Generating an SSL certificate
 is very easy when you are behind a NGINX server or the IP Address is directly pointing to the server you are IN.
 It gets a bit tricky in other cases. You have to use the certbot's DNS challenge verifying ownership of the domain. Here
 are the steps:
@@ -49,5 +49,11 @@ value(s) you've just added.
 In my case, I needed to add DNS record to the Azure platform. To add DNS record, you can run the following command:
 
 ```
-az network dns record-set txt add-record --resource-group myresourcegroup --zone-name robin.engineer --record-set-name _acme-challenge.robin.engineer. --value "YFIQf3EDS1PG17pJ3hGiAS3xEtwr4CSA2noBbFYe2Yc"
+az network dns record-set txt add-record --resource-group myresourcegroup --zone-name robin.engineer --record-set-name _acme-challenge.robin.engineer --value "YFIQf3EDS1PG17pJ3hGiAS3xEtwr4CSA2noBbFYe2Yc"
+```
+
+#### Helpful commands regarding DNS record automation
+List zone list:
+```shell
+az network dns zone list --query "[].name"
 ```
