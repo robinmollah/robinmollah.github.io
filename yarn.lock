@@ -591,10 +591,10 @@ has@^1.0.3:
   dependencies:
     function-bind "^1.1.1"
 
-hexo-asset-link@^2.1.0:
-  version "2.1.0"
-  resolved "https://registry.yarnpkg.com/hexo-asset-link/-/hexo-asset-link-2.1.0.tgz#c8e59d72fc381b97fcdb077ec75e90af4fe0fd77"
-  integrity sha512-WhV/woj7NbCdh0AKpgesCpMn7KSC/dL7ul+JEgr0eA6dVSEZJcuzVQ/2A9q6wiRF4tDIMv8PjodFR7G7+x2SSg==
+hexo-asset-link@^2.2.2:
+  version "2.2.2"
+  resolved "https://registry.yarnpkg.com/hexo-asset-link/-/hexo-asset-link-2.2.2.tgz#1985df3d982778af1a97d664b04cd04b20dfe3d0"
+  integrity sha512-wJDngeQXJic2CStUVIKqDdV16Fkh5pwliV8hEyLjeBfY7YoYIEeuDsY+n2VPRIXomaw4GnFG6jVVBne7lrHY1w==
 
 hexo-cli@^4.0.0:
   version "4.3.0"
