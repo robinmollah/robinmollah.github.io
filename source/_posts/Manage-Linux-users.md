@@ -1,6 +1,6 @@
 ---
-title: Manage Linux users
-date: 2024-09-22 13:45:39
+title: Personal cheat sheet | Manage Linux users
+date: 2021-09-22 13:45:39
 tags:
   - Personal Cheat sheet
 ---
@@ -13,7 +13,7 @@ tags:
 ```shell
 sudo adduser robin
 ```
-
+<!--more-->
 ## Create user and home directory
 
 ```shell
