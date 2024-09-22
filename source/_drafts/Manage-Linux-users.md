@@ -2,10 +2,7 @@
 title: Manage Linux users
 date: 2024-09-22 13:45:39
 tags:
-  - GKE
-  - Kubernetes
-  - SSL
-  - Ingress
+  - Personal Cheat sheet
 ---
 
 
