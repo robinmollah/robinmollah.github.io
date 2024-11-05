@@ -2,6 +2,8 @@
 title: Nginx essential cheatsheet
 date: 2022-12-06 00:45:09
 tags:
+    - nginx
+    - cheatsheet
 ---
 
 Nginx saves it's logs, configs, binaries in different folder in different operating system. Every time I struggle to find them in different locations.
