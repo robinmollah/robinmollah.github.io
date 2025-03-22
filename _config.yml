@@ -10,6 +10,7 @@ keywords: programming, technology
 author: Robin Mollah
 language: en
 timezone: 'Asia/Dhaka'
+rss: /atom.xml
 
 # URL
 ## Set your site url here. For example, if you use GitHub Page, set url as 'https://username.github.io/project'
