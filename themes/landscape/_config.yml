@@ -1,6 +1,7 @@
 # Header
 menu:
   Home: /
+  About Me: https://intro.robin.engineer
 rss: /atom.xml
 banner: "images/banner.jpg"
 og_image: "/css/images/banner.jpg"
@@ -25,19 +26,19 @@ copyright:
 #   All website licensed under <a href="https://creativecommons.org/licenses/by/4.0/" target="_blank">CC BY 4.0</a></br>
 
 # Sidebar
-sidebar: right
+sidebar: left
 widgets:
+- tagcloud
 - category
 - tag
-- tagcloud
 - archive
 - recent_posts
 
 # display widgets at the bottom of index pages (pagination == 2)
 index_widgets:
-# - category
-# - tagcloud
-# - archive
+- category
+- tagcloud
+- archive
 
 # Widget behavior
 archive_type: 'monthly'
