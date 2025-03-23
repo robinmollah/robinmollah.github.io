@@ -17,7 +17,7 @@ this architecture.
 Robin's Blog
 --------------------
 
-I am talking about [this](https://blog.robin.engineer) blog. It is developed using Hexo, and it is deployed in GitHub Pages.
+I am talking about [this](https://robin.engineer) blog. It is developed using Hexo, and it is deployed in GitHub Pages.
 So, I am paying nothing for this server. 
 ### Markdown language
 I choose Hexo because it provides Markdown language. So I can write in my IDE.
