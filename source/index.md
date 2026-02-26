@@ -4,7 +4,7 @@ date: 2026-02-26 21:00:18
 type: "page"
 ---
 
-I am Robin Mollah, a Senior Software Engineer architecting and building scalable software systems across cloud, frontend, and AI. And probably some stories worth sharing.
+I am Robin Mollah, a Senior Software Engineer architecting and building scalable software systems across cloud, backend, frontend, and AI. And probably some stories worth sharing.
 
 ## Extreme Constraint Engineering Challenges Solved
 
