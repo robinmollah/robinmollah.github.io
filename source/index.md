@@ -4,13 +4,11 @@ date: 2026-02-26 21:00:18
 type: "page"
 ---
 
-I am Robin Mollah, a Senior Software Engineer architecting and building scalable software systems across cloud, frontend, and AI. And probably some ways worth sharing.
+I am Robin Mollah, a Senior Software Engineer architecting and building scalable software systems across cloud, frontend, and AI. And probably some stories worth sharing.
 
 ## Extreme Constraint Engineering Challenges Solved
 
 Delivered software under extreme hardware constraints
-
-
 
 👉 **100KB web server on a 64MB RAM wifi router:** Built complex web servers with custom security layers and TCP tunneling inside tightly constrained Wi‑Fi router environments. ([Bonton Connect](https://bonton.app))
 
@@ -18,11 +16,36 @@ Delivered software under extreme hardware constraints
 
 👉 **Single digit(<=9ms) real-time streaming:** Engineered and optimized a real-time streaming system to operate under controlled environment. ([Eagle 3D Streaming](https://eagle3dstreaming.com/))
 
+<style>
+details[open] summary ~ * {
+  animation: detailsFadeIn 0.8s ease-in-out forwards;
+}
+@keyframes detailsFadeIn {
+  0%    { opacity: 0; }
+  100%  { opacity: 1; }
+}
+.details-fade-out summary ~ * {
+  animation: detailsFadeOut 0.8s ease-in-out forwards !important;
+}
+@keyframes detailsFadeOut {
+  0%    { opacity: 1; }
+  100%  { opacity: 0; }
+}
+</style>
+<details id="more-challenges-details">
+<summary class="btn" style="margin: 15px auto; display: block; width: fit-content; cursor: pointer;">Show More Challenges...</summary>
+<div style="margin-top: 15px;">
+
 👉 **100GB+ high-speed file uploads:** Optimized end-to-end throughput for massive payloads by engineering across browser limitations, network constraints, and cloud I/O. ([Eagle 3D Streaming](https://eagle3dstreaming.com/))
 
 👉 **Custom internet protocol & binary‑level TCP optimization:** Designed and implemented a custom webserver communication protocol enabling real-time device-to-device communication applying low-level TCP and binary payload optimizations.
 
 👉 **Custom web server protocol:** Built a custom webserver protocol for real-time communication between devices through several proxies and binary level optimisations on TCP protocol. ([Bonton Connect](https://bonton.app))
+
+</div>
+</details>
+
+
 
 ## Experience
 
@@ -77,3 +100,25 @@ Main techstack: AWS, GCP, Docker, Kubernetes, Terraform and various cloud servic
 I occasionally document engineering decisions, system design lessons, cloud architecture practices, and practical AI integration challenges.
 
 [View Articles](/archives/) -->
+
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    const details = document.getElementById('more-challenges-details');
+    const summary = details.querySelector('summary');
+
+    summary.addEventListener('click', function(e) {
+      if (details.open) {
+        e.preventDefault();
+        details.classList.add('details-fade-out');
+        summary.innerText = "Show More Challenges...";
+        
+        setTimeout(function() {
+          details.removeAttribute('open');
+          details.classList.remove('details-fade-out');
+        }, 800);
+      } else {
+        summary.innerText = "Collapse challenges";
+      }
+    });
+  });
+</script>
