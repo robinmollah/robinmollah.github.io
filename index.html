@@ -20,15 +20,15 @@
 
 <script class="next-config" data-name="main" type="application/json">{"hostname":"robin.engineer","root":"/","images":"/images","scheme":"Muse","darkmode":true,"version":"8.27.0","exturl":false,"sidebar":{"position":"left","width_expanded":320,"width_dual_column":240,"display":"always","padding":18,"offset":12},"hljswrap":true,"codeblock":{"theme":{"light":"default","dark":"stackoverflow-dark"},"prism":{"light":"prism","dark":"prism-dark"},"copy_button":{"enable":false,"style":null},"fold":{"enable":false,"height":500},"language":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"duration":200,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"Searching...","empty":"We didn't find any results for the search: ${query}","hits_time":"${hits} results found in ${time} ms","hits":"${hits} results found"}}</script><script src="/js/config.js" defer></script>
 
-    <meta name="description" content="I am Robin Mollah, a Senior Software Engineer architecting and building scalable software systems across cloud, frontend, and AI. And probably some ways worth sharing. Extreme Constraint Engineering C">
+    <meta name="description" content="I am Robin Mollah, a Senior Software Engineer architecting and building scalable software systems across cloud, frontend, and AI. And probably some stories worth sharing. Extreme Constraint Engineerin">
 <meta property="og:type" content="website">
 <meta property="og:title" content="Robin Mollah">
 <meta property="og:url" content="https://robin.engineer/">
 <meta property="og:site_name" content="Robin Mollah">
-<meta property="og:description" content="I am Robin Mollah, a Senior Software Engineer architecting and building scalable software systems across cloud, frontend, and AI. And probably some ways worth sharing. Extreme Constraint Engineering C">
+<meta property="og:description" content="I am Robin Mollah, a Senior Software Engineer architecting and building scalable software systems across cloud, frontend, and AI. And probably some stories worth sharing. Extreme Constraint Engineerin">
 <meta property="og:locale" content="en_US">
 <meta property="article:published_time" content="2026-02-26T15:00:18.000Z">
-<meta property="article:modified_time" content="2026-02-26T17:04:58.395Z">
+<meta property="article:modified_time" content="2026-02-26T17:14:03.639Z">
 <meta property="article:author" content="Robin Mollah">
 <meta property="article:tag" content="programming, technology">
 <meta name="twitter:card" content="summary">
@@ -191,14 +191,39 @@
       
       
       <div class="post-body">
-          <p>I am Robin Mollah, a Senior Software Engineer architecting and building scalable software systems across cloud, frontend, and AI. And probably some ways worth sharing.</p>
+          <p>I am Robin Mollah, a Senior Software Engineer architecting and building scalable software systems across cloud, frontend, and AI. And probably some stories worth sharing.</p>
 <h2 id="Extreme-Constraint-Engineering-Challenges-Solved"><a href="#Extreme-Constraint-Engineering-Challenges-Solved" class="headerlink" title="Extreme Constraint Engineering Challenges Solved"></a>Extreme Constraint Engineering Challenges Solved</h2><p>Delivered software under extreme hardware constraints</p>
 <p>👉 <strong>100KB web server on a 64MB RAM wifi router:</strong> Built complex web servers with custom security layers and TCP tunneling inside tightly constrained Wi‑Fi router environments. (<a target="_blank" rel="noopener" href="https://bonton.app/">Bonton Connect</a>)</p>
 <p>👉 <strong>36MB game engine on 512MB RAM:</strong> Engineered and optimized a LibGDX framework-based game engine and full open-world game to operate within strict memory and storage limits. Reworked asset management, minimized runtime footprint, streamlined execution paths, and restructured architecture for stability under hard caps. (<a target="_blank" rel="noopener" href="https://apkpure.com/71-hit-run/net.properbd.hitnrun">71: Hit &amp; Run</a>)</p>
 <p>👉 <strong>Single digit(&lt;&#x3D;9ms) real-time streaming:</strong> Engineered and optimized a real-time streaming system to operate under controlled environment. (<a target="_blank" rel="noopener" href="https://eagle3dstreaming.com/">Eagle 3D Streaming</a>)</p>
+<style>
+details[open] summary ~ * {
+  animation: detailsFadeIn 0.8s ease-in-out forwards;
+}
+@keyframes detailsFadeIn {
+  0%    { opacity: 0; }
+  100%  { opacity: 1; }
+}
+.details-fade-out summary ~ * {
+  animation: detailsFadeOut 0.8s ease-in-out forwards !important;
+}
+@keyframes detailsFadeOut {
+  0%    { opacity: 1; }
+  100%  { opacity: 0; }
+}
+</style>
+<details id="more-challenges-details">
+<summary class="btn" style="margin: 15px auto; display: block; width: fit-content; cursor: pointer;">Show More Challenges...</summary>
+<div style="margin-top: 15px;">
+
 <p>👉 <strong>100GB+ high-speed file uploads:</strong> Optimized end-to-end throughput for massive payloads by engineering across browser limitations, network constraints, and cloud I&#x2F;O. (<a target="_blank" rel="noopener" href="https://eagle3dstreaming.com/">Eagle 3D Streaming</a>)</p>
 <p>👉 <strong>Custom internet protocol &amp; binary‑level TCP optimization:</strong> Designed and implemented a custom webserver communication protocol enabling real-time device-to-device communication applying low-level TCP and binary payload optimizations.</p>
 <p>👉 <strong>Custom web server protocol:</strong> Built a custom webserver protocol for real-time communication between devices through several proxies and binary level optimisations on TCP protocol. (<a target="_blank" rel="noopener" href="https://bonton.app/">Bonton Connect</a>)</p>
+</div>
+</details>
+
+
+
 <h2 id="Experience"><a href="#Experience" class="headerlink" title="Experience"></a>Experience</h2><h3 id="SaaS-Platforms-High-Traffic-APIs"><a href="#SaaS-Platforms-High-Traffic-APIs" class="headerlink" title="SaaS Platforms &amp; High-Traffic APIs"></a>SaaS Platforms &amp; High-Traffic APIs</h3><p>Designed and delivered SaaS platforms and backend systems serving millions of requests per day. Owned architecture decisions, technology selection, database design, deployment strategy, and operational monitoring. Onboarding, mentoring and managing engineers</p>
 <p>Organizations: <a target="_blank" rel="noopener" href="https://eagle3dstreaming.com/">Eagle 3D Streaming</a> &amp; <a target="_blank" rel="noopener" href="https://freedom2hear.com/">Freedom2Hear</a><br>Main Tech Stack: Python(FastAPI), MongoDB, PostGres, Kubernetes, Terraform, Redis, Kafka</p>
 <hr>
@@ -225,6 +250,28 @@
 I occasionally document engineering decisions, system design lessons, cloud architecture practices, and practical AI integration challenges.
 
 [View Articles](/archives/) -->
+
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    const details = document.getElementById('more-challenges-details');
+    const summary = details.querySelector('summary');
+
+    summary.addEventListener('click', function(e) {
+      if (details.open) {
+        e.preventDefault();
+        details.classList.add('details-fade-out');
+        summary.innerText = "Show More Challenges...";
+        
+        setTimeout(function() {
+          details.removeAttribute('open');
+          details.classList.remove('details-fade-out');
+        }, 800);
+      } else {
+        summary.innerText = "Collapse challenges";
+      }
+    });
+  });
+</script>
 
       </div>
       
