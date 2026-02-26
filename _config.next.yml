@@ -1,9 +1,19 @@
 menu:
   home: / || fa fa-home
+  blog: /blog/ || fa fa-pencil
   about: /about/ || fa fa-user
-  tags: /tags/ || fa fa-tags
-  categories: /categories/ || fa fa-th
-  archives: /archives/ || fa fa-archive
+  # tags: /tags/ || fa fa-tags
+  # categories: /categories/ || fa fa-th
+  # archives: /archives/ || fa fa-archive
   # schedule: /schedule/ || fa fa-calendar
   # sitemap: /sitemap.xml || fa fa-sitemap
   # commonweal: /404/ || fa fa-heartbeat
+  
+sidebar:
+  display: always
+
+mermaid:
+  enable: true
+  version: "10.4.0"
+  options:
+    theme: default

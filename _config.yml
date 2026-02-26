@@ -48,15 +48,14 @@ note:
 
 # Mermaid tag
 mermaid:
-  enable: false
-  # Available themes: default | dark | forest | neutral
-  theme:
-    light: default
-    dark: dark
+  enable: true
+  version: "10.4.0"
+  options:
+    theme: default
 
 # Easily enable fast Ajax navigation on your website.
 # For more information: https://github.com/next-theme/pjax
-pjax: false
+pjax: true
 
 # FancyBox is a tool that offers a nice and elegant way to add zooming functionality for images.
 # For more information: https://fancyapps.com/fancybox/
@@ -141,10 +140,15 @@ prismjs:
 # per_page: Posts displayed per page. (0 = disable pagination)
 # order_by: Posts order. (Order by date descending by default)
 index_generator:
-  path: ''
+  path: 'blog'
   per_page: 10
   order_by: -date
 
+
+markdown:
+  render:
+    html: true
+    
 # Category & Tag
 default_category: uncategorized
 category_map:
