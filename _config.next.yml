@@ -1,6 +1,7 @@
 menu:
   home: / || fa fa-home
   blog: /blog/ || fa fa-pencil
+  contact: /contact/ || fa fa-envelope
   about: /about/ || fa fa-user
   # tags: /tags/ || fa fa-tags
   # categories: /categories/ || fa fa-th
@@ -17,3 +18,5 @@ mermaid:
   version: "10.4.0"
   options:
     theme: default
+
+pjax: true
