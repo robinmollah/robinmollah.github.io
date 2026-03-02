@@ -6,7 +6,7 @@
 # Site
 title: Robin Mollah
 subtitle: "Architecting and building scalable software systems across cloud, frontend, and AI."
-description: 'I am Robin from Bangladesh. From very early age, I was amused by the inventions of science and so many wonderful happening around the world to make our imaginations true.'
+description: ''
 keywords: programming, technology
 author: Robin Mollah
 language: en
@@ -14,7 +14,7 @@ timezone: 'Asia/Dhaka'
 
 # URL
 ## Set your site url here. For example, if you use GitHub Page, set url as 'https://username.github.io/project'
-url: https://robin.engineer
+url: https://robinmollah.com
 permalink: :year/:month/:title/
 permalink_defaults:
 pretty_urls:
