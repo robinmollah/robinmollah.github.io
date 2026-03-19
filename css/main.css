@@ -1208,7 +1208,7 @@ pre code {
   vertical-align: middle;
 }
 .links-of-author a::before {
-  background: #f09532;
+  background: #7e496b;
   display: inline-block;
   margin-right: 3px;
   transform: translateY(-2px);
@@ -2694,6 +2694,10 @@ body:before {
   margin-top: 1em;
   padding: 12px;
   overflow: hidden;
+}
+.post-body p,
+.post-body li {
+  max-width: 100% !important;
 }
 .sidebar-nav {
   border-bottom: 1px solid var(--line-soft);
