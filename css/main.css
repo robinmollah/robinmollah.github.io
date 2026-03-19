@@ -1208,7 +1208,7 @@ pre code {
   vertical-align: middle;
 }
 .links-of-author a::before {
-  background: #7e496b;
+  background: #1245ff;
   display: inline-block;
   margin-right: 3px;
   transform: translateY(-2px);
@@ -2574,6 +2574,7 @@ body:before {
 }
 .site-meta {
   padding: 52px 24px 30px;
+  text-align: left;
 }
 .brand {
   border-bottom: 0;
