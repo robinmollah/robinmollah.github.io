@@ -139,6 +139,21 @@ body:before
 .menu-item-active a i
   color: #fff1e4
 
+.post-toc .nav .active-current > a
+  color: var(--link-color)
+  border-bottom-color: rgba(0, 85, 125, 1)
+
+.post-toc .nav .active > a
+  color: var(--link-color)
+  border-bottom-color: rgba(0, 85, 125, 1)
+  font-weight: 600
+
+.post-toc .nav .active-current > a:hover
+  color: var(--link-color)
+
+.post-toc .nav .active > a:hover
+  color: var(--link-color)
+
 .main-inner
   width: unquote('calc(100% - 36px)')
   max-width: 1120px
@@ -146,6 +161,7 @@ body:before
 
 .sidebar a
   color: var(--link-color)
+  border-bottom: 1px solid rgba(0, 0, 0, 0.1)
 
 .sidebar
   margin-right: 24px
