@@ -1,3 +1,9 @@
+custom_file_path:
+  head: source/_data/head.njk
+  style: source/_data/styles.styl
+
+darkmode: false
+
 menu:
   home: / || fa fa-home
   blog: /blog/ || fa fa-pencil
