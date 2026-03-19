@@ -27,15 +27,21 @@ type: "page"
   text-decoration: none !important;
   border-bottom: none !important;
   padding: 30px 20px;
-  border-radius: 12px;
-  background: rgba(128, 128, 128, 0.05);
-  transition: transform 0.3s ease, background 0.3s ease, box-shadow 0.3s ease;
+  border-radius: 22px;
+  border: 1px solid rgba(145, 107, 78, 0.16);
+  background: linear-gradient(180deg, rgba(251, 244, 235, 0.96), rgba(239, 223, 205, 0.92));
+  color: #342820 !important;
+  box-shadow: 0 14px 34px rgba(82, 57, 36, 0.08), inset 0 1px 0 rgba(255, 255, 255, 0.45);
+  transition: transform 0.3s ease, background 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
   min-width: 200px;
+  color: #342820 !important;
 }
 .contact-card:hover {
-  background: rgba(128, 128, 128, 0.1);
+  background: linear-gradient(180deg, rgba(255, 248, 240, 0.98), rgba(241, 225, 207, 0.94));
+  border-color: rgba(145, 107, 78, 0.3);
   transform: translateY(-8px);
-  box-shadow: 0 10px 20px rgba(0,0,0,0.05);
+  box-shadow: 0 18px 36px rgba(82, 57, 36, 0.14), inset 0 1px 0 rgba(255, 255, 255, 0.45);
+  color: #2a1f18 !important;
 }
 .contact-icon {
   font-size: 2em;
@@ -48,10 +54,12 @@ type: "page"
 .contact-label {
   font-weight: 600;
   font-size: 1.2em;
+  color: #2f241d;
 }
 .contact-value {
   font-size: 0.95em;
-  opacity: 0.8;
+  color: #6f4a32;
+  font-weight: 600;
   margin-top: 8px;
 }
 </style>
