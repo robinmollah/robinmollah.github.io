@@ -84,7 +84,7 @@ Cloud sync (which requires a phone number) is an optional feature. Students unde
 
 You can:
 - **Use the app without signing in** — all practice and learning features work fully offline
-- **Request deletion** of your cloud data by emailing us
+- **Request deletion** of your cloud data — use the **Request data deletion** option in the app's Settings screen, or email [robinsajin@gmail.com](mailto:robinsajin@gmail.com?subject=Data%20Deletion%20Request%20%E2%80%94%20English%20E%20A%2B&body=Please%20delete%20all%20data%20associated%20with%20my%20account.) directly
 - **Opt out of analytics** by disabling analytics in your device settings (Android: Settings → Google → Ads)
 - **Uninstall the app** to remove all local data from your device
 
