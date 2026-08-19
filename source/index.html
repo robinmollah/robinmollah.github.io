@@ -237,11 +237,109 @@
     .diagram .line {
       stroke: rgba(255, 253, 248, 0.38);
       stroke-width: 2;
+      fill: none;
+      stroke-dasharray: 1;
+      stroke-dashoffset: 1;
+      animation: draw-line 1200ms ease forwards;
+    }
+
+    .diagram .line:nth-of-type(2) {
+      animation-delay: 140ms;
+    }
+
+    .diagram .line:nth-of-type(3) {
+      animation-delay: 260ms;
+    }
+
+    .diagram .line:nth-of-type(4) {
+      animation-delay: 380ms;
     }
 
     .diagram .node {
       stroke: rgba(255, 253, 248, 0.45);
       stroke-width: 1;
+      opacity: 0;
+      transform-box: fill-box;
+      transform-origin: center;
+      animation: node-arrive 520ms cubic-bezier(.2, .8, .2, 1) forwards;
+    }
+
+    .diagram .node:nth-of-type(1) {
+      animation-delay: 220ms;
+    }
+
+    .diagram .node:nth-of-type(2) {
+      animation-delay: 360ms;
+    }
+
+    .diagram .node:nth-of-type(3) {
+      animation-delay: 500ms;
+    }
+
+    .diagram .node:nth-of-type(4) {
+      animation-delay: 640ms;
+    }
+
+    .diagram .node:nth-of-type(5) {
+      animation-delay: 780ms;
+    }
+
+    .diagram .label-dark {
+      fill: var(--ink);
+    }
+
+    .diagram .node-label {
+      opacity: 0;
+      animation: label-arrive 420ms ease forwards;
+      animation-delay: 760ms;
+    }
+
+    .diagram .signal {
+      fill: #fffdf8;
+      opacity: 0.78;
+      filter: drop-shadow(0 0 6px rgba(255, 253, 248, 0.7));
+    }
+
+    @keyframes draw-line {
+      to {
+        stroke-dashoffset: 0;
+      }
+    }
+
+    @keyframes node-arrive {
+      from {
+        opacity: 0;
+        transform: scale(0.88);
+      }
+      to {
+        opacity: 1;
+        transform: scale(1);
+      }
+    }
+
+    @keyframes label-arrive {
+      from {
+        opacity: 0;
+        transform: translateY(4px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .diagram .line,
+      .diagram .node,
+      .diagram .node-label {
+        animation: none;
+        opacity: 1;
+        stroke-dashoffset: 0;
+      }
+
+      .diagram .signal {
+        display: none;
+      }
     }
 
     .visual-note {
@@ -561,20 +659,40 @@
             <span>Scale</span>
           </div>
           <svg class="diagram" viewBox="0 0 520 360" role="img" aria-label="A system map connecting devices, APIs, data, and cloud infrastructure">
-            <line class="line" x1="105" y1="92" x2="260" y2="180"></line>
-            <line class="line" x1="260" y1="180" x2="420" y2="92"></line>
-            <line class="line" x1="260" y1="180" x2="420" y2="272"></line>
-            <line class="line" x1="105" y1="272" x2="260" y2="180"></line>
+            <path id="signal-devices-api" class="line" pathLength="1" d="M105 92 L260 180"></path>
+            <path id="signal-api-cloud" class="line" pathLength="1" d="M260 180 L420 92"></path>
+            <path id="signal-api-ai" class="line" pathLength="1" d="M260 180 L420 272"></path>
+            <path id="signal-data-api" class="line" pathLength="1" d="M105 272 L260 180"></path>
             <rect class="node" x="40" y="52" width="130" height="80" rx="6" fill="#337a72"></rect>
             <rect class="node" x="195" y="140" width="130" height="80" rx="6" fill="#d59b32"></rect>
             <rect class="node" x="355" y="52" width="130" height="80" rx="6" fill="#b76547"></rect>
             <rect class="node" x="40" y="232" width="130" height="80" rx="6" fill="#637849"></rect>
             <rect class="node" x="355" y="232" width="130" height="80" rx="6" fill="#fbf8f0"></rect>
-            <text x="105" y="98" text-anchor="middle">Devices</text>
-            <text x="260" y="186" text-anchor="middle" fill="#172024">APIs</text>
-            <text x="420" y="98" text-anchor="middle">Cloud</text>
-            <text x="105" y="278" text-anchor="middle">Data</text>
-            <text x="420" y="278" text-anchor="middle" fill="#172024">AI</text>
+            <circle class="signal" r="4">
+              <animateMotion dur="2800ms" begin="900ms" repeatCount="indefinite">
+                <mpath href="#signal-devices-api"></mpath>
+              </animateMotion>
+            </circle>
+            <circle class="signal" r="4">
+              <animateMotion dur="3200ms" begin="1250ms" repeatCount="indefinite">
+                <mpath href="#signal-api-cloud"></mpath>
+              </animateMotion>
+            </circle>
+            <circle class="signal" r="4">
+              <animateMotion dur="3400ms" begin="1550ms" repeatCount="indefinite">
+                <mpath href="#signal-api-ai"></mpath>
+              </animateMotion>
+            </circle>
+            <circle class="signal" r="4">
+              <animateMotion dur="3000ms" begin="1750ms" repeatCount="indefinite">
+                <mpath href="#signal-data-api"></mpath>
+              </animateMotion>
+            </circle>
+            <text class="node-label" x="105" y="98" text-anchor="middle">Devices</text>
+            <text class="node-label label-dark" x="260" y="186" text-anchor="middle">APIs</text>
+            <text class="node-label" x="420" y="98" text-anchor="middle">Cloud</text>
+            <text class="node-label" x="105" y="278" text-anchor="middle">Data</text>
+            <text class="node-label label-dark" x="420" y="278" text-anchor="middle">AI</text>
           </svg>
           <p class="visual-note">I am most useful where software has to survive limited resources, high traffic, large data, unreliable networks, and production deadlines.</p>
         </aside>
