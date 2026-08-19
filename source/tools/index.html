@@ -562,8 +562,8 @@
       <section class="hero">
         <div>
           <p class="eyebrow">Tools</p>
-          <h1>Small utilities for practical shipping work.</h1>
-          <p class="hero-copy">Browser-based tools for engineering and release tasks where a quick, local workflow is more useful than another dashboard.</p>
+          <h1>Tools</h1>
+          <p class="hero-copy">Small browser tools for shipping work.</p>
         </div>
         <aside class="tool-index" aria-label="Available tools">
           <a href="#app-icon-resizer">
@@ -577,35 +577,35 @@
         <div class="section-head">
           <div>
             <p class="eyebrow">App icon resizer</p>
-            <h2>Generate icon sizes and check Play listing basics.</h2>
+            <h2>App icon resizer</h2>
           </div>
-          <p>Upload a square source icon and generate PNG sizes locally in your browser. The tool checks the Google Play 512px asset requirements it can verify technically.</p>
+          <p>Upload once. Generate PNG sizes locally.</p>
         </div>
         <div class="tools-workbench">
           <article class="tool-card">
-            <h3>What it checks</h3>
-            <p>The tool verifies source dimensions, PNG format preference, generated 512x512 Play icon size, and the 1024KB file-size limit.</p>
-            <p class="tool-note">Visual rules still need a human pass: full square artwork, no baked-in rounded corners, and no baked-in drop shadow.</p>
+            <h3>Checks</h3>
+            <p>Square source: 2048, 1024, 512, or 256px.</p>
+            <p class="tool-note">Play icon: 512x512 PNG, max 1024KB.</p>
+            <p class="tool-note">Manual: no rounded corners or drop shadow.</p>
             <p class="tool-note">
-              Reference:
-              <a href="https://developer.android.com/distribute/google-play/resources/icon-design-specifications" target="_blank" rel="noopener">Google Play icon design specifications</a>
+              <a href="https://developer.android.com/distribute/google-play/resources/icon-design-specifications" target="_blank" rel="noopener">Google Play specs</a>
             </p>
           </article>
           <div class="icon-tool">
             <label class="upload-panel" for="icon-upload">
               <input id="icon-upload" type="file" accept="image/png,image/jpeg,image/webp">
               <span class="upload-title">Upload app icon</span>
-              <span class="upload-help">Accepted source dimensions: 2048x2048, 1024x1024, 512x512, or 256x256. PNG is required for the final Google Play asset.</span>
+              <span class="upload-help">Square PNG, JPG, or WebP: 2048, 1024, 512, or 256px.</span>
             </label>
             <p class="tool-status" id="icon-tool-status">No icon selected yet.</p>
             <div class="tool-preview-grid">
               <div class="icon-preview" id="icon-preview" aria-label="Icon preview"></div>
               <ul class="spec-list" id="icon-spec-list" aria-label="Icon specification checks">
-                <li data-check="dimensions">Upload a supported square source icon.</li>
-                <li data-check="format">Google Play final asset should be PNG.</li>
-                <li data-check="play-size">Generate and verify the 512x512 Play icon.</li>
-                <li data-check="file-size">512x512 PNG must be 1024KB or less.</li>
-                <li data-check="manual">Manual check: full square artwork, no baked-in rounded corners or drop shadow.</li>
+                <li data-check="dimensions">Source size</li>
+                <li data-check="format">PNG output</li>
+                <li data-check="play-size">512x512 Play icon</li>
+                <li data-check="file-size">Under 1024KB</li>
+                <li data-check="manual">Manual visual check</li>
               </ul>
             </div>
             <div class="download-grid" id="icon-downloads" aria-label="Generated icon downloads"></div>
@@ -654,7 +654,7 @@
       image.onload = () => resolve({ image, url });
       image.onerror = () => {
         URL.revokeObjectURL(url);
-        reject(new Error('The selected file could not be read as an image.'));
+        reject(new Error('Invalid image file.'));
       };
 
       image.src = url;
@@ -687,7 +687,7 @@
         return;
       }
 
-      setIconStatus('Reading icon and preparing generated sizes...');
+      setIconStatus('Processing...');
 
       try {
         const { image, url } = await loadIconImage(file);
@@ -705,28 +705,24 @@
           'dimensions',
           isAcceptedSource ? 'pass' : 'fail',
           isSquare
-            ? `Source is ${image.naturalWidth}x${image.naturalHeight}. Supported source sizes are ${acceptedIconSizes.join(', ')}.`
-            : `Source is ${image.naturalWidth}x${image.naturalHeight}. Upload a square icon.`
+            ? `${image.naturalWidth}x${image.naturalHeight}`
+            : `${image.naturalWidth}x${image.naturalHeight}, not square`
         );
 
         setIconCheck(
           'format',
           isPng ? 'pass' : 'warn',
           isPng
-            ? 'Uploaded source is PNG. Generated outputs are PNG.'
-            : `Uploaded source is ${file.type || 'unknown format'}. Generated outputs will be PNG, but use a PNG source when possible.`
+            ? 'PNG source'
+            : 'Converted to PNG'
         );
 
-        setIconCheck(
-          'manual',
-          'warn',
-          'Manual check still required: full square artwork, no baked-in rounded corners, and no baked-in drop shadow.'
-        );
+        setIconCheck('manual', 'warn', 'Check artwork shape/shadow manually.');
 
         if (!isAcceptedSource) {
-          setIconCheck('play-size', 'fail', '512x512 Play icon was not generated because the source size is unsupported.');
-          setIconCheck('file-size', 'fail', '512x512 PNG size was not checked because generation was skipped.');
-          setIconStatus('Use a square 2048, 1024, 512, or 256px source icon.', true);
+          setIconCheck('play-size', 'fail', 'Not generated');
+          setIconCheck('file-size', 'fail', 'Not checked');
+          setIconStatus('Use 2048, 1024, 512, or 256px square image.', true);
           return;
         }
 
@@ -738,13 +734,13 @@
         const playIcon = generated.find((item) => item.size === 512);
         const playIconFits = playIcon && playIcon.blob && playIcon.blob.size <= playIconMaxBytes;
 
-        setIconCheck('play-size', 'pass', 'Generated a 512x512 PNG for the Google Play listing icon.');
+        setIconCheck('play-size', 'pass', 'Generated');
         setIconCheck(
           'file-size',
           playIconFits ? 'pass' : 'fail',
           playIcon
-            ? `Generated 512x512 PNG is ${formatBytes(playIcon.blob.size)}. Limit is 1024KB.`
-            : 'Could not generate the 512x512 PNG.'
+            ? `${formatBytes(playIcon.blob.size)} / 1024KB`
+            : 'Not generated'
         );
 
         generated.forEach(({ size, blob }) => {
@@ -760,13 +756,13 @@
           iconDownloads.appendChild(link);
         });
 
-        setIconStatus(`Generated ${generated.length} PNG sizes from ${file.name}.`);
+        setIconStatus(`Generated ${generated.length} sizes.`);
       } catch (error) {
-        setIconCheck('dimensions', 'fail', 'Could not read image dimensions.');
-        setIconCheck('format', 'fail', 'Could not process the selected file.');
-        setIconCheck('play-size', 'fail', '512x512 Play icon was not generated.');
-        setIconCheck('file-size', 'fail', '512x512 PNG size was not checked.');
-        setIconCheck('manual', 'warn', 'Manual design checks still apply once a valid icon is uploaded.');
+        setIconCheck('dimensions', 'fail', 'Unreadable');
+        setIconCheck('format', 'fail', 'Invalid file');
+        setIconCheck('play-size', 'fail', 'Not generated');
+        setIconCheck('file-size', 'fail', 'Not checked');
+        setIconCheck('manual', 'warn', 'Check manually after upload.');
         setIconStatus(error.message, true);
       }
     };
