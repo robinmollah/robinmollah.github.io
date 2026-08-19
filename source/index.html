@@ -5,13 +5,42 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Robin Mollah | Software Engineer</title>
   <meta name="description" content="Robin Mollah is a Senior Software Engineer building backend platforms, cloud infrastructure, data systems, and applied AI under real production constraints.">
+  <meta name="author" content="Robin Mollah">
+  <meta name="keywords" content="Robin Mollah, software engineer, backend engineering, cloud infrastructure, data pipelines, applied AI, systems architecture">
+  <meta name="robots" content="index, follow">
+  <meta name="theme-color" content="#123744">
+  <link rel="canonical" href="https://robinmollah.com/">
   <meta property="og:title" content="Robin Mollah | Software Engineer">
   <meta property="og:description" content="Backend, cloud, data, frontend, and AI engineering for systems under real production constraints.">
   <meta property="og:type" content="website">
   <meta property="og:url" content="https://robinmollah.com/">
+  <meta property="og:site_name" content="Robin Mollah">
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="Robin Mollah | Software Engineer">
+  <meta name="twitter:description" content="Backend, cloud, data, frontend, and AI engineering for systems under real production constraints.">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,650;9..144,800&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "Person",
+      "name": "Robin Mollah",
+      "url": "https://robinmollah.com/",
+      "jobTitle": "Senior Software Engineer",
+      "sameAs": [
+        "https://github.com/robinmollah",
+        "https://linkedin.com/in/robinmollah"
+      ],
+      "knowsAbout": [
+        "Backend engineering",
+        "Cloud infrastructure",
+        "Data pipelines",
+        "Applied AI",
+        "Systems architecture"
+      ]
+    }
+  </script>
   <style>
     :root {
       --ink: #172024;
@@ -198,6 +227,18 @@
       transform: translateY(-1px);
     }
 
+    .reveal {
+      opacity: 0;
+      transform: translateY(18px);
+      transition: opacity 620ms ease, transform 620ms ease;
+      transition-delay: var(--reveal-delay, 0ms);
+    }
+
+    .reveal.is-visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
     .system-visual {
       min-height: 560px;
       display: grid;
@@ -329,6 +370,16 @@
     }
 
     @media (prefers-reduced-motion: reduce) {
+      html {
+        scroll-behavior: auto;
+      }
+
+      .reveal {
+        opacity: 1;
+        transform: none;
+        transition: none;
+      }
+
       .diagram .line,
       .diagram .node,
       .diagram .node-label {
@@ -568,6 +619,11 @@
         min-height: 460px;
       }
 
+      .diagram {
+        max-width: 620px;
+        margin: 32px auto;
+      }
+
       .metric-strip,
       .focus-grid,
       .writing-grid {
@@ -587,12 +643,27 @@
       .site-nav {
         align-items: flex-start;
         flex-direction: column;
+        gap: 16px;
+      }
+
+      .brand {
+        width: 100%;
+      }
+
+      .nav-links {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        width: 100%;
+      }
+
+      .nav-links a {
+        text-align: center;
       }
 
       .hero {
         min-height: auto;
         gap: 28px;
-        padding: 28px 0 42px;
+        padding: 24px 0 42px;
       }
 
       h1 {
@@ -601,6 +672,29 @@
 
       h2 {
         font-size: 2.55rem;
+      }
+
+      .hero-actions {
+        display: grid;
+        grid-template-columns: 1fr;
+      }
+
+      .button {
+        justify-content: center;
+        width: 100%;
+      }
+
+      .system-visual {
+        min-height: auto;
+        padding: 18px;
+      }
+
+      .visual-top {
+        flex-wrap: wrap;
+      }
+
+      .diagram {
+        margin: 24px 0;
       }
 
       .metric-strip,
@@ -698,27 +792,27 @@
         </aside>
       </section>
 
-      <section class="metric-strip" aria-label="Selected engineering scale">
-        <div class="metric">
+      <section class="metric-strip reveal" aria-label="Selected engineering scale">
+        <div class="metric reveal" style="--reveal-delay: 80ms;">
           <strong>64MB</strong>
           <span>Router-class environments handled with custom web servers, security layers, and tunneling.</span>
         </div>
-        <div class="metric">
+        <div class="metric reveal" style="--reveal-delay: 160ms;">
           <strong>512MB</strong>
           <span>Android device constraints managed through game-engine and asset optimization.</span>
         </div>
-        <div class="metric">
+        <div class="metric reveal" style="--reveal-delay: 240ms;">
           <strong>300GB+</strong>
           <span>Large upload paths redesigned around browser, network, and cloud I/O limits.</span>
         </div>
-        <div class="metric">
+        <div class="metric reveal" style="--reveal-delay: 320ms;">
           <strong>TB</strong>
           <span>Production-scale data pipelines built for throughput, fault tolerance, and cost control.</span>
         </div>
       </section>
 
-      <section class="section">
-        <div class="section-head">
+      <section class="section reveal">
+        <div class="section-head reveal">
           <div>
             <p class="eyebrow">Selected work</p>
             <h2>Engineering problems with hard edges.</h2>
@@ -726,22 +820,22 @@
           <p>These examples were shaped by memory, bandwidth, latency, deployment, and operational constraints rather than ideal lab conditions.</p>
         </div>
         <div class="proof-grid">
-          <article class="proof" style="--accent: var(--teal);">
+          <article class="proof reveal" style="--accent: var(--teal); --reveal-delay: 80ms;">
             <h3>100KB web server</h3>
             <p>Built complex web servers for 64MB RAM Wi-Fi routers, including custom security layers and TCP tunneling for constrained device environments.</p>
             <a href="https://bonton.app" target="_blank" rel="noopener">Bonton Connect</a>
           </article>
-          <article class="proof" style="--accent: var(--gold);">
+          <article class="proof reveal" style="--accent: var(--gold); --reveal-delay: 160ms;">
             <h3>36MB game engine</h3>
             <p>Optimized a LibGDX-based open-world game to run under strict memory and storage limits on a 512MB RAM Android device.</p>
             <a href="https://apkpure.com/71-hit-run/net.properbd.hitnrun" target="_blank" rel="noopener">71: Hit & Run</a>
           </article>
-          <article class="proof" style="--accent: var(--navy);">
+          <article class="proof reveal" style="--accent: var(--navy); --reveal-delay: 240ms;">
             <h3>Real-time streaming</h3>
             <p>Engineered and optimized real-time streaming systems where responsiveness, operational control, and predictable delivery mattered.</p>
             <a href="https://eagle3dstreaming.com/" target="_blank" rel="noopener">Eagle 3D Streaming</a>
           </article>
-          <article class="proof" style="--accent: var(--clay);">
+          <article class="proof reveal" style="--accent: var(--clay); --reveal-delay: 320ms;">
             <h3>Ultra-large file movement</h3>
             <p>Improved upload flows for files larger than 300GB by working through browser limits, cloud I/O constraints, and network behavior.</p>
             <a href="https://eagle3dstreaming.com/" target="_blank" rel="noopener">Eagle 3D Streaming</a>
@@ -749,8 +843,8 @@
         </div>
       </section>
 
-      <section class="section">
-        <div class="section-head">
+      <section class="section reveal">
+        <div class="section-head reveal">
           <div>
             <p class="eyebrow">Capability</p>
             <h2>From architecture to production behavior.</h2>
@@ -758,47 +852,47 @@
           <p>I work best where the system has to be designed, shipped, observed, and improved as real users stress it.</p>
         </div>
         <div class="focus-grid">
-          <article class="focus" style="--accent: var(--gold);">
+          <article class="focus reveal" style="--accent: var(--gold); --reveal-delay: 80ms;">
             <h3>Backend platforms</h3>
             <p>APIs, services, data models, boundaries, and operational patterns for systems that need to keep scaling.</p>
           </article>
-          <article class="focus" style="--accent: var(--teal);">
+          <article class="focus reveal" style="--accent: var(--teal); --reveal-delay: 160ms;">
             <h3>Cloud reliability</h3>
             <p>Kubernetes, Terraform, deployment workflows, monitoring, autoscaling, and production recovery.</p>
           </article>
-          <article class="focus" style="--accent: var(--moss);">
+          <article class="focus reveal" style="--accent: var(--moss); --reveal-delay: 240ms;">
             <h3>Data systems</h3>
             <p>Batch and pipeline work across TB-scale datasets, analytics workflows, and storage tradeoffs.</p>
           </article>
-          <article class="focus" style="--accent: var(--clay);">
+          <article class="focus reveal" style="--accent: var(--clay); --reveal-delay: 320ms;">
             <h3>Applied AI</h3>
             <p>AI integrations treated as product infrastructure: useful, measurable, and grounded in real workflows.</p>
           </article>
         </div>
       </section>
 
-      <section class="section experience">
-        <div class="experience-copy">
+      <section class="section experience reveal">
+        <div class="experience-copy reveal">
           <p class="eyebrow">Experience</p>
           <h2>Built with teams facing real operational pressure.</h2>
           <p>My work has covered SaaS platforms, high-traffic APIs, data pipelines, cloud infrastructure, real-time systems, and resource-constrained environments.</p>
         </div>
         <div class="role-list">
-          <div class="role">
+          <div class="role reveal" style="--reveal-delay: 80ms;">
             <div>
               <strong>Eagle 3D Streaming</strong>
               <span>Real-time streaming, SaaS platforms, cloud infrastructure, and large file workflows.</span>
             </div>
             <em>Scale</em>
           </div>
-          <div class="role">
+          <div class="role reveal" style="--reveal-delay: 160ms;">
             <div>
               <strong>Freedom2Hear</strong>
               <span>Backend systems, data pipelines, analytics, and cloud reliability across production workloads.</span>
             </div>
             <em>Data</em>
           </div>
-          <div class="role">
+          <div class="role reveal" style="--reveal-delay: 240ms;">
             <div>
               <strong>Bonton Connect</strong>
               <span>Constrained networked devices, custom communication paths, and router-class engineering.</span>
@@ -808,8 +902,8 @@
         </div>
       </section>
 
-      <section class="section">
-        <div class="section-head">
+      <section class="section reveal">
+        <div class="section-head reveal">
           <div>
             <p class="eyebrow">Writing</p>
             <h2>Notes from practical engineering work.</h2>
@@ -817,17 +911,17 @@
           <p>I write about infrastructure, cloud platforms, operational lessons, and engineering choices that become important after software reaches production.</p>
         </div>
         <div class="writing-grid">
-          <article class="article-link" style="--accent: var(--navy);">
+          <article class="article-link reveal" style="--accent: var(--navy); --reveal-delay: 80ms;">
             <h3>AWS EC2 vs GCP Compute Engine</h3>
             <p>A practical comparison of virtual machine creation and operational workflow between AWS and GCP.</p>
             <a href="/2021/08/A-Brief-Comparison-Of-AWS-EC2-and-GCP-Compute-Engine/">Read article</a>
           </article>
-          <article class="article-link" style="--accent: var(--teal);">
+          <article class="article-link reveal" style="--accent: var(--teal); --reveal-delay: 160ms;">
             <h3>Uploading extra large files to S3</h3>
             <p>Implementation paths for large uploads, including tradeoffs around streaming and multipart upload.</p>
             <a href="/2021/12/Uploading-extra-large-files-to-S3/">Read article</a>
           </article>
-          <article class="article-link" style="--accent: var(--moss);">
+          <article class="article-link reveal" style="--accent: var(--moss); --reveal-delay: 240ms;">
             <h3>Optimising disk usage of a Linux server</h3>
             <p>Operational commands and habits for finding disk pressure before it becomes a production issue.</p>
             <a href="/2022/12/Optimising-disk-usage-of-a-linux-server/">Read article</a>
@@ -835,7 +929,7 @@
         </div>
       </section>
 
-      <section class="final">
+      <section class="final reveal">
         <div>
           <p class="eyebrow">Contact</p>
           <h2>Useful when the problem is vague, constrained, or already in production.</h2>
@@ -845,5 +939,22 @@
       </section>
     </main>
   </div>
+  <script>
+    const revealItems = document.querySelectorAll('.reveal');
+
+    if ('IntersectionObserver' in window) {
+      const revealObserver = new IntersectionObserver((entries, observer) => {
+        entries.forEach((entry) => {
+          if (!entry.isIntersecting) return;
+          entry.target.classList.add('is-visible');
+          observer.unobserve(entry.target);
+        });
+      }, { rootMargin: '0px 0px -12% 0px', threshold: 0.12 });
+
+      revealItems.forEach((item) => revealObserver.observe(item));
+    } else {
+      revealItems.forEach((item) => item.classList.add('is-visible'));
+    }
+  </script>
 </body>
 </html>

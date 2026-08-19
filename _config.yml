@@ -177,7 +177,6 @@ pagination_dir: page
 ## include:/exclude: options only apply to the 'source/' folder
 include:
 exclude:
-  - index.md
 ignore:
 
 # Extensions
