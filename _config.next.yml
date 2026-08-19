@@ -6,6 +6,7 @@ darkmode: false
 
 menu:
   home: / || fa fa-home
+  tools: /tools/ || fa fa-wrench
   blog: /blog/ || fa fa-pencil
   contact: /contact/ || fa fa-envelope
   about: /about/ || fa fa-user

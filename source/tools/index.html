@@ -1,0 +1,779 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Tools | Robin Mollah</title>
+  <meta name="description" content="Browser-based engineering tools by Robin Mollah, starting with an app icon resizer and Google Play icon specification checker.">
+  <meta name="author" content="Robin Mollah">
+  <meta name="robots" content="index, follow">
+  <meta name="theme-color" content="#f8f4ea">
+  <link rel="canonical" href="https://robinmollah.com/tools/">
+  <meta property="og:title" content="Tools | Robin Mollah">
+  <meta property="og:description" content="Browser-based engineering tools for release and production work.">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://robinmollah.com/tools/">
+  <meta property="og:site_name" content="Robin Mollah">
+  <meta name="twitter:card" content="summary">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,650;9..144,800&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --ink: #172024;
+      --muted: #5b666b;
+      --line: rgba(23, 32, 36, 0.14);
+      --paper: #f8f4ea;
+      --paper-deep: #ece4d2;
+      --navy: #123744;
+      --teal: #337a72;
+      --clay: #884d39;
+      --clay-bright: #b76547;
+      --gold: #d59b32;
+      --white: #fffdf8;
+      --shadow: 0 20px 54px rgba(18, 36, 44, 0.13);
+      --display: "Fraunces", Georgia, serif;
+      --body: "IBM Plex Sans", "Segoe UI", sans-serif;
+      --ease-editorial: cubic-bezier(0.2, 0.8, 0.2, 1);
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      margin: 0;
+      background: var(--paper);
+      color: var(--ink);
+      font-family: var(--body);
+      font-size: 17px;
+      line-height: 1.65;
+    }
+
+    body::before {
+      content: "";
+      position: fixed;
+      inset: 0;
+      z-index: -1;
+      background:
+        linear-gradient(90deg, rgba(23, 32, 36, 0.035) 1px, transparent 1px),
+        linear-gradient(180deg, rgba(23, 32, 36, 0.035) 1px, transparent 1px),
+        linear-gradient(135deg, rgba(51, 122, 114, 0.08), transparent 42%),
+        linear-gradient(315deg, rgba(183, 101, 71, 0.12), transparent 40%);
+      background-size: 80px 80px, 80px 80px, auto, auto;
+      pointer-events: none;
+    }
+
+    a {
+      color: inherit;
+      text-decoration-thickness: 1px;
+      text-underline-offset: 0.18em;
+    }
+
+    .site-shell {
+      width: min(1180px, calc(100% - 40px));
+      margin: 0 auto;
+    }
+
+    .site-nav {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 24px;
+      padding: 24px 0;
+    }
+
+    .brand {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      color: var(--ink);
+      font-weight: 800;
+      text-decoration: none;
+    }
+
+    .brand-mark {
+      display: inline-grid;
+      place-items: center;
+      width: 40px;
+      height: 40px;
+      background: var(--ink);
+      color: var(--white);
+      font-family: var(--display);
+      font-size: 1.15rem;
+      border-radius: 4px;
+    }
+
+    .nav-links {
+      display: flex;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+
+    .nav-links a {
+      position: relative;
+      padding: 9px 12px;
+      border: 1px solid transparent;
+      border-radius: 4px;
+      color: var(--ink);
+      font-size: 0.88rem;
+      font-weight: 700;
+      text-decoration: none;
+      transition: background 180ms ease, border-color 180ms ease, transform 180ms ease;
+    }
+
+    .nav-links a:hover,
+    .nav-links a:focus-visible,
+    .nav-links .active {
+      border-color: var(--line);
+      background: rgba(255, 253, 248, 0.72);
+      transform: translateY(-1px);
+    }
+
+    .hero {
+      display: grid;
+      grid-template-columns: minmax(0, 0.85fr) minmax(320px, 1fr);
+      gap: 44px;
+      align-items: end;
+      padding: 48px 0 56px;
+    }
+
+    .eyebrow {
+      margin: 0 0 14px;
+      color: var(--clay-bright);
+      font-size: 0.82rem;
+      font-weight: 800;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+
+    h1,
+    h2,
+    h3,
+    p {
+      margin-top: 0;
+    }
+
+    h1,
+    h2,
+    h3 {
+      font-family: var(--display);
+      line-height: 0.98;
+      letter-spacing: 0;
+    }
+
+    h1 {
+      margin-bottom: 24px;
+      font-size: clamp(4rem, 9vw, 7rem);
+      font-weight: 800;
+    }
+
+    h2 {
+      margin-bottom: 0;
+      font-size: clamp(2.6rem, 5vw, 4.4rem);
+      font-weight: 800;
+    }
+
+    h3 {
+      margin-bottom: 12px;
+      font-size: 2rem;
+      font-weight: 650;
+    }
+
+    .hero-copy,
+    .section-head p,
+    .tool-card p {
+      color: var(--muted);
+    }
+
+    .tool-index {
+      display: grid;
+      gap: 16px;
+      padding: 24px;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: rgba(255, 253, 248, 0.82);
+      box-shadow: var(--shadow);
+    }
+
+    .tool-index a {
+      display: flex;
+      justify-content: space-between;
+      gap: 16px;
+      padding: 14px;
+      border: 1px solid var(--line);
+      border-radius: 6px;
+      color: var(--ink);
+      font-weight: 800;
+      text-decoration: none;
+      transition: transform 180ms ease, border-color 180ms ease, background 180ms ease;
+    }
+
+    .tool-index a:hover,
+    .tool-index a:focus-visible {
+      border-color: rgba(18, 55, 68, 0.28);
+      background: var(--white);
+      transform: translateY(-1px);
+    }
+
+    .tool-index span {
+      color: var(--clay);
+      font-size: 0.82rem;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+
+    .section {
+      padding: 42px 0 80px;
+    }
+
+    .section-head {
+      display: grid;
+      grid-template-columns: minmax(0, 0.72fr) minmax(320px, 1fr);
+      gap: 48px;
+      align-items: end;
+      margin-bottom: 28px;
+    }
+
+    .tools-workbench {
+      display: grid;
+      grid-template-columns: minmax(280px, 0.82fr) minmax(0, 1fr);
+      gap: 16px;
+      align-items: stretch;
+    }
+
+    .tool-card,
+    .icon-tool {
+      position: relative;
+      padding: 24px;
+      border: 1px solid var(--line);
+      border-radius: 6px;
+      background: rgba(255, 253, 248, 0.78);
+      box-shadow: var(--shadow);
+      overflow: hidden;
+    }
+
+    .tool-card::before {
+      content: "";
+      display: block;
+      width: 48px;
+      height: 4px;
+      margin-bottom: 18px;
+      background: var(--gold);
+    }
+
+    .tool-note {
+      margin-top: 18px;
+      font-size: 0.92rem;
+    }
+
+    .tool-note a {
+      color: var(--navy);
+      font-weight: 800;
+    }
+
+    .icon-tool {
+      display: grid;
+      gap: 16px;
+      background:
+        linear-gradient(90deg, rgba(23, 32, 36, 0.03) 1px, transparent 1px),
+        linear-gradient(180deg, rgba(23, 32, 36, 0.03) 1px, transparent 1px),
+        rgba(255, 253, 248, 0.62);
+      background-size: 28px 28px, 28px 28px, auto;
+    }
+
+    .upload-panel {
+      display: grid;
+      place-items: center;
+      min-height: 220px;
+      padding: 24px;
+      border: 1px dashed rgba(18, 55, 68, 0.3);
+      border-radius: 6px;
+      background: rgba(248, 244, 234, 0.72);
+      color: var(--muted);
+      cursor: pointer;
+      text-align: center;
+      transition: border-color 180ms ease, background 180ms ease, transform 180ms ease;
+    }
+
+    .upload-panel:hover,
+    .upload-panel:focus-within {
+      border-color: var(--clay);
+      background: var(--white);
+      transform: translateY(-1px);
+    }
+
+    .upload-panel input {
+      inline-size: 1px;
+      block-size: 1px;
+      position: absolute;
+      opacity: 0;
+      pointer-events: none;
+    }
+
+    .upload-title {
+      display: block;
+      color: var(--ink);
+      font-family: var(--display);
+      font-size: 1.55rem;
+      font-weight: 800;
+      line-height: 1;
+    }
+
+    .upload-help {
+      display: block;
+      max-width: 440px;
+      margin-top: 10px;
+      font-size: 0.94rem;
+    }
+
+    .tool-status {
+      min-height: 24px;
+      color: var(--muted);
+      font-size: 0.92rem;
+      font-weight: 700;
+    }
+
+    .tool-status.is-error {
+      color: #8d2f22;
+    }
+
+    .tool-preview-grid {
+      display: grid;
+      grid-template-columns: minmax(120px, 180px) 1fr;
+      gap: 16px;
+      align-items: start;
+    }
+
+    .icon-preview {
+      display: grid;
+      place-items: center;
+      min-height: 180px;
+      border: 1px solid var(--line);
+      border-radius: 6px;
+      background:
+        linear-gradient(45deg, rgba(23, 32, 36, 0.06) 25%, transparent 25%),
+        linear-gradient(-45deg, rgba(23, 32, 36, 0.06) 25%, transparent 25%),
+        linear-gradient(45deg, transparent 75%, rgba(23, 32, 36, 0.06) 75%),
+        linear-gradient(-45deg, transparent 75%, rgba(23, 32, 36, 0.06) 75%),
+        var(--paper);
+      background-position: 0 0, 0 10px, 10px -10px, -10px 0;
+      background-size: 20px 20px;
+      overflow: hidden;
+    }
+
+    .icon-preview img {
+      max-width: 132px;
+      max-height: 132px;
+      border-radius: 18px;
+      box-shadow: 0 12px 28px rgba(18, 36, 44, 0.12);
+    }
+
+    .spec-list {
+      display: grid;
+      gap: 8px;
+      margin: 0;
+      padding: 0;
+      list-style: none;
+    }
+
+    .spec-list li {
+      display: flex;
+      gap: 10px;
+      align-items: flex-start;
+      padding: 10px 12px;
+      border: 1px solid var(--line);
+      border-radius: 6px;
+      background: rgba(255, 253, 248, 0.78);
+      color: var(--muted);
+      font-size: 0.9rem;
+      font-weight: 700;
+    }
+
+    .spec-list li::before {
+      content: "Pending";
+      flex: 0 0 auto;
+      min-width: 58px;
+      color: var(--muted);
+      font-size: 0.7rem;
+      font-weight: 800;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+
+    .spec-list li.is-pass::before {
+      content: "Pass";
+      color: var(--teal);
+    }
+
+    .spec-list li.is-warn::before {
+      content: "Check";
+      color: var(--gold);
+    }
+
+    .spec-list li.is-fail::before {
+      content: "Fail";
+      color: #8d2f22;
+    }
+
+    .download-grid {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 10px;
+    }
+
+    .download-grid a {
+      display: grid;
+      gap: 3px;
+      padding: 12px;
+      border: 1px solid var(--line);
+      border-radius: 6px;
+      background: var(--ink);
+      color: var(--white);
+      font-size: 0.82rem;
+      font-weight: 800;
+      text-align: center;
+      text-decoration: none;
+      transition: transform 180ms ease, box-shadow 180ms ease, background 180ms ease;
+    }
+
+    .download-grid a:hover,
+    .download-grid a:focus-visible {
+      background: var(--navy);
+      color: var(--white);
+      transform: translateY(-1px);
+      box-shadow: 0 10px 22px rgba(18, 36, 44, 0.16);
+    }
+
+    .download-grid small {
+      color: rgba(255, 253, 248, 0.68);
+      font-weight: 600;
+    }
+
+    .download-grid:empty::before {
+      content: "Generated downloads will appear here.";
+      grid-column: 1 / -1;
+      padding: 14px;
+      border: 1px solid var(--line);
+      border-radius: 6px;
+      color: var(--muted);
+      font-size: 0.92rem;
+      text-align: center;
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      html {
+        scroll-behavior: auto;
+      }
+
+      .nav-links a,
+      .tool-index a,
+      .upload-panel,
+      .download-grid a {
+        transition: none;
+      }
+
+      .nav-links a:hover,
+      .nav-links a:focus-visible,
+      .tool-index a:hover,
+      .tool-index a:focus-visible,
+      .upload-panel:hover,
+      .upload-panel:focus-within,
+      .download-grid a:hover,
+      .download-grid a:focus-visible {
+        transform: none;
+      }
+    }
+
+    @media (max-width: 980px) {
+      .hero,
+      .section-head,
+      .tools-workbench {
+        grid-template-columns: 1fr;
+      }
+
+      .download-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+    }
+
+    @media (max-width: 640px) {
+      body {
+        font-size: 16px;
+      }
+
+      .site-shell {
+        width: min(100% - 24px, 1180px);
+      }
+
+      .site-nav {
+        align-items: flex-start;
+        flex-direction: column;
+      }
+
+      .brand,
+      .nav-links {
+        width: 100%;
+      }
+
+      .nav-links {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+
+      .nav-links a {
+        text-align: center;
+      }
+
+      .hero {
+        padding: 24px 0 36px;
+      }
+
+      .tool-index a,
+      .tool-preview-grid,
+      .download-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="site-shell">
+    <nav class="site-nav" aria-label="Primary navigation">
+      <a class="brand" href="/" aria-label="Robin Mollah home">
+        <span class="brand-mark">RM</span>
+        <span>Robin Mollah</span>
+      </a>
+      <div class="nav-links">
+        <a class="active" href="/tools/">Tools</a>
+        <a href="/blog/">Blog</a>
+        <a href="/about/">About</a>
+        <a href="/contact/">Contact</a>
+        <a href="https://github.com/robinmollah" target="_blank" rel="noopener">GitHub</a>
+      </div>
+    </nav>
+
+    <main>
+      <section class="hero">
+        <div>
+          <p class="eyebrow">Tools</p>
+          <h1>Small utilities for practical shipping work.</h1>
+          <p class="hero-copy">Browser-based tools for engineering and release tasks where a quick, local workflow is more useful than another dashboard.</p>
+        </div>
+        <aside class="tool-index" aria-label="Available tools">
+          <a href="#app-icon-resizer">
+            App icon resizer
+            <span>Available</span>
+          </a>
+        </aside>
+      </section>
+
+      <section class="section" id="app-icon-resizer">
+        <div class="section-head">
+          <div>
+            <p class="eyebrow">App icon resizer</p>
+            <h2>Generate icon sizes and check Play listing basics.</h2>
+          </div>
+          <p>Upload a square source icon and generate PNG sizes locally in your browser. The tool checks the Google Play 512px asset requirements it can verify technically.</p>
+        </div>
+        <div class="tools-workbench">
+          <article class="tool-card">
+            <h3>What it checks</h3>
+            <p>The tool verifies source dimensions, PNG format preference, generated 512x512 Play icon size, and the 1024KB file-size limit.</p>
+            <p class="tool-note">Visual rules still need a human pass: full square artwork, no baked-in rounded corners, and no baked-in drop shadow.</p>
+            <p class="tool-note">
+              Reference:
+              <a href="https://developer.android.com/distribute/google-play/resources/icon-design-specifications" target="_blank" rel="noopener">Google Play icon design specifications</a>
+            </p>
+          </article>
+          <div class="icon-tool">
+            <label class="upload-panel" for="icon-upload">
+              <input id="icon-upload" type="file" accept="image/png,image/jpeg,image/webp">
+              <span class="upload-title">Upload app icon</span>
+              <span class="upload-help">Accepted source dimensions: 2048x2048, 1024x1024, 512x512, or 256x256. PNG is required for the final Google Play asset.</span>
+            </label>
+            <p class="tool-status" id="icon-tool-status">No icon selected yet.</p>
+            <div class="tool-preview-grid">
+              <div class="icon-preview" id="icon-preview" aria-label="Icon preview"></div>
+              <ul class="spec-list" id="icon-spec-list" aria-label="Icon specification checks">
+                <li data-check="dimensions">Upload a supported square source icon.</li>
+                <li data-check="format">Google Play final asset should be PNG.</li>
+                <li data-check="play-size">Generate and verify the 512x512 Play icon.</li>
+                <li data-check="file-size">512x512 PNG must be 1024KB or less.</li>
+                <li data-check="manual">Manual check: full square artwork, no baked-in rounded corners or drop shadow.</li>
+              </ul>
+            </div>
+            <div class="download-grid" id="icon-downloads" aria-label="Generated icon downloads"></div>
+          </div>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <script>
+    const iconUpload = document.querySelector('#icon-upload');
+    const iconStatus = document.querySelector('#icon-tool-status');
+    const iconPreview = document.querySelector('#icon-preview');
+    const iconDownloads = document.querySelector('#icon-downloads');
+    const iconChecks = document.querySelectorAll('#icon-spec-list [data-check]');
+    const acceptedIconSizes = [2048, 1024, 512, 256];
+    const outputIconSizes = [2048, 1024, 512, 256];
+    const playIconMaxBytes = 1024 * 1024;
+    let generatedIconUrls = [];
+
+    const setIconStatus = (message, isError = false) => {
+      iconStatus.textContent = message;
+      iconStatus.classList.toggle('is-error', isError);
+    };
+
+    const setIconCheck = (name, state, message) => {
+      const item = Array.from(iconChecks).find((check) => check.dataset.check === name);
+      if (!item) return;
+
+      item.classList.remove('is-pass', 'is-warn', 'is-fail');
+      if (state) item.classList.add(`is-${state}`);
+      item.textContent = message;
+    };
+
+    const resetIconTool = () => {
+      generatedIconUrls.forEach((url) => URL.revokeObjectURL(url));
+      generatedIconUrls = [];
+      iconPreview.replaceChildren();
+      iconDownloads.replaceChildren();
+    };
+
+    const loadIconImage = (file) => new Promise((resolve, reject) => {
+      const image = new Image();
+      const url = URL.createObjectURL(file);
+
+      image.onload = () => resolve({ image, url });
+      image.onerror = () => {
+        URL.revokeObjectURL(url);
+        reject(new Error('The selected file could not be read as an image.'));
+      };
+
+      image.src = url;
+    });
+
+    const renderIconBlob = (image, size) => new Promise((resolve) => {
+      const canvas = document.createElement('canvas');
+      const context = canvas.getContext('2d');
+
+      canvas.width = size;
+      canvas.height = size;
+      context.imageSmoothingEnabled = true;
+      context.imageSmoothingQuality = 'high';
+      context.clearRect(0, 0, size, size);
+      context.drawImage(image, 0, 0, size, size);
+      canvas.toBlob(resolve, 'image/png');
+    });
+
+    const formatBytes = (bytes) => {
+      if (bytes < 1024) return `${bytes}B`;
+      if (bytes < 1024 * 1024) return `${Math.round(bytes / 1024)}KB`;
+      return `${(bytes / 1024 / 1024).toFixed(2)}MB`;
+    };
+
+    const processIconFile = async (file) => {
+      resetIconTool();
+
+      if (!file) {
+        setIconStatus('No icon selected yet.');
+        return;
+      }
+
+      setIconStatus('Reading icon and preparing generated sizes...');
+
+      try {
+        const { image, url } = await loadIconImage(file);
+        const isSquare = image.naturalWidth === image.naturalHeight;
+        const isAcceptedSource = isSquare && acceptedIconSizes.includes(image.naturalWidth);
+        const isPng = file.type === 'image/png';
+        generatedIconUrls.push(url);
+
+        const preview = new Image();
+        preview.src = url;
+        preview.alt = `${image.naturalWidth} by ${image.naturalHeight} icon preview`;
+        iconPreview.replaceChildren(preview);
+
+        setIconCheck(
+          'dimensions',
+          isAcceptedSource ? 'pass' : 'fail',
+          isSquare
+            ? `Source is ${image.naturalWidth}x${image.naturalHeight}. Supported source sizes are ${acceptedIconSizes.join(', ')}.`
+            : `Source is ${image.naturalWidth}x${image.naturalHeight}. Upload a square icon.`
+        );
+
+        setIconCheck(
+          'format',
+          isPng ? 'pass' : 'warn',
+          isPng
+            ? 'Uploaded source is PNG. Generated outputs are PNG.'
+            : `Uploaded source is ${file.type || 'unknown format'}. Generated outputs will be PNG, but use a PNG source when possible.`
+        );
+
+        setIconCheck(
+          'manual',
+          'warn',
+          'Manual check still required: full square artwork, no baked-in rounded corners, and no baked-in drop shadow.'
+        );
+
+        if (!isAcceptedSource) {
+          setIconCheck('play-size', 'fail', '512x512 Play icon was not generated because the source size is unsupported.');
+          setIconCheck('file-size', 'fail', '512x512 PNG size was not checked because generation was skipped.');
+          setIconStatus('Use a square 2048, 1024, 512, or 256px source icon.', true);
+          return;
+        }
+
+        const generated = await Promise.all(outputIconSizes.map(async (size) => {
+          const blob = await renderIconBlob(image, size);
+          return { size, blob };
+        }));
+
+        const playIcon = generated.find((item) => item.size === 512);
+        const playIconFits = playIcon && playIcon.blob && playIcon.blob.size <= playIconMaxBytes;
+
+        setIconCheck('play-size', 'pass', 'Generated a 512x512 PNG for the Google Play listing icon.');
+        setIconCheck(
+          'file-size',
+          playIconFits ? 'pass' : 'fail',
+          playIcon
+            ? `Generated 512x512 PNG is ${formatBytes(playIcon.blob.size)}. Limit is 1024KB.`
+            : 'Could not generate the 512x512 PNG.'
+        );
+
+        generated.forEach(({ size, blob }) => {
+          if (!blob) return;
+
+          const url = URL.createObjectURL(blob);
+          generatedIconUrls.push(url);
+
+          const link = document.createElement('a');
+          link.href = url;
+          link.download = `app-icon-${size}x${size}.png`;
+          link.innerHTML = `<span>${size}x${size}</span><small>${formatBytes(blob.size)}</small>`;
+          iconDownloads.appendChild(link);
+        });
+
+        setIconStatus(`Generated ${generated.length} PNG sizes from ${file.name}.`);
+      } catch (error) {
+        setIconCheck('dimensions', 'fail', 'Could not read image dimensions.');
+        setIconCheck('format', 'fail', 'Could not process the selected file.');
+        setIconCheck('play-size', 'fail', '512x512 Play icon was not generated.');
+        setIconCheck('file-size', 'fail', '512x512 PNG size was not checked.');
+        setIconCheck('manual', 'warn', 'Manual design checks still apply once a valid icon is uploaded.');
+        setIconStatus(error.message, true);
+      }
+    };
+
+    iconUpload.addEventListener('change', (event) => {
+      processIconFile(event.target.files[0]);
+    });
+  </script>
+</body>
+</html>
