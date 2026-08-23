@@ -4,13 +4,13 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Tools | Robin Mollah</title>
-  <meta name="description" content="Browser-based engineering tools by Robin Mollah, starting with an app icon resizer and Google Play icon specification checker.">
+  <meta name="description" content="Browser-based engineering tools by Robin Mollah, including an app icon resizer and SSL certificate file analyser.">
   <meta name="author" content="Robin Mollah">
   <meta name="robots" content="index, follow">
   <meta name="theme-color" content="#f8f4ea">
   <link rel="canonical" href="https://robinmollah.com/tools/">
   <meta property="og:title" content="Tools | Robin Mollah">
-  <meta property="og:description" content="Browser-based engineering tools for release and production work.">
+  <meta property="og:description" content="Browser-based engineering tools for release, SSL, and production work.">
   <meta property="og:type" content="website">
   <meta property="og:url" content="https://robinmollah.com/tools/">
   <meta property="og:site_name" content="Robin Mollah">
@@ -248,7 +248,8 @@
     }
 
     .tool-card,
-    .icon-tool {
+    .icon-tool,
+    .ssl-tool {
       position: relative;
       padding: 24px;
       border: 1px solid var(--line);
@@ -277,7 +278,8 @@
       font-weight: 800;
     }
 
-    .icon-tool {
+    .icon-tool,
+    .ssl-tool {
       display: grid;
       gap: 16px;
       background:
@@ -330,6 +332,53 @@
       max-width: 440px;
       margin-top: 10px;
       font-size: 0.94rem;
+    }
+
+    .live-cert-form {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) auto;
+      gap: 10px;
+      align-items: stretch;
+    }
+
+    .live-cert-form input {
+      width: 100%;
+      min-height: 48px;
+      padding: 0 14px;
+      border: 1px solid var(--line);
+      border-radius: 6px;
+      background: rgba(255, 253, 248, 0.82);
+      color: var(--ink);
+      font: 700 0.96rem var(--body);
+      outline: none;
+      transition: border-color 180ms ease, box-shadow 180ms ease, background 180ms ease;
+    }
+
+    .live-cert-form input:focus {
+      border-color: var(--clay);
+      background: var(--white);
+      box-shadow: 0 0 0 3px rgba(177, 91, 58, 0.12);
+    }
+
+    .live-cert-form button {
+      min-height: 48px;
+      padding: 0 16px;
+      border: 1px solid var(--ink);
+      border-radius: 6px;
+      background: var(--ink);
+      color: var(--white);
+      font: 800 0.78rem var(--body);
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      cursor: pointer;
+      transition: transform 180ms ease, box-shadow 180ms ease, background 180ms ease;
+    }
+
+    .live-cert-form button:hover,
+    .live-cert-form button:focus-visible {
+      background: var(--navy);
+      transform: translateY(-1px);
+      box-shadow: 0 10px 22px rgba(18, 36, 44, 0.16);
     }
 
     .tool-status {
@@ -466,6 +515,84 @@
       text-align: center;
     }
 
+    .result-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 10px;
+      margin: 0;
+    }
+
+    .result-grid div {
+      min-width: 0;
+      padding: 12px;
+      border: 1px solid var(--line);
+      border-radius: 6px;
+      background: rgba(255, 253, 248, 0.78);
+    }
+
+    .result-grid dt {
+      color: var(--muted);
+      font-size: 0.72rem;
+      font-weight: 800;
+      letter-spacing: 0.08em;
+      margin-bottom: 4px;
+      text-transform: uppercase;
+    }
+
+    .result-grid dd {
+      margin: 0;
+      color: var(--ink);
+      font-weight: 700;
+      overflow-wrap: anywhere;
+    }
+
+    .result-grid .wide {
+      grid-column: 1 / -1;
+    }
+
+    .empty-result {
+      margin: 0;
+      padding: 14px;
+      border: 1px solid var(--line);
+      border-radius: 6px;
+      color: var(--muted);
+      font-size: 0.92rem;
+      font-weight: 700;
+      text-align: center;
+    }
+
+    .ssl-live-panel {
+      display: grid;
+      gap: 10px;
+      padding: 14px;
+      border: 1px solid var(--line);
+      border-radius: 6px;
+      background: rgba(255, 253, 248, 0.78);
+    }
+
+    .ssl-live-panel p {
+      margin: 0;
+    }
+
+    .ssl-live-panel a {
+      color: var(--navy);
+      font-weight: 900;
+      text-decoration-thickness: 0.08em;
+      text-underline-offset: 0.18em;
+    }
+
+    .ssl-live-panel code {
+      display: block;
+      padding: 12px;
+      border: 1px solid var(--line);
+      border-radius: 6px;
+      background: var(--paper);
+      color: var(--ink);
+      font-size: 0.82rem;
+      overflow-x: auto;
+      white-space: nowrap;
+    }
+
     @media (prefers-reduced-motion: reduce) {
       html {
         scroll-behavior: auto;
@@ -474,6 +601,8 @@
       .nav-links a,
       .tool-index a,
       .upload-panel,
+      .live-cert-form input,
+      .live-cert-form button,
       .download-grid a {
         transition: none;
       }
@@ -536,6 +665,8 @@
 
       .tool-index a,
       .tool-preview-grid,
+      .result-grid,
+      .live-cert-form,
       .download-grid {
         grid-template-columns: 1fr;
       }
@@ -568,6 +699,10 @@
         <aside class="tool-index" aria-label="Available tools">
           <a href="#app-icon-resizer">
             App icon resizer
+            <span>Available</span>
+          </a>
+          <a href="#ssl-file-analyser">
+            SSL file analyser
             <span>Available</span>
           </a>
         </aside>
@@ -612,6 +747,38 @@
           </div>
         </div>
       </section>
+
+      <section class="section" id="ssl-file-analyser">
+        <div class="section-head">
+          <div>
+            <p class="eyebrow">SSL file analyser</p>
+            <h2>SSL file analyser</h2>
+          </div>
+          <p>Upload a PEM, CRT, or CER certificate. Analysis stays local.</p>
+        </div>
+        <div class="tools-workbench">
+          <article class="tool-card">
+            <h3>Reads</h3>
+            <p>Subject, issuer, expiry, SANs, serial, algorithms, fingerprint.</p>
+            <p class="tool-note">Files are parsed locally. Live websites open an external TLS scan.</p>
+          </article>
+          <div class="ssl-tool">
+            <form class="live-cert-form" id="ssl-live-form">
+              <input id="ssl-live-host" type="text" inputmode="url" autocomplete="url" placeholder="example.com" aria-label="Live website hostname">
+              <button type="submit">Check live site</button>
+            </form>
+            <label class="upload-panel" for="ssl-upload">
+              <input id="ssl-upload" type="file" accept=".pem,.crt,.cer,.cert,application/x-pem-file,application/pkix-cert,text/plain">
+              <span class="upload-title">Upload SSL file</span>
+              <span class="upload-help">PEM, CRT, or CER certificate file.</span>
+            </label>
+            <p class="tool-status" id="ssl-tool-status">No certificate selected yet.</p>
+            <div id="ssl-results">
+              <p class="empty-result">Certificate details will appear here.</p>
+            </div>
+          </div>
+        </div>
+      </section>
     </main>
   </div>
 
@@ -624,6 +791,11 @@
     const acceptedIconSizes = [2048, 1024, 512, 256];
     const outputIconSizes = [2048, 1024, 512, 256];
     const playIconMaxBytes = 1024 * 1024;
+    const sslLiveForm = document.querySelector('#ssl-live-form');
+    const sslLiveHost = document.querySelector('#ssl-live-host');
+    const sslUpload = document.querySelector('#ssl-upload');
+    const sslStatus = document.querySelector('#ssl-tool-status');
+    const sslResults = document.querySelector('#ssl-results');
     let generatedIconUrls = [];
 
     const setIconStatus = (message, isError = false) => {
@@ -767,8 +939,351 @@
       }
     };
 
+    const oidLabels = {
+      '1.2.840.113549.1.1.1': 'RSA',
+      '1.2.840.113549.1.1.5': 'SHA1 with RSA',
+      '1.2.840.113549.1.1.11': 'SHA256 with RSA',
+      '1.2.840.113549.1.1.12': 'SHA384 with RSA',
+      '1.2.840.113549.1.1.13': 'SHA512 with RSA',
+      '1.2.840.10045.2.1': 'EC public key',
+      '1.2.840.10045.4.3.2': 'ECDSA with SHA256',
+      '1.2.840.10045.4.3.3': 'ECDSA with SHA384',
+      '1.2.840.10045.4.3.4': 'ECDSA with SHA512',
+      '1.3.101.112': 'Ed25519',
+      '2.5.4.3': 'CN',
+      '2.5.4.6': 'C',
+      '2.5.4.7': 'L',
+      '2.5.4.8': 'ST',
+      '2.5.4.10': 'O',
+      '2.5.4.11': 'OU',
+      '2.5.29.17': 'Subject Alt Names'
+    };
+
+    const escapeHtml = (value) => String(value)
+      .replace(/&/g, '&amp;')
+      .replace(/</g, '&lt;')
+      .replace(/>/g, '&gt;')
+      .replace(/"/g, '&quot;');
+
+    const setSslStatus = (message, isError = false) => {
+      sslStatus.textContent = message;
+      sslStatus.classList.toggle('is-error', isError);
+    };
+
+    const bytesToHex = (bytes) => Array.from(bytes)
+      .map((byte) => byte.toString(16).padStart(2, '0'))
+      .join('');
+
+    const formatFingerprint = (bytes) => Array.from(bytes)
+      .map((byte) => byte.toString(16).padStart(2, '0').toUpperCase())
+      .join(':');
+
+    const decodeOid = (bytes) => {
+      const values = [Math.floor(bytes[0] / 40), bytes[0] % 40];
+      let value = 0;
+
+      for (const byte of bytes.slice(1)) {
+        value = (value << 7) | (byte & 0x7f);
+        if ((byte & 0x80) === 0) {
+          values.push(value);
+          value = 0;
+        }
+      }
+
+      return values.join('.');
+    };
+
+    const parseAsn1 = (bytes, offset = 0) => {
+      const start = offset;
+      const first = bytes[offset++];
+      const tagClass = first >> 6;
+      const constructed = Boolean(first & 0x20);
+      let tag = first & 0x1f;
+
+      if (tag === 0x1f) {
+        tag = 0;
+        let byte;
+        do {
+          byte = bytes[offset++];
+          tag = (tag << 7) | (byte & 0x7f);
+        } while (byte & 0x80);
+      }
+
+      let length = bytes[offset++];
+      if (length & 0x80) {
+        const lengthBytes = length & 0x7f;
+        length = 0;
+        for (let i = 0; i < lengthBytes; i += 1) {
+          length = (length << 8) | bytes[offset++];
+        }
+      }
+
+      const contentStart = offset;
+      const end = contentStart + length;
+      const node = {
+        tagClass,
+        constructed,
+        tag,
+        start,
+        contentStart,
+        end,
+        value: bytes.slice(contentStart, end),
+        children: []
+      };
+
+      if (constructed || tag === 16 || tag === 17) {
+        let childOffset = contentStart;
+        while (childOffset < end) {
+          const child = parseAsn1(bytes, childOffset);
+          node.children.push(child);
+          childOffset = child.end;
+        }
+      }
+
+      return node;
+    };
+
+    const decodeAsn1String = (node) => {
+      if (node.tag === 30) {
+        let output = '';
+        for (let i = 0; i < node.value.length; i += 2) {
+          output += String.fromCharCode((node.value[i] << 8) | node.value[i + 1]);
+        }
+        return output;
+      }
+
+      return new TextDecoder('utf-8').decode(node.value);
+    };
+
+    const decodeName = (node) => node.children
+      .map((set) => {
+        const pair = set.children[0];
+        if (!pair || pair.children.length < 2) return '';
+        const oid = decodeOid(pair.children[0].value);
+        const label = oidLabels[oid] || oid;
+        return `${label}=${decodeAsn1String(pair.children[1])}`;
+      })
+      .filter(Boolean)
+      .join(', ');
+
+    const decodeTime = (node) => {
+      const value = decodeAsn1String(node).replace(/Z$/, '');
+      let year;
+      let offset;
+
+      if (node.tag === 23) {
+        year = Number(value.slice(0, 2));
+        year += year >= 50 ? 1900 : 2000;
+        offset = 2;
+      } else {
+        year = Number(value.slice(0, 4));
+        offset = 4;
+      }
+
+      const month = Number(value.slice(offset, offset + 2)) - 1;
+      const day = Number(value.slice(offset + 2, offset + 4));
+      const hour = Number(value.slice(offset + 4, offset + 6) || '0');
+      const minute = Number(value.slice(offset + 6, offset + 8) || '0');
+      const second = Number(value.slice(offset + 8, offset + 10) || '0');
+
+      return new Date(Date.UTC(year, month, day, hour, minute, second));
+    };
+
+    const formatDate = (date) => new Intl.DateTimeFormat('en', {
+      year: 'numeric',
+      month: 'short',
+      day: '2-digit',
+      timeZone: 'UTC'
+    }).format(date);
+
+    const decodeGeneralName = (node) => {
+      if (node.tagClass !== 2) return '';
+      if ([1, 2, 6].includes(node.tag)) return decodeAsn1String(node);
+      if (node.tag === 7 && node.value.length === 4) return Array.from(node.value).join('.');
+      if (node.tag === 7 && node.value.length === 16) {
+        const chunks = [];
+        for (let i = 0; i < node.value.length; i += 2) {
+          chunks.push(((node.value[i] << 8) | node.value[i + 1]).toString(16));
+        }
+        return chunks.join(':');
+      }
+      return '';
+    };
+
+    const findExtension = (tbs, oid) => {
+      const extensionsWrapper = tbs.children.find((node) => node.tagClass === 2 && node.tag === 3);
+      const extensions = extensionsWrapper && extensionsWrapper.children[0];
+      if (!extensions) return undefined;
+
+      return extensions.children.find((extension) => {
+        const extensionOid = extension.children[0] && decodeOid(extension.children[0].value);
+        return extensionOid === oid;
+      });
+    };
+
+    const decodeSubjectAltNames = (tbs) => {
+      const extension = findExtension(tbs, '2.5.29.17');
+      if (!extension) return [];
+
+      const octet = extension.children.find((node) => node.tag === 4);
+      if (!octet) return [];
+
+      return parseAsn1(octet.value).children.map(decodeGeneralName).filter(Boolean);
+    };
+
+    const extractPemBlocks = (text) => Array.from(text.matchAll(/-----BEGIN ([^-]+)-----([\s\S]*?)-----END \1-----/g))
+      .map((match) => ({
+        type: match[1].trim(),
+        body: match[2].replace(/\s+/g, '')
+      }));
+
+    const normalizeHostname = (value) => {
+      const trimmed = value.trim();
+      if (!trimmed) return '';
+
+      const url = new URL(trimmed.includes('://') ? trimmed : `https://${trimmed}`);
+      const hostname = url.hostname.replace(/^\[|\]$/g, '').toLowerCase();
+      const isDomainOrIpv4 = /^[a-z0-9.-]+$/.test(hostname) && hostname.includes('.');
+
+      if (!isDomainOrIpv4) {
+        throw new Error('Enter a valid public hostname.');
+      }
+
+      return hostname;
+    };
+
+    const renderLiveSslOptions = (hostname) => {
+      const sslLabsUrl = `https://www.ssllabs.com/ssltest/analyze.html?d=${encodeURIComponent(hostname)}&hideResults=on`;
+      const command = `echo | openssl s_client -servername ${hostname} -connect ${hostname}:443 2>/dev/null | openssl x509 -noout -subject -issuer -dates -serial -fingerprint -sha256`;
+
+      sslResults.innerHTML = `
+        <div class="ssl-live-panel">
+          <p>Browser JavaScript cannot read a live peer certificate directly from this static page.</p>
+          <p><a href="${sslLabsUrl}" target="_blank" rel="noopener">Open SSL Labs scan for ${escapeHtml(hostname)}</a></p>
+          <code>${escapeHtml(command)}</code>
+        </div>
+      `;
+    };
+
+    const parseCertificate = async (bytes) => {
+      const cert = parseAsn1(bytes);
+      const tbs = cert.children[0];
+      const signatureOid = cert.children[1] && cert.children[1].children[0]
+        ? decodeOid(cert.children[1].children[0].value)
+        : '';
+      let index = tbs.children[0].tagClass === 2 && tbs.children[0].tag === 0 ? 1 : 0;
+      const serial = tbs.children[index++];
+      index += 1;
+      const issuer = tbs.children[index++];
+      const validity = tbs.children[index++];
+      const subject = tbs.children[index++];
+      const publicKeyInfo = tbs.children[index++];
+      const notBefore = decodeTime(validity.children[0]);
+      const notAfter = decodeTime(validity.children[1]);
+      const remainingDays = Math.ceil((notAfter.getTime() - Date.now()) / 86400000);
+      const publicKeyOid = publicKeyInfo && publicKeyInfo.children[0] && publicKeyInfo.children[0].children[0]
+        ? decodeOid(publicKeyInfo.children[0].children[0].value)
+        : '';
+      const fingerprint = await crypto.subtle.digest('SHA-256', bytes);
+
+      return {
+        subject: decodeName(subject),
+        issuer: decodeName(issuer),
+        validFrom: formatDate(notBefore),
+        validTo: formatDate(notAfter),
+        status: remainingDays < 0 ? `Expired ${Math.abs(remainingDays)}d ago` : `${remainingDays}d left`,
+        sans: decodeSubjectAltNames(tbs).join(', ') || 'None found',
+        serial: bytesToHex(serial.value).replace(/^00/, '').toUpperCase(),
+        signature: oidLabels[signatureOid] || signatureOid || 'Unknown',
+        publicKey: oidLabels[publicKeyOid] || publicKeyOid || 'Unknown',
+        fingerprint: formatFingerprint(new Uint8Array(fingerprint))
+      };
+    };
+
+    const renderSslResults = (details) => {
+      const rows = [
+        ['Subject', details.subject, true],
+        ['Issuer', details.issuer, true],
+        ['Valid from', details.validFrom, false],
+        ['Valid to', details.validTo, false],
+        ['Status', details.status, false],
+        ['SANs', details.sans, true],
+        ['Serial', details.serial, true],
+        ['Signature', details.signature, false],
+        ['Public key', details.publicKey, false],
+        ['SHA-256 fingerprint', details.fingerprint, true]
+      ];
+
+      sslResults.innerHTML = `<dl class="result-grid">${rows.map(([label, value, wide]) => `
+        <div class="${wide ? 'wide' : ''}">
+          <dt>${escapeHtml(label)}</dt>
+          <dd>${escapeHtml(value)}</dd>
+        </div>
+      `).join('')}</dl>`;
+    };
+
+    const processSslFile = async (file) => {
+      if (!file) {
+        setSslStatus('No certificate selected yet.');
+        return;
+      }
+
+      sslResults.innerHTML = '<p class="empty-result">Reading certificate...</p>';
+      setSslStatus('Processing...');
+
+      try {
+        const text = await file.text();
+        const blocks = extractPemBlocks(text);
+        const certificateBlock = blocks.find((block) => block.type === 'CERTIFICATE');
+        const privateKeyBlock = blocks.find((block) => block.type.includes('PRIVATE KEY'));
+
+        if (!certificateBlock && privateKeyBlock) {
+          sslResults.innerHTML = '<p class="empty-result">Private key detected. Upload a certificate file.</p>';
+          setSslStatus('Private key detected.', true);
+          return;
+        }
+
+        const bytes = certificateBlock
+          ? Uint8Array.from(atob(certificateBlock.body), (char) => char.charCodeAt(0))
+          : new Uint8Array(await file.arrayBuffer());
+        const details = await parseCertificate(bytes);
+
+        renderSslResults(details);
+        setSslStatus('Certificate analysed.');
+      } catch (error) {
+        sslResults.innerHTML = '<p class="empty-result">Could not parse certificate.</p>';
+        setSslStatus(error.message || 'Invalid certificate file.', true);
+      }
+    };
+
+    const processLiveHost = (value) => {
+      try {
+        const hostname = normalizeHostname(value);
+
+        if (!hostname) {
+          setSslStatus('Enter a hostname to check.', true);
+          return;
+        }
+
+        renderLiveSslOptions(hostname);
+        setSslStatus('Live website check prepared.');
+      } catch (error) {
+        sslResults.innerHTML = '<p class="empty-result">Enter a valid public hostname, for example example.com.</p>';
+        setSslStatus(error.message || 'Invalid hostname.', true);
+      }
+    };
+
     iconUpload.addEventListener('change', (event) => {
       processIconFile(event.target.files[0]);
+    });
+
+    sslLiveForm.addEventListener('submit', (event) => {
+      event.preventDefault();
+      processLiveHost(sslLiveHost.value);
+    });
+
+    sslUpload.addEventListener('change', (event) => {
+      processSslFile(event.target.files[0]);
     });
   </script>
 </body>
