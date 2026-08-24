@@ -1,0 +1,86 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>SSL Analyser | Tools | Robin Mollah</title>
+  <meta name="description" content="Analyse PEM, CRT, or CER certificate files locally and prepare live website SSL checks.">
+  <meta name="author" content="Robin Mollah">
+  <meta name="robots" content="index, follow">
+  <meta name="theme-color" content="#f8f4ea">
+  <link rel="canonical" href="https://robinmollah.com/tools/ssl-analyser/">
+  <meta property="og:title" content="SSL Analyser | Tools | Robin Mollah">
+  <meta property="og:description" content="Inspect SSL certificate files locally or prepare a live website TLS scan.">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://robinmollah.com/tools/ssl-analyser/">
+  <meta property="og:site_name" content="Robin Mollah">
+  <meta name="twitter:card" content="summary">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,650;9..144,800&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/tools/assets/tools.css">
+</head>
+<body>
+  <div class="site-shell">
+    <nav class="site-nav" aria-label="Primary navigation">
+      <a class="brand" href="/" aria-label="Robin Mollah home">
+        <span class="brand-mark">RM</span>
+        <span>Robin Mollah</span>
+      </a>
+      <div class="nav-links">
+        <a class="active" href="/tools/">Tools</a>
+        <a href="/blog/">Blog</a>
+        <a href="/about/">About</a>
+        <a href="/contact/">Contact</a>
+        <a href="https://github.com/robinmollah" target="_blank" rel="noopener">GitHub</a>
+      </div>
+    </nav>
+
+    <main>
+      <section class="hero is-compact">
+        <div>
+          <a class="back-link" href="/tools/">Back to tools</a>
+          <p class="eyebrow">Security tool</p>
+          <h1>SSL analyser</h1>
+          <p class="hero-copy">Inspect certificate files locally or prepare a live website TLS scan.</p>
+        </div>
+      </section>
+
+      <section class="section" id="ssl-analyser">
+        <div class="section-head">
+          <div>
+            <p class="eyebrow">SSL analyser</p>
+            <h2>Read certificate details</h2>
+          </div>
+          <p>Upload a PEM, CRT, or CER certificate. Analysis stays local.</p>
+        </div>
+        <div class="tools-workbench">
+          <article class="tool-card">
+            <h3>Reads</h3>
+            <p>Subject, issuer, expiry, SANs, serial, algorithms, fingerprint.</p>
+            <p class="tool-note">Files are parsed locally. Live websites open an external TLS scan.</p>
+          </article>
+          <div class="ssl-tool">
+            <form class="live-cert-form" id="ssl-live-form">
+              <input id="ssl-live-host" type="text" inputmode="url" autocomplete="url" placeholder="example.com" aria-label="Live website hostname">
+              <button type="submit">Check live site</button>
+            </form>
+            <label class="upload-panel" for="ssl-upload">
+              <input id="ssl-upload" type="file" accept=".pem,.crt,.cer,.cert,application/x-pem-file,application/pkix-cert,text/plain">
+              <span class="upload-title">Upload SSL file</span>
+              <span class="upload-help">PEM, CRT, or CER certificate file.</span>
+            </label>
+            <p class="tool-status" id="ssl-tool-status">No certificate selected yet.</p>
+            <div id="ssl-results">
+              <p class="empty-result">Certificate details will appear here.</p>
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <script src="/tools/assets/tools.js" defer></script>
+  <script src="/tools/assets/ssl-analyser.js" defer></script>
+</body>
+</html>
