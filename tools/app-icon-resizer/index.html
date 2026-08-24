@@ -1,0 +1,94 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>App Icon Resizer | Tools | Robin Mollah</title>
+  <meta name="description" content="Resize app icons to common production sizes and check Google Play icon requirements locally in the browser.">
+  <meta name="author" content="Robin Mollah">
+  <meta name="robots" content="index, follow">
+  <meta name="theme-color" content="#f8f4ea">
+  <link rel="canonical" href="https://robinmollah.com/tools/app-icon-resizer/">
+  <meta property="og:title" content="App Icon Resizer | Tools | Robin Mollah">
+  <meta property="og:description" content="Generate app icon PNG sizes locally in the browser.">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://robinmollah.com/tools/app-icon-resizer/">
+  <meta property="og:site_name" content="Robin Mollah">
+  <meta name="twitter:card" content="summary">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,650;9..144,800&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/tools/assets/tools.css">
+</head>
+<body>
+  <div class="site-shell">
+    <nav class="site-nav" aria-label="Primary navigation">
+      <a class="brand" href="/" aria-label="Robin Mollah home">
+        <span class="brand-mark">RM</span>
+        <span>Robin Mollah</span>
+      </a>
+      <div class="nav-links">
+        <a class="active" href="/tools/">Tools</a>
+        <a href="/blog/">Blog</a>
+        <a href="/about/">About</a>
+        <a href="/contact/">Contact</a>
+        <a href="https://github.com/robinmollah" target="_blank" rel="noopener">GitHub</a>
+      </div>
+    </nav>
+
+    <main>
+      <section class="hero is-compact">
+        <div>
+          <a class="back-link" href="/tools/">Back to tools</a>
+          <p class="eyebrow">Release tool</p>
+          <h1>App icon resizer</h1>
+          <p class="hero-copy">Upload once. Generate PNG sizes locally.</p>
+        </div>
+      </section>
+
+      <section class="section" id="app-icon-resizer">
+        <div class="section-head">
+          <div>
+            <p class="eyebrow">App icon resizer</p>
+            <h2>Generate icons</h2>
+          </div>
+          <p>Square source: 2048, 1024, 512, or 256px.</p>
+        </div>
+        <div class="tools-workbench">
+          <article class="tool-card">
+            <h3>Checks</h3>
+            <p>Source must be square and one of the accepted sizes.</p>
+            <p class="tool-note">Play icon: 512x512 PNG, max 1024KB.</p>
+            <p class="tool-note">Manual: no rounded corners or drop shadow.</p>
+            <p class="tool-note">
+              <a href="https://developer.android.com/distribute/google-play/resources/icon-design-specifications" target="_blank" rel="noopener">Google Play specs</a>
+            </p>
+          </article>
+          <div class="icon-tool">
+            <label class="upload-panel" for="icon-upload">
+              <input id="icon-upload" type="file" accept="image/png,image/jpeg,image/webp">
+              <span class="upload-title">Upload app icon</span>
+              <span class="upload-help">Square PNG, JPG, or WebP: 2048, 1024, 512, or 256px.</span>
+            </label>
+            <p class="tool-status" id="icon-tool-status">No icon selected yet.</p>
+            <div class="tool-preview-grid">
+              <div class="icon-preview" id="icon-preview" aria-label="Icon preview"></div>
+              <ul class="spec-list" id="icon-spec-list" aria-label="Icon specification checks">
+                <li data-check="dimensions">Source size</li>
+                <li data-check="format">PNG output</li>
+                <li data-check="play-size">512x512 Play icon</li>
+                <li data-check="file-size">Under 1024KB</li>
+                <li data-check="manual">Manual visual check</li>
+              </ul>
+            </div>
+            <div class="download-grid" id="icon-downloads" aria-label="Generated icon downloads"></div>
+          </div>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <script src="/tools/assets/tools.js" defer></script>
+  <script src="/tools/assets/app-icon-resizer.js" defer></script>
+</body>
+</html>
