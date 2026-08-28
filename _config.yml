@@ -108,6 +108,9 @@ category_dir: categories
 code_dir: downloads/code
 i18n_dir: :lang
 skip_render:
+  - lab.html
+  - work.html
+  - headshot.png
   - index.html
   - tools/**/*.html
 

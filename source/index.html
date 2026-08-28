@@ -100,23 +100,23 @@
       inset: 0;
       z-index: -1;
       background:
-        linear-gradient(90deg, rgba(183, 101, 71, 0.055) 1px, transparent 1px),
-        linear-gradient(180deg, rgba(183, 101, 71, 0.045) 1px, transparent 1px),
-        radial-gradient(circle, rgba(18, 55, 68, 0.055) 1px, transparent 2px);
+        linear-gradient(90deg, rgba(136, 77, 57, 0.075) 1px, transparent 1px),
+        linear-gradient(180deg, rgba(136, 77, 57, 0.065) 1px, transparent 1px),
+        radial-gradient(circle, rgba(213, 155, 50, 0.12) 1px, transparent 2px);
       background-size: 80px 80px, 80px 80px, 80px 80px;
       mask-image: radial-gradient(
-        280px circle at var(--page-spotlight-x) var(--page-spotlight-y),
-        black,
-        rgba(0, 0, 0, 0.34) 38%,
+        360px circle at var(--page-spotlight-x) var(--page-spotlight-y),
+        rgba(0, 0, 0, 0.68),
+        rgba(0, 0, 0, 0.24) 38%,
         transparent 76%
       );
       opacity: 0;
       pointer-events: none;
-      transition: opacity 320ms ease;
+      transition: opacity 520ms ease;
     }
 
     body.is-page-spotlit::after {
-      opacity: 0.64;
+      opacity: 0.42;
     }
 
     a {
@@ -286,6 +286,55 @@
       background: transparent;
       color: var(--ink);
     }
+
+    .contact-toggle-wrap {
+      position: relative;
+      display: inline-block;
+    }
+    .contact-panel {
+      position: absolute;
+      top: calc(100% + 6px);
+      left: 0;
+      display: flex;
+      gap: 8px;
+      background: var(--white);
+      border: 1px solid rgba(18,36,44,0.12);
+      border-radius: 6px;
+      padding: 8px;
+      box-shadow: 0 8px 24px rgba(18,36,44,0.10);
+      opacity: 0;
+      transform: translateY(-6px);
+      pointer-events: none;
+      transition: opacity 220ms ease, transform 220ms ease;
+      white-space: nowrap;
+      z-index: 20;
+    }
+    .contact-panel.open {
+      opacity: 1;
+      transform: translateY(0);
+      pointer-events: all;
+    }
+    .contact-icon-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      padding: 9px 14px;
+      border-radius: 4px;
+      border: 1px solid rgba(18,36,44,0.12);
+      background: transparent;
+      color: var(--ink);
+      font-family: inherit;
+      font-size: 0.82rem;
+      font-weight: 600;
+      letter-spacing: 0.02em;
+      text-decoration: none;
+      transition: background 160ms ease, color 160ms ease;
+    }
+    .contact-icon-btn:hover {
+      background: var(--ink);
+      color: var(--white);
+    }
+    .contact-icon-btn svg { flex-shrink: 0; }
 
     .button:hover,
     .button:focus-visible {
@@ -1099,9 +1148,170 @@
         grid-template-columns: 1fr;
       }
     }
+
+    /* ── Lab intro section ───────────────────────────────────────────── */
+    body.lab-active { overflow: hidden; }
+
+    #lab-intro {
+      position: fixed;
+      inset: 0;
+      z-index: 100;
+      transition: opacity 0.6s ease;
+      background:
+        radial-gradient(ellipse at 25% 70%, #1e5c50 0%, transparent 55%),
+        radial-gradient(ellipse at 80% 20%, #123744 0%, transparent 50%),
+        #0a1e27;
+    }
+    #lab-canvas {
+      position: fixed;
+      inset: 0;
+      z-index: 100;
+      width: 100% !important;
+      height: 100% !important;
+      display: block;
+    }
+    #lab-vignette {
+      position: fixed;
+      inset: 0;
+      z-index: 101;
+      background: radial-gradient(ellipse at center, transparent 40%, rgba(8,18,24,0.72) 100%);
+      pointer-events: none;
+    }
+    #lab-nav {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 102;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 24px;
+      padding: 24px 32px;
+      z-index: 10;
+    }
+    .lab-brand {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      color: rgba(240,235,224,0.85);
+      font-weight: 800;
+      text-decoration: none;
+      font-family: var(--display);
+    }
+    .lab-brand-mark {
+      display: inline-grid;
+      place-items: center;
+      width: 40px; height: 40px;
+      background: rgba(240,235,224,0.12);
+      color: rgba(240,235,224,0.85);
+      font-family: var(--display);
+      font-size: 1.15rem;
+      border-radius: 4px;
+    }
+    .lab-nav-links {
+      display: flex;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+    .lab-nav-links a {
+      padding: 6px 10px;
+      border-radius: 4px;
+      color: rgba(220,210,195,0.5);
+      font-size: 0.82rem;
+      font-weight: 600;
+      text-decoration: none;
+      letter-spacing: 0.02em;
+      transition: color 180ms ease;
+    }
+    .lab-nav-links a:hover { color: rgba(220,210,195,0.9); }
+    #lab-ui {
+      position: fixed;
+      inset: 0;
+      z-index: 102;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 24px;
+      pointer-events: none;
+    }
+    .lab-eyebrow {
+      font-family: 'IBM Plex Sans', sans-serif;
+      font-size: 0.7rem;
+      font-weight: 600;
+      letter-spacing: 0.28em;
+      text-transform: uppercase;
+      color: rgba(74,171,158,0.7);
+      margin-bottom: 20px;
+    }
+    .lab-h1 {
+      font-family: 'Fraunces', Georgia, serif;
+      font-weight: 800;
+      font-size: clamp(3rem, 9vw, 7rem);
+      line-height: 0.95;
+      color: #f0ebe0;
+      letter-spacing: -0.02em;
+      margin-bottom: 18px;
+    }
+    .lab-subtitle {
+      font-family: 'IBM Plex Sans', sans-serif;
+      font-size: clamp(0.82rem, 1.8vw, 1rem);
+      color: rgba(220,210,195,0.45);
+      letter-spacing: 0.06em;
+    }
+    #lab-hint {
+      position: absolute;
+      bottom: 28px;
+      left: 50%;
+      transform: translateX(-50%);
+      font-family: 'IBM Plex Sans', sans-serif;
+      font-size: 0.68rem;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: rgba(220,210,195,0.25);
+      white-space: nowrap;
+      animation: labPulse 2.4s ease infinite;
+    }
+    @keyframes labPulse { 0%,100%{opacity:0.25} 50%{opacity:0.65} }
+    @keyframes labFadeUp {
+      from { opacity: 0; transform: translateY(14px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+    .lab-eyebrow { animation: labFadeUp 0.9s ease 0.3s both; }
+    .lab-h1      { animation: labFadeUp 0.9s ease 0.45s both; }
+    .lab-subtitle{ animation: labFadeUp 0.9s ease 0.6s both; }
+    #lab-hint    { animation: labPulse 2.4s ease infinite, labFadeUp 1s ease 1s both; z-index: 102; }
   </style>
 </head>
 <body>
+
+  <!-- ── Lab intro (full-screen particle scene) ─────────────────────── -->
+  <section id="lab-intro" aria-label="Interactive intro">
+    <canvas id="lab-canvas" aria-hidden="true"></canvas>
+    <div id="lab-vignette" aria-hidden="true"></div>
+    <header id="lab-nav" aria-label="Site navigation">
+      <a class="lab-brand" href="/">
+        <span class="lab-brand-mark">RM</span>
+        <span>Robin Mollah</span>
+      </a>
+      <div class="lab-nav-links">
+        <a href="/tools/">Tools</a>
+        <a href="/blog/">Blog</a>
+        <a href="/about/">About</a>
+        <a href="/contact/">Contact</a>
+        <a href="/work.html">Work</a>
+        <a href="https://github.com/robinmollah" target="_blank" rel="noopener">GitHub</a>
+      </div>
+    </header>
+    <div id="lab-ui">
+      <p class="lab-eyebrow">Senior Software Engineer</p>
+      <h1 class="lab-h1">Robin Mollah</h1>
+      <p class="lab-subtitle">Backend · Cloud · AI</p>
+    </div>
+    <p id="lab-hint">↓ Scroll to explore</p>
+  </section>
+
   <div class="site-shell">
     <nav class="site-nav" aria-label="Primary navigation">
       <a class="brand" href="/" aria-label="Robin Mollah home">
@@ -1113,6 +1323,7 @@
         <a href="/blog/">Blog</a>
         <a href="/about/">About</a>
         <a href="/contact/">Contact</a>
+        <a href="/work.html">Work</a>
         <a href="https://github.com/robinmollah" target="_blank" rel="noopener">GitHub</a>
       </div>
     </nav>
@@ -1124,7 +1335,19 @@
           <h1>Robin Mollah</h1>
           <p class="hero-copy">I design, build, and stabilize software systems across backend platforms, cloud infrastructure, data pipelines, frontend products, and applied AI. The common thread is practical engineering under real constraints.</p>
           <div class="hero-actions">
-            <a class="button" href="/contact/">Start a conversation</a>
+            <div class="contact-toggle-wrap">
+              <button class="button" id="contact-toggle" aria-expanded="false" onclick="(function(){var p=document.getElementById('contact-panel'),b=document.getElementById('contact-toggle'),o=p.classList.toggle('open');b.setAttribute('aria-expanded',o);})()">Start a conversation</button>
+              <div class="contact-panel" id="contact-panel" role="group" aria-label="Contact options">
+                <a class="contact-icon-btn" href="mailto:contact@robinmollah.com" target="_blank">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m2 7 10 7 10-7"/></svg>
+                  Email
+                </a>
+                <a class="contact-icon-btn" href="https://wa.me/8801794894932" target="_blank" rel="noopener">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+                  WhatsApp
+                </a>
+              </div>
+            </div>
             <a class="button secondary" href="/blog/">Read engineering notes</a>
           </div>
         </div>
@@ -1341,8 +1564,9 @@
   <script>
     const revealItems = document.querySelectorAll('.reveal');
     const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    const canUsePointerReaction = window.matchMedia('(hover: hover) and (pointer: fine)').matches;
 
-    if (!prefersReducedMotion) {
+    if (!prefersReducedMotion && canUsePointerReaction) {
       let pageSpotlightFrame;
       let pageCurrentX = 50;
       let pageCurrentY = 24;
@@ -1474,6 +1698,201 @@
       });
     }
 
+  </script>
+
+  <!-- ── Lab particle scene ─────────────────────────────────────────── -->
+  <script src="https://unpkg.com/three@0.160.0/build/three.min.js"></script>
+  <script>
+  (function () {
+    document.body.classList.add('lab-active');
+
+    const labEl  = document.getElementById('lab-intro');
+    const canvas = document.getElementById('lab-canvas');
+    const renderer = new THREE.WebGLRenderer({ canvas, antialias: true, alpha: true });
+    renderer.setPixelRatio(Math.min(devicePixelRatio, 2));
+    renderer.setClearColor(0x000000, 0);
+
+    const scene  = new THREE.Scene();
+    const camera = new THREE.PerspectiveCamera(60, innerWidth / innerHeight, 0.1, 200);
+    camera.position.z = 58;
+
+    function resize() {
+      renderer.setSize(innerWidth, innerHeight, false);
+      camera.aspect = innerWidth / innerHeight;
+      camera.updateProjectionMatrix();
+    }
+    resize();
+    window.addEventListener('resize', resize);
+
+    const N = 160;
+    const pos   = new Float32Array(N * 3);
+    const vel   = new Float32Array(N * 3);
+    const phase = new Float32Array(N);
+    const act   = new Float32Array(N);
+    const pCol  = new Float32Array(N * 3);
+
+    for (let i = 0; i < N; i++) {
+      pos[i*3]   = (Math.random() - 0.5) * 110;
+      pos[i*3+1] = (Math.random() - 0.5) * 75;
+      pos[i*3+2] = (Math.random() - 0.5) * 80;
+      vel[i*3]   = (Math.random() - 0.5) * 0.013;
+      vel[i*3+1] = (Math.random() - 0.5) * 0.013;
+      vel[i*3+2] = (Math.random() - 0.5) * 0.013;
+      phase[i]   = Math.random() * Math.PI * 2;
+    }
+
+    const pGeo = new THREE.BufferGeometry();
+    pGeo.setAttribute('position', new THREE.BufferAttribute(pos,  3));
+    pGeo.setAttribute('color',    new THREE.BufferAttribute(pCol, 3));
+    const pMat = new THREE.PointsMaterial({ size: 1.8, sizeAttenuation: true, vertexColors: true, transparent: true, opacity: 0.95 });
+    scene.add(new THREE.Points(pGeo, pMat));
+
+    const maxSegs = N * (N - 1) / 2;
+    const lPos = new Float32Array(maxSegs * 6);
+    const lCol = new Float32Array(maxSegs * 6);
+    const lGeo = new THREE.BufferGeometry();
+    lGeo.setAttribute('position', new THREE.BufferAttribute(lPos, 3));
+    lGeo.setAttribute('color',    new THREE.BufferAttribute(lCol, 3));
+    const lMat = new THREE.LineBasicMaterial({ vertexColors: true, transparent: true, opacity: 0.55 });
+    scene.add(new THREE.LineSegments(lGeo, lMat));
+
+    const mouse      = new THREE.Vector2(9999, 9999);
+    const mouseWorld = new THREE.Vector3();
+    const plane      = new THREE.Plane(new THREE.Vector3(0, 0, 1), 0);
+    const raycaster  = new THREE.Raycaster();
+    let   camTX = 0, camTY = 0;
+
+    window.addEventListener('mousemove', e => {
+      if (flying) return;
+      mouse.x =  (e.clientX / innerWidth)  * 2 - 1;
+      mouse.y = -(e.clientY / innerHeight) * 2 + 1;
+      raycaster.setFromCamera(mouse, camera);
+      raycaster.ray.intersectPlane(plane, mouseWorld);
+    });
+
+    // ── Fly-through ────────────────────────────────────────────────────
+    let flying = false, flyProgress = 0;
+
+    const overlay = document.createElement('div');
+    Object.assign(overlay.style, {
+      position: 'fixed', inset: '0', zIndex: '101',
+      background: '#0d1f28', opacity: '0', pointerEvents: 'none',
+      transition: 'opacity 0.5s ease',
+    });
+    document.body.appendChild(overlay);
+
+    function triggerFly() {
+      if (flying) return;
+      flying = true;
+      document.getElementById('lab-ui').style.transition  = 'opacity 0.5s ease';
+      document.getElementById('lab-ui').style.opacity     = '0';
+      document.getElementById('lab-nav').style.transition = 'opacity 0.4s ease';
+      document.getElementById('lab-nav').style.opacity    = '0';
+      document.getElementById('lab-hint').style.opacity   = '0';
+    }
+
+    function onWheel(e) { e.preventDefault(); if (e.deltaY > 0) triggerFly(); }
+    window.addEventListener('wheel', onWheel, { passive: false });
+
+    let touchStartY = 0;
+    function onTouchStart(e) { touchStartY = e.touches[0].clientY; }
+    function onTouchMove(e)  { e.preventDefault(); }
+    function onTouchEnd(e)   { if (touchStartY - e.changedTouches[0].clientY > 40) triggerFly(); }
+    window.addEventListener('touchstart', onTouchStart, { passive: true });
+    window.addEventListener('touchmove',  onTouchMove,  { passive: false });
+    window.addEventListener('touchend',   onTouchEnd,   { passive: true });
+
+    // ── Animation ──────────────────────────────────────────────────────
+    let tick = 0;
+    const BX = 55, BY = 37, BZ = 40;
+    const BASE_THRESH = 9, MOUSE_RADIUS = 22;
+
+    function animate() {
+      requestAnimationFrame(animate);
+      tick += 0.007;
+
+      if (flying) {
+        flyProgress = Math.min(flyProgress + 0.018, 1);
+        const ease = flyProgress * flyProgress * (3 - 2 * flyProgress);
+        camera.position.z = 58 - ease * 90;
+        if (flyProgress > 0.4) {
+          overlay.style.opacity = Math.min((flyProgress - 0.4) / 0.6, 1).toFixed(3);
+        }
+        if (flyProgress >= 1) {
+          // Reveal the portfolio — remove scroll blockers first
+          window.removeEventListener('wheel',      onWheel);
+          window.removeEventListener('touchstart', onTouchStart);
+          window.removeEventListener('touchmove',  onTouchMove);
+          window.removeEventListener('touchend',   onTouchEnd);
+          labEl.style.opacity  = '0';
+          overlay.style.opacity = '0';
+          document.body.classList.remove('lab-active');
+          setTimeout(() => { labEl.style.display = 'none'; overlay.remove(); }, 650);
+          renderer.render(scene, camera);
+          return;
+        }
+        camera.lookAt(0, 0, 0);
+        renderer.render(scene, camera);
+        return;
+      }
+
+      scene.rotation.y = Math.sin(tick * 0.18) * 0.25;
+      scene.rotation.x = Math.sin(tick * 0.11) * 0.10;
+      camTX += (mouse.x * 3.5 - camTX) * 0.035;
+      camTY += (mouse.y * 2.2 - camTY) * 0.035;
+      camera.position.x = camTX;
+      camera.position.y = camTY;
+      camera.lookAt(0, 0, 0);
+
+      for (let i = 0; i < N; i++) {
+        const s = Math.sin(tick + phase[i]) * 0.003;
+        pos[i*3]   += vel[i*3]   + s;
+        pos[i*3+1] += vel[i*3+1] + s * 0.6;
+        pos[i*3+2] += vel[i*3+2];
+        if (pos[i*3]   >  BX) { pos[i*3]   =  BX; vel[i*3]   *= -1; }
+        if (pos[i*3]   < -BX) { pos[i*3]   = -BX; vel[i*3]   *= -1; }
+        if (pos[i*3+1] >  BY) { pos[i*3+1] =  BY; vel[i*3+1] *= -1; }
+        if (pos[i*3+1] < -BY) { pos[i*3+1] = -BY; vel[i*3+1] *= -1; }
+        if (pos[i*3+2] >  BZ) { pos[i*3+2] =  BZ; vel[i*3+2] *= -1; }
+        if (pos[i*3+2] < -BZ) { pos[i*3+2] = -BZ; vel[i*3+2] *= -1; }
+        const dx = pos[i*3] - mouseWorld.x, dy = pos[i*3+1] - mouseWorld.y;
+        const d  = Math.sqrt(dx*dx + dy*dy);
+        act[i] += ((d < MOUSE_RADIUS ? (1 - d / MOUSE_RADIUS) : 0) - act[i]) * 0.08;
+        const a = act[i];
+        pCol[i*3]   = 0.290 + a * 0.545;
+        pCol[i*3+1] = 0.671 - a * 0.063;
+        pCol[i*3+2] = 0.620 - a * 0.424;
+      }
+      pGeo.attributes.position.needsUpdate = true;
+      pGeo.attributes.color.needsUpdate    = true;
+
+      let seg = 0;
+      for (let i = 0; i < N && seg < maxSegs - 1; i++) {
+        for (let j = i + 1; j < N && seg < maxSegs - 1; j++) {
+          const dx = pos[i*3]-pos[j*3], dy = pos[i*3+1]-pos[j*3+1], dz = pos[i*3+2]-pos[j*3+2];
+          const dist = Math.sqrt(dx*dx + dy*dy + dz*dz);
+          const pAct = Math.max(act[i], act[j]);
+          const thresh = BASE_THRESH + pAct * 10;
+          if (dist < thresh) {
+            const br = (1 - dist / thresh) * (0.18 + pAct * 0.55);
+            lPos[seg*6]=pos[i*3]; lPos[seg*6+1]=pos[i*3+1]; lPos[seg*6+2]=pos[i*3+2];
+            lPos[seg*6+3]=pos[j*3]; lPos[seg*6+4]=pos[j*3+1]; lPos[seg*6+5]=pos[j*3+2];
+            const r=0.290+pAct*0.545, g=0.671-pAct*0.063, b=0.620-pAct*0.424;
+            lCol[seg*6]=r*br*3.2; lCol[seg*6+1]=g*br*3.2; lCol[seg*6+2]=b*br*3.2;
+            lCol[seg*6+3]=r*br*3.2; lCol[seg*6+4]=g*br*3.2; lCol[seg*6+5]=b*br*3.2;
+            seg++;
+          }
+        }
+      }
+      lGeo.setDrawRange(0, seg * 2);
+      lGeo.attributes.position.needsUpdate = true;
+      lGeo.attributes.color.needsUpdate    = true;
+
+      renderer.render(scene, camera);
+    }
+
+    animate();
+  })();
   </script>
 </body>
 </html>
