@@ -1,0 +1,711 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Robin Mollah — Work</title>
+  <meta name="description" content="Engineering timeline of Robin Mollah, Senior Software Engineer.">
+  <meta name="robots" content="noindex">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,650;9..144,800&family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+    :root {
+      --accent: #4aab9e;
+      --bg: #0a1e27;
+    }
+
+    html, body { overflow: hidden; height: 100%; }
+
+    body {
+      width: 100%;
+      background:
+        radial-gradient(ellipse at 25% 70%, #1e5c50 0%, transparent 55%),
+        radial-gradient(ellipse at 80% 20%, #123744 0%, transparent 50%),
+        #0a1e27;
+      font-family: 'IBM Plex Sans', sans-serif;
+    }
+
+    canvas {
+      display: block;
+      position: fixed;
+      inset: 0;
+      width: 100% !important;
+      height: 100% !important;
+    }
+
+    /* Vignette */
+    #vignette {
+      position: fixed;
+      inset: 0;
+      background: radial-gradient(ellipse at center, transparent 35%, rgba(8, 18, 24, 0.7) 100%);
+      pointer-events: none;
+      z-index: 1;
+    }
+
+    /* Top bar */
+    #back {
+      position: fixed;
+      top: 28px; left: 32px;
+      z-index: 20;
+      font-size: 0.78rem;
+      font-weight: 600;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      color: rgba(220, 210, 195, 0.38);
+      text-decoration: none;
+      transition: color 220ms ease;
+    }
+    #back:hover { color: rgba(220, 210, 195, 0.78); }
+
+    #badge {
+      position: fixed;
+      top: 28px; right: 32px;
+      z-index: 20;
+      font-size: 0.68rem;
+      font-weight: 600;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: rgba(74, 171, 158, 0.45);
+    }
+
+    /* Progress dots */
+    #progress {
+      position: fixed;
+      right: 32px;
+      top: 50%;
+      transform: translateY(-50%);
+      z-index: 20;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      align-items: center;
+    }
+
+    .dot {
+      width: 20px; height: 24px;
+      background: transparent;
+      border: none; outline: none; appearance: none;
+      cursor: pointer;
+      display: flex; align-items: center; justify-content: center;
+      padding: 0;
+    }
+    .dot::after {
+      content: '';
+      display: block;
+      width: 5px; height: 5px;
+      border-radius: 50%;
+      background: rgba(220, 210, 195, 0.18);
+      transition: background 0.4s ease, height 0.4s ease, border-radius 0.4s ease;
+    }
+    .dot.active::after {
+      background: var(--accent);
+      height: 16px;
+      border-radius: 3px;
+    }
+
+    /* ── Content panels ── */
+    .panel {
+      position: fixed;
+      left: 7%;
+      top: 50%;
+      transform: translateY(-50%) translateX(-24px);
+      width: min(440px, 42vw);
+      z-index: 10;
+      opacity: 0;
+      transition: opacity 0.55s ease, transform 0.55s ease;
+      pointer-events: none;
+    }
+    .panel.active {
+      opacity: 1;
+      transform: translateY(-50%) translateX(0);
+      pointer-events: all;
+    }
+
+    /* Intro panel — centred */
+    #panel-intro {
+      left: 50%;
+      transform: translateX(-50%) translateY(-50%);
+      width: min(620px, 80vw);
+      text-align: center;
+    }
+    #panel-intro.active {
+      transform: translateX(-50%) translateY(-50%);
+    }
+
+    .panel-card {
+      background: rgba(10, 30, 38, 0.68);
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
+      border: 1px solid rgba(255, 255, 255, 0.07);
+      border-radius: 14px;
+      padding: 36px 40px;
+    }
+
+    .eyebrow {
+      display: inline-block;
+      font-size: 0.68rem;
+      font-weight: 600;
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 14px;
+      font-family: 'IBM Plex Mono', monospace;
+      transition: color 0.5s ease;
+    }
+
+    .panel h1 {
+      font-family: 'Fraunces', Georgia, serif;
+      font-size: clamp(2.4rem, 5vw, 3.8rem);
+      font-weight: 800;
+      line-height: 0.96;
+      color: #f0ebe0;
+      letter-spacing: -0.02em;
+      margin-bottom: 18px;
+    }
+
+    .panel h2 {
+      font-family: 'Fraunces', Georgia, serif;
+      font-size: clamp(1.8rem, 3.5vw, 2.6rem);
+      font-weight: 800;
+      line-height: 1;
+      color: #f0ebe0;
+      letter-spacing: -0.02em;
+      margin-bottom: 6px;
+    }
+
+    .role-title {
+      font-size: 0.82rem;
+      font-weight: 500;
+      color: rgba(220, 210, 195, 0.45);
+      margin-bottom: 20px;
+      letter-spacing: 0.03em;
+    }
+
+    .panel-lead {
+      font-size: 0.96rem;
+      line-height: 1.65;
+      color: rgba(220, 210, 195, 0.65);
+      margin-bottom: 20px;
+    }
+
+    .panel ul {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      margin-bottom: 24px;
+    }
+
+    .panel ul li {
+      font-size: 0.84rem;
+      line-height: 1.5;
+      color: rgba(220, 210, 195, 0.55);
+      padding-left: 16px;
+      position: relative;
+    }
+    .panel ul li::before {
+      content: '─';
+      position: absolute;
+      left: 0;
+      color: var(--accent);
+      font-size: 0.7rem;
+      top: 3px;
+      transition: color 0.5s ease;
+    }
+
+    .tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 7px;
+    }
+    .tags span {
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 0.68rem;
+      font-weight: 500;
+      letter-spacing: 0.06em;
+      padding: 4px 10px;
+      border-radius: 4px;
+      background: rgba(255,255,255,0.05);
+      border: 1px solid rgba(255,255,255,0.1);
+      color: rgba(220, 210, 195, 0.5);
+    }
+
+    .intro-subtitle {
+      font-size: 0.9rem;
+      color: rgba(220, 210, 195, 0.45);
+      margin-bottom: 8px;
+    }
+    .scroll-hint {
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 0.68rem;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: rgba(74, 171, 158, 0.45);
+      animation: pulse 2s ease infinite;
+    }
+    @keyframes pulse { 0%,100%{opacity:0.45} 50%{opacity:1} }
+
+    /* Scroll progress bar */
+    #scroll-track {
+      position: fixed;
+      bottom: 0; left: 0;
+      width: 100%; height: 2px;
+      background: rgba(255,255,255,0.05);
+      z-index: 30;
+      opacity: 0;
+      transition: opacity 0.3s ease;
+    }
+    #scroll-track.visible { opacity: 1; }
+    #scroll-fill {
+      height: 100%;
+      width: 0%;
+      background: var(--accent);
+      transition: background 0.5s ease;
+      will-change: width;
+    }
+
+    /* Overlay for fade-out */
+    #overlay {
+      position: fixed;
+      inset: 0;
+      z-index: 99;
+      background: #0a1e27;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.9s ease;
+    }
+
+    @media (max-width: 768px) {
+      .panel {
+        left: 5%;
+        width: 90vw;
+        top: auto;
+        bottom: 80px;
+        transform: translateY(16px) translateX(0);
+      }
+      #panel-intro {
+        left: 5%;
+        width: 90vw;
+        top: 50%;
+        transform: translateY(-50%);
+      }
+      #panel-intro.active { transform: translateY(-50%); }
+      .panel.active { transform: translateY(0); }
+      .panel-card { padding: 24px; }
+      #progress { display: none; }
+    }
+  </style>
+</head>
+<body>
+  <canvas id="webgl" aria-hidden="true"></canvas>
+  <div id="vignette" aria-hidden="true"></div>
+  <div id="overlay" aria-hidden="true"></div>
+
+  <div id="scroll-track" aria-hidden="true"><div id="scroll-fill"></div></div>
+
+  <a id="back" href="/">← robinmollah.com</a>
+  <div id="badge">Work</div>
+
+  <!-- Progress dots -->
+  <nav id="progress" aria-label="Section navigation">
+    <button class="dot active" data-section="0" aria-label="Intro"></button>
+    <button class="dot" data-section="1" aria-label="GoBubble AI Tech"></button>
+    <button class="dot" data-section="2" aria-label="Eagle 3D Streaming"></button>
+    <button class="dot" data-section="3" aria-label="Bonton Connect"></button>
+  </nav>
+
+  <!-- Intro panel -->
+  <div class="panel active" id="panel-intro" role="region" aria-label="Introduction">
+    <p class="eyebrow">Engineering Timeline</p>
+    <h1>Work Experience.</h1>
+    <p class="intro-subtitle" style="margin-top:16px">Backend platforms, cloud infrastructure, data systems, and applied AI — built under real production constraints across three companies.</p>
+    <p class="scroll-hint" style="margin-top:28px">↓ Scroll to explore</p>
+  </div>
+
+  <!-- GoBubble AI Tech Ltd -->
+  <div class="panel" id="panel-gobubble" role="region" aria-label="GoBubble AI Tech Ltd">
+    <div class="panel-card">
+      <span class="eyebrow">Most Recent · On-site · Dubai, UAE</span>
+      <h2>GoBubble AI Tech Ltd</h2>
+      <p class="role-title">Technical Lead</p>
+      <p class="panel-lead">Technical leadership at an AI technology company — driving architecture decisions, leading engineering teams, and delivering AI-powered product features at production scale.</p>
+      <ul>
+        <li>Led technical direction and architecture across the engineering organisation</li>
+        <li>Hands-on delivery across backend systems, AI integration, and cloud infrastructure</li>
+        <li>Defined and enforced engineering standards, review processes, and delivery practices</li>
+        <li>Collaborated with product and leadership to translate business goals into technical roadmap</li>
+      </ul>
+      <div class="tags">
+        <span>Technical Leadership</span><span>AI</span><span>Backend</span><span>Cloud</span><span>System Design</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Eagle 3D Streaming -->
+  <div class="panel" id="panel-eagle" role="region" aria-label="Eagle 3D Streaming">
+    <div class="panel-card">
+      <span class="eyebrow">Previous Role · Remote · Dallas, Texas</span>
+      <h2>Eagle 3D Streaming</h2>
+      <p class="role-title">Senior Software Engineer</p>
+      <p class="panel-lead">Real-time 3D streaming infrastructure and SaaS platform engineering at scale — cloud-native architecture, large file workflows, and Kubernetes-managed deployments.</p>
+      <ul>
+        <li>Architected real-time streaming pipeline serving enterprise clients at production load</li>
+        <li>Built and operated multi-tenant SaaS platform on Google Kubernetes Engine</li>
+        <li>Engineered large-file distribution workflows on GCS with Git-based version control</li>
+        <li>Scaled platform to 9× maximum concurrent users through network and file system level optimisation</li>
+      </ul>
+      <div class="tags">
+        <span>GKE</span><span>GCS</span><span>Kubernetes</span><span>WebSocket</span><span>SaaS</span><span>SSL/TLS</span><span>Cloud Infra</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Bonton Connect -->
+  <div class="panel" id="panel-bonton" role="region" aria-label="Bonton Connect">
+    <div class="panel-card">
+      <span class="eyebrow">Earlier Role · On-site · Dhaka, Bangladesh</span>
+      <h2>Bonton Connect</h2>
+      <p class="role-title">Software Engineer</p>
+      <p class="panel-lead">Low-level networking and systems engineering on constrained hardware — custom communication paths, router-class software, and embedded device workflows.</p>
+      <ul>
+        <li>Developed software for resource-constrained networked devices at the edge</li>
+        <li>Built custom communication protocols and routing logic for embedded hardware</li>
+        <li>Managed Linux environments, user access, and disk-level system administration</li>
+        <li>Configured Nginx for routing, proxying, and service exposure on self-hosted infrastructure</li>
+        <li>Worked at the intersection of software and hardware in network appliance engineering</li>
+      </ul>
+      <div class="tags">
+        <span>Linux</span><span>Nginx</span><span>Networking</span><span>Embedded</span><span>Routing</span><span>Systems</span>
+      </div>
+    </div>
+  </div>
+
+  <script src="https://unpkg.com/three@0.160.0/build/three.min.js"></script>
+  <script>
+  (function () {
+    // ── Renderer ──────────────────────────────────────────────────────
+    const canvas = document.getElementById('webgl');
+    const renderer = new THREE.WebGLRenderer({ canvas, antialias: true, alpha: true, preserveDrawingBuffer: true });
+    renderer.setPixelRatio(Math.min(devicePixelRatio, 2));
+    renderer.setClearColor(0x000000, 0);
+
+    const scene = new THREE.Scene();
+    const camera = new THREE.PerspectiveCamera(60, innerWidth / innerHeight, 0.1, 200);
+    camera.position.z = 58;
+
+    function resize() {
+      renderer.setSize(innerWidth, innerHeight, false);
+      camera.aspect = innerWidth / innerHeight;
+      camera.updateProjectionMatrix();
+    }
+    resize();
+    window.addEventListener('resize', resize);
+
+    // ── Particles ─────────────────────────────────────────────────────
+    const N = 160;
+    const pos   = new Float32Array(N * 3);
+    const phase = new Float32Array(N);
+    const act   = new Float32Array(N);
+    const pCol  = new Float32Array(N * 3);
+
+    for (let i = 0; i < N; i++) {
+      pos[i*3]   = (Math.random() - 0.5) * 110;
+      pos[i*3+1] = (Math.random() - 0.5) * 75;
+      pos[i*3+2] = (Math.random() - 0.5) * 80;
+      phase[i]   = Math.random() * Math.PI * 2;
+    }
+
+    const pGeo = new THREE.BufferGeometry();
+    pGeo.setAttribute('position', new THREE.BufferAttribute(pos,  3));
+    pGeo.setAttribute('color',    new THREE.BufferAttribute(pCol, 3));
+    const pMat = new THREE.PointsMaterial({ size: 1.8, sizeAttenuation: true, vertexColors: true, transparent: true, opacity: 0.95 });
+    scene.add(new THREE.Points(pGeo, pMat));
+
+    // ── Lines ─────────────────────────────────────────────────────────
+    const maxSegs = N * (N - 1) / 2;
+    const lPos  = new Float32Array(maxSegs * 6);
+    const lCol  = new Float32Array(maxSegs * 6);
+    const lGeo  = new THREE.BufferGeometry();
+    lGeo.setAttribute('position', new THREE.BufferAttribute(lPos, 3));
+    lGeo.setAttribute('color',    new THREE.BufferAttribute(lCol, 3));
+    const lMat  = new THREE.LineBasicMaterial({ vertexColors: true, transparent: true, opacity: 0.55 });
+    scene.add(new THREE.LineSegments(lGeo, lMat));
+
+    // ── Formations ────────────────────────────────────────────────────
+    // 0: Random scatter (intro)
+    const floatForm = new Float32Array(N * 3);
+    for (let i = 0; i < N; i++) {
+      floatForm[i*3]   = (Math.random() - 0.5) * 110;
+      floatForm[i*3+1] = (Math.random() - 0.5) * 75;
+      floatForm[i*3+2] = (Math.random() - 0.5) * 80;
+    }
+
+    // 1: Fibonacci sphere (GoBubble AI)
+    const helixForm = new Float32Array(N * 3);
+    (function() {
+      const golden = Math.PI * (1 + Math.sqrt(5));
+      for (let i = 0; i < N; i++) {
+        const phi   = Math.acos(1 - 2 * (i + 0.5) / N);
+        const theta = golden * i;
+        const r = 24;
+        helixForm[i*3]   = r * Math.sin(phi) * Math.cos(theta);
+        helixForm[i*3+1] = r * Math.sin(phi) * Math.sin(theta);
+        helixForm[i*3+2] = r * Math.cos(phi);
+      }
+    })();
+
+    // 2: Streaming rows (Eagle 3D Streaming)
+    const streamForm = new Float32Array(N * 3);
+    (function() {
+      const rows = 8, cols = Math.ceil(N / rows);
+      for (let i = 0; i < N; i++) {
+        const r = i % rows, c = Math.floor(i / rows);
+        streamForm[i*3]   = (c / (cols - 1) - 0.5) * 95;
+        streamForm[i*3+1] = (r / (rows - 1) - 0.5) * 48;
+        streamForm[i*3+2] = (r % 2 === 0 ? 1 : -1) * (4 + r * 2.5);
+      }
+    })();
+
+    // 3: Organic cluster (Bonton)
+    const sphereForm = new Float32Array(N * 3);
+    (function() {
+      for (let i = 0; i < N; i++) {
+        const theta = Math.random() * Math.PI * 2;
+        const phi   = Math.acos(2 * Math.random() - 1);
+        const r     = 6 + Math.pow(Math.random(), 0.5) * 22;
+        sphereForm[i*3]   = r * Math.sin(phi) * Math.cos(theta);
+        sphereForm[i*3+1] = r * Math.sin(phi) * Math.sin(theta);
+        sphereForm[i*3+2] = r * Math.cos(phi);
+      }
+    })();
+
+    const formations = [floatForm, helixForm, streamForm, sphereForm];
+    const target = floatForm.slice();
+
+    // Current lerp target — populated after floatForm is defined below
+    let lerpSpeed = 0.018;
+
+    // Section colours: [r, g, b]
+    const sectionCols = [
+      [0.290, 0.671, 0.620], // teal (intro)
+      [0.545, 0.435, 0.859], // violet (gobubble)
+      [0.240, 0.780, 0.737], // cyan-teal (eagle)
+      [0.718, 0.396, 0.278], // clay (bonton)
+    ];
+    const curCol = [...sectionCols[0]];
+
+    // ── Mouse ──────────────────────────────────────────────────────────
+    const mouse      = new THREE.Vector2(9999, 9999);
+    const mouseWorld = new THREE.Vector3();
+    const plane      = new THREE.Plane(new THREE.Vector3(0, 0, 1), 0);
+    const raycaster  = new THREE.Raycaster();
+    let camTX = 0, camTY = 0;
+
+    window.addEventListener('mousemove', e => {
+      mouse.x =  (e.clientX / innerWidth)  * 2 - 1;
+      mouse.y = -(e.clientY / innerHeight) * 2 + 1;
+      raycaster.setFromCamera(mouse, camera);
+      raycaster.ray.intersectPlane(plane, mouseWorld);
+    });
+
+    // ── Section logic ──────────────────────────────────────────────────
+    let currentSection = 0;
+    let flyProgress = 0, flying = false;
+
+    const panels = [
+      document.getElementById('panel-intro'),
+      document.getElementById('panel-gobubble'),
+      document.getElementById('panel-eagle'),
+      document.getElementById('panel-bonton'),
+    ];
+    const dots = Array.from(document.querySelectorAll('.dot'));
+    const accentVar = ['#4aab9e','#8b6fdb','#3dc7bc','#b76547'];
+
+    let transitioning = false;
+
+    function activateSection(s) {
+      if (s === currentSection || transitioning) return;
+      transitioning = true;
+
+      // Morph particles immediately
+      const f = formations[s];
+      for (let i = 0; i < N * 3; i++) target[i] = f[i];
+      lerpSpeed = 0.032;
+
+      // Switch panel + colour after particles have moved
+      setTimeout(() => {
+        currentSection = s;
+        panels.forEach((p, i) => p.classList.toggle('active', i === s));
+        dots.forEach((d, i) => d.classList.toggle('active', i === s));
+        document.documentElement.style.setProperty('--accent', accentVar[s]);
+        lerpSpeed = 0.018;
+        transitioning = false;
+      }, 800);
+    }
+
+    // Dot navigation — direct jump, no scroll position needed
+    dots.forEach(d => {
+      d.addEventListener('click', () => activateSection(parseInt(d.dataset.section)));
+    });
+
+    // ── Wheel accumulation with progress bar ──────────────────────────
+    const SCROLL_THRESH = 280;
+    let scrollAccum  = 0;
+    let scrollCooldown = false;
+    let hideTimer    = null;
+    const scrollTrack = document.getElementById('scroll-track');
+    const scrollFill  = document.getElementById('scroll-fill');
+
+    function showBar() {
+      scrollTrack.classList.add('visible');
+      clearTimeout(hideTimer);
+      hideTimer = setTimeout(() => scrollTrack.classList.remove('visible'), 1000);
+    }
+
+    function advance(dir) {
+      scrollAccum = 0;
+      scrollFill.style.width = '0%';
+      scrollCooldown = true;
+      setTimeout(() => { scrollCooldown = false; }, 550);
+
+      const next = currentSection + dir;
+      if (next > panels.length - 1) { triggerFly(); return; }
+      if (next < 0) return;
+      activateSection(next);
+    }
+
+    window.addEventListener('wheel', e => {
+      if (flying) return;
+      showBar();
+      if (scrollCooldown) return;
+      scrollAccum += e.deltaY;
+      const ratio = Math.max(-1, Math.min(1, scrollAccum / SCROLL_THRESH));
+      scrollFill.style.width = Math.abs(ratio) * 100 + '%';
+      if (ratio >=  1) advance(1);
+      else if (ratio <= -1) advance(-1);
+    }, { passive: true });
+
+    // Touch swipe
+    let touchStartY = 0;
+    window.addEventListener('touchstart', e => { touchStartY = e.touches[0].clientY; }, { passive: true });
+    window.addEventListener('touchend', e => {
+      if (flying) return;
+      const dy = touchStartY - e.changedTouches[0].clientY;
+      if (Math.abs(dy) > 50) advance(dy > 0 ? 1 : -1);
+    }, { passive: true });
+
+    // ── Fly-through exit ──────────────────────────────────────────────
+    const overlay = document.getElementById('overlay');
+
+    function triggerFly() {
+      if (flying) return;
+      flying = true;
+      panels.forEach(p => { p.style.transition = 'opacity 0.4s ease'; p.style.opacity = '0'; });
+      document.getElementById('back').style.opacity  = '0';
+      document.getElementById('badge').style.opacity = '0';
+      document.getElementById('progress').style.opacity = '0';
+    }
+
+    // ── Animation ─────────────────────────────────────────────────────
+    let tick = 0;
+    const BASE_THRESH = 9, MOUSE_RADIUS = 22;
+
+    function animate() {
+      requestAnimationFrame(animate);
+      tick += 0.007;
+
+      // Fly-through
+      if (flying) {
+        flyProgress = Math.min(flyProgress + 0.016, 1);
+        const ease = flyProgress * flyProgress * (3 - 2 * flyProgress);
+        camera.position.z = 58 - ease * 95;
+        if (flyProgress > 0.45) overlay.style.opacity = Math.min((flyProgress - 0.45) / 0.55, 1).toFixed(3);
+        if (flyProgress >= 1) { window.location.href = '/'; return; }
+        camera.lookAt(0, 0, 0);
+        renderer.render(scene, camera);
+        return;
+      }
+
+      // Slow scene rotation (emphasises 3D depth)
+      scene.rotation.y = Math.sin(tick * 0.18) * 0.25;
+      scene.rotation.x = Math.sin(tick * 0.11) * 0.10;
+
+      // Camera parallax
+      camTX += (mouse.x * 3.5 - camTX) * 0.035;
+      camTY += (mouse.y * 2.2 - camTY) * 0.035;
+      camera.position.x = camTX;
+      camera.position.y = camTY;
+      camera.lookAt(0, 0, 0);
+
+      // Lerp colour toward section colour
+      const tc = sectionCols[currentSection];
+      curCol[0] += (tc[0] - curCol[0]) * 0.025;
+      curCol[1] += (tc[1] - curCol[1]) * 0.025;
+      curCol[2] += (tc[2] - curCol[2]) * 0.025;
+
+      // Update particles
+      for (let i = 0; i < N; i++) {
+        const wobble  = Math.sin(tick * 0.9 + phase[i]) * 2.8;
+        const wobbleY = Math.cos(tick * 0.7 + phase[i]) * 2.0;
+        const wobbleZ = Math.sin(tick * 0.5 + phase[i] * 1.3) * 1.6;
+
+        // Lerp toward formation target + wobble
+        pos[i*3]   += (target[i*3]   + wobble  - pos[i*3])   * lerpSpeed;
+        pos[i*3+1] += (target[i*3+1] + wobbleY - pos[i*3+1]) * lerpSpeed;
+        pos[i*3+2] += (target[i*3+2] + wobbleZ - pos[i*3+2]) * lerpSpeed;
+
+        // Mouse activation
+        const dx = pos[i*3]   - mouseWorld.x;
+        const dy = pos[i*3+1] - mouseWorld.y;
+        const d  = Math.sqrt(dx*dx + dy*dy);
+        const ta = d < MOUSE_RADIUS ? (1 - d / MOUSE_RADIUS) : 0;
+        act[i] += (ta - act[i]) * 0.08;
+
+        // Vertex colour: section colour → gold on hover
+        const a = act[i];
+        pCol[i*3]   = curCol[0] + a * (0.835 - curCol[0]);
+        pCol[i*3+1] = curCol[1] + a * (0.608 - curCol[1]);
+        pCol[i*3+2] = curCol[2] + a * (0.196 - curCol[2]);
+      }
+      pGeo.attributes.position.needsUpdate = true;
+      pGeo.attributes.color.needsUpdate    = true;
+
+      // Update connections
+      let seg = 0;
+      for (let i = 0; i < N && seg < maxSegs - 1; i++) {
+        for (let j = i + 1; j < N && seg < maxSegs - 1; j++) {
+          const dx = pos[i*3] - pos[j*3], dy = pos[i*3+1] - pos[j*3+1], dz = pos[i*3+2] - pos[j*3+2];
+          const dist = Math.sqrt(dx*dx + dy*dy + dz*dz);
+          const pAct = Math.max(act[i], act[j]);
+          const thresh = BASE_THRESH + pAct * 10;
+
+          if (dist < thresh) {
+            const t = 1 - dist / thresh;
+            lPos[seg*6]   = pos[i*3];   lPos[seg*6+1] = pos[i*3+1]; lPos[seg*6+2] = pos[i*3+2];
+            lPos[seg*6+3] = pos[j*3];   lPos[seg*6+4] = pos[j*3+1]; lPos[seg*6+5] = pos[j*3+2];
+
+            const br = t * (0.18 + pAct * 0.55);
+            const r = curCol[0] + pAct * (0.835 - curCol[0]);
+            const g = curCol[1] + pAct * (0.608 - curCol[1]);
+            const b = curCol[2] + pAct * (0.196 - curCol[2]);
+            lCol[seg*6]   = r*br*3.2; lCol[seg*6+1] = g*br*3.2; lCol[seg*6+2] = b*br*3.2;
+            lCol[seg*6+3] = r*br*3.2; lCol[seg*6+4] = g*br*3.2; lCol[seg*6+5] = b*br*3.2;
+            seg++;
+          }
+        }
+      }
+      lGeo.setDrawRange(0, seg * 2);
+      lGeo.attributes.position.needsUpdate = true;
+      lGeo.attributes.color.needsUpdate    = true;
+
+      renderer.render(scene, camera);
+    }
+
+    animate();
+  })();
+  </script>
+</body>
+</html>

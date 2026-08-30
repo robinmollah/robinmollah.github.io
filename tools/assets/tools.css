@@ -52,15 +52,23 @@ body::after {
   inset: 0;
   z-index: -1;
   background:
+    linear-gradient(90deg, rgba(136, 77, 57, 0.085) 1px, transparent 1px),
+    linear-gradient(180deg, rgba(136, 77, 57, 0.085) 1px, transparent 1px),
     radial-gradient(
-      420px circle at var(--pointer-x, 50%) var(--pointer-y, 18%),
-      rgba(213, 155, 50, 0.12),
-      rgba(183, 101, 71, 0.055) 34%,
-      transparent 68%
+      2px circle at var(--pointer-x, 50%) var(--pointer-y, 18%),
+      rgba(213, 155, 50, 0.18),
+      transparent 100%
     );
+  background-size: 80px 80px, 80px 80px, auto;
+  mask-image: radial-gradient(
+    360px circle at var(--pointer-x, 50%) var(--pointer-y, 18%),
+    rgba(0, 0, 0, 0.7),
+    rgba(0, 0, 0, 0.26) 38%,
+    transparent 74%
+  );
   opacity: var(--pointer-opacity, 0);
   pointer-events: none;
-  transition: opacity 420ms ease;
+  transition: opacity 520ms ease;
 }
 
 a {

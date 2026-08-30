@@ -9,8 +9,8 @@ if (canUsePointerReaction) {
   let targetY = 18;
 
   const applyPointerPosition = () => {
-    pointerX += (targetX - pointerX) * 0.14;
-    pointerY += (targetY - pointerY) * 0.14;
+    pointerX += (targetX - pointerX) * 0.08;
+    pointerY += (targetY - pointerY) * 0.08;
     document.documentElement.style.setProperty('--pointer-x', `${pointerX}%`);
     document.documentElement.style.setProperty('--pointer-y', `${pointerY}%`);
 
@@ -25,7 +25,7 @@ if (canUsePointerReaction) {
   window.addEventListener('pointermove', (event) => {
     targetX = (event.clientX / window.innerWidth) * 100;
     targetY = (event.clientY / window.innerHeight) * 100;
-    document.documentElement.style.setProperty('--pointer-opacity', '1');
+    document.documentElement.style.setProperty('--pointer-opacity', '0.72');
 
     if (!pointerFrame) {
       pointerFrame = window.requestAnimationFrame(applyPointerPosition);
