@@ -388,9 +388,129 @@ h3 {
   color: var(--accent);
   margin-bottom: 24px;
 }
+.timeline-copy .lead,
+.timeline-copy .section-intro,
+.timeline-copy .moment > p {
+  --description-color: #acb0b6;
+  position: relative;
+  color: transparent;
+  opacity: 1;
+  visibility: visible;
+  transform: translateY(0);
+  filter: none;
+  pointer-events: auto;
+  transition:
+    color 450ms ease,
+    transform 700ms cubic-bezier(0.22, 1, 0.36, 1),
+    filter 700ms ease;
+}
+.timeline-copy .lead {
+  --description-color: var(--paper);
+}
+.timeline-copy [data-teaser]::before {
+  content: attr(data-teaser);
+  position: absolute;
+  inset: 0 auto auto 0;
+  color: var(--description-color);
+  opacity: 1;
+  transform: translateY(0);
+  transition:
+    opacity 450ms ease,
+    transform 700ms cubic-bezier(0.22, 1, 0.36, 1);
+  pointer-events: none;
+}
+.timeline-copy > h2:hover + .lead,
+.timeline-copy > h2:hover + .section-intro,
+.timeline-copy .lead:hover,
+.timeline-copy .section-intro:hover,
+.timeline-copy .moment:hover > p,
+.timeline-copy .moment:focus-within > p {
+  color: var(--description-color);
+  transform: translateY(0);
+  filter: blur(0);
+  transition-delay: 0s;
+}
+.timeline-copy > h2:hover + .lead::before,
+.timeline-copy > h2:hover + .section-intro::before,
+.timeline-copy .lead:hover::before,
+.timeline-copy .section-intro:hover::before,
+.timeline-copy .moment:hover > p::before,
+.timeline-copy .moment:focus-within > p::before {
+  opacity: 0;
+  transform: translateY(-10px);
+}
+.timeline-copy .moment > p {
+  transition-delay: 90ms;
+}
+.timeline-copy .section-intro {
+  transition-delay: 40ms;
+}
+.timeline-copy .lead {
+  transition-delay: 40ms;
+}
 .moment h3 {
   font-size: 31px;
   margin-bottom: 18px;
+}
+.timeline-copy .description-ready {
+  display: grid;
+  padding-left: 30px;
+  color: var(--description-color);
+}
+.timeline-copy .description-ready::before {
+  content: none;
+}
+.description-teaser,
+.description-full {
+  grid-area: 1 / 1;
+  transition: opacity 450ms ease, transform 600ms ease, filter 600ms ease;
+}
+.description-full {
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(10px);
+  filter: blur(4px);
+}
+.description-open .description-full {
+  opacity: 1;
+  visibility: visible;
+  transform: none;
+  filter: none;
+}
+.description-open .description-teaser {
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(-6px);
+}
+.description-info {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 24px;
+  height: 28px;
+  padding: 0;
+  background: transparent;
+  border: 0;
+  color: var(--accent);
+  font: bold 13px Georgia, serif;
+  cursor: pointer;
+}
+.description-info::before {
+  content: "";
+  position: absolute;
+  width: 16px;
+  height: 16px;
+  border: 1px solid currentColor;
+  border-radius: 50%;
+  top: 5px;
+  left: 3px;
+}
+.description-info:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 3px;
+}
+@media (prefers-reduced-motion: reduce) {
+  .description-teaser, .description-full { transition: none; }
 }
 .moment p {
   font-size: 15px;

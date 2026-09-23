@@ -1,5 +1,51 @@
 (() => {
   "use strict";
+  document.querySelectorAll("[data-teaser]").forEach((description, index) => {
+    const full = document.createElement("span");
+    full.className = "description-full";
+    full.id = "description-" + index;
+    full.textContent = description.textContent.trim();
+    const teaser = document.createElement("span");
+    teaser.className = "description-teaser";
+    teaser.textContent = description.dataset.teaser;
+    const button = document.createElement("button");
+    button.type = "button";
+    button.className = "description-info";
+    button.textContent = "i";
+    button.title = "More details";
+    button.setAttribute("aria-label", "More details");
+    button.setAttribute("aria-controls", full.id);
+    description.replaceChildren(teaser, full, button);
+    description.classList.add("description-ready");
+    let pinned = false, hovered = false, focused = false;
+    const update = () => {
+      const open = pinned || hovered || focused;
+      description.classList.toggle("description-open", open);
+      button.setAttribute("aria-expanded", String(open));
+      full.setAttribute("aria-hidden", String(!open));
+      teaser.setAttribute("aria-hidden", String(open));
+    };
+    description.addEventListener("pointerenter", event => {
+      if (event.pointerType === "mouse") { hovered = true; update(); }
+    });
+    description.addEventListener("pointerleave", () => { hovered = false; update(); });
+    button.addEventListener("focus", () => {
+      focused = button.matches(":focus-visible"); update();
+    });
+    button.addEventListener("blur", () => { focused = false; update(); });
+    button.addEventListener("click", () => {
+      pinned = !pinned;
+      if (!pinned) { hovered = false; focused = false; }
+      update();
+    });
+    button.addEventListener("keydown", event => {
+      if (event.key === "Escape") {
+        pinned = hovered = focused = false;
+        update();
+      }
+    });
+    update();
+  });
   const chapters = [...document.querySelectorAll(".chapter")];
   const links = [...document.querySelectorAll(".chapters a")];
   const media = matchMedia("(prefers-reduced-motion: reduce)");
@@ -144,7 +190,7 @@
   const earth = new T.Mesh(new T.SphereGeometry(3.3, 80, 64), earthMaterial);
   earth.rotation.set(0.12, 2.7, -0.2);
   earthGroup.add(earth);
-  const texture = new T.TextureLoader().load("./assets/earth.jpg", () =>
+  const texture = new T.TextureLoader().load("/life/assets/earth.jpg", () =>
     draw(),
   );
   texture.colorSpace = T.SRGBColorSpace;
@@ -326,7 +372,7 @@
   ring.rotation.y = 0.25;
 
   const loader = new T.TextureLoader();
-  const moonTexture = loader.load("./assets/moon.jpg", () => draw());
+  const moonTexture = loader.load("/life/assets/moon.jpg", () => draw());
   moonTexture.colorSpace = T.SRGBColorSpace;
   moon.geometry.dispose();
   moon.geometry = new T.SphereGeometry(4.2, 64, 48);
@@ -419,30 +465,115 @@
       radius * Math.sin(phi) * Math.sin(theta),
     );
   }
+  function attachVideoPanel(group, src, datasetKey, width, height) {
+    const material = new T.MeshBasicMaterial({
+      color: 0x111b23,
+      side: T.DoubleSide,
+      transparent: true,
+      opacity: 0.78,
+    });
+    const video = document.createElement("video");
+    video.src = src;
+    video.muted = true;
+    video.defaultMuted = true;
+    video.loop = false;
+    video.playsInline = true;
+    video.preload = "auto";
+    video.style.display = "none";
+    video.setAttribute("playsinline", "");
+    video.setAttribute("webkit-playsinline", "");
+    document.body.append(video);
+    video.addEventListener("loadeddata", () => {
+      const aspect = video.videoWidth / video.videoHeight;
+      const fittedWidth = Math.min(width, height * aspect);
+      const fittedHeight = fittedWidth / aspect;
+      panel.geometry.dispose();
+      panel.geometry = new T.PlaneGeometry(fittedWidth, fittedHeight);
+      const texture = new T.VideoTexture(video);
+      texture.colorSpace = T.SRGBColorSpace;
+      texture.minFilter = T.LinearFilter;
+      texture.magFilter = T.LinearFilter;
+      material.map = texture;
+      material.color.setHex(0xffffff);
+      material.opacity = 1;
+      material.needsUpdate = true;
+      canvas.dataset[datasetKey] = "loaded";
+      draw();
+    });
+    video.addEventListener("ended", () => {
+      video.currentTime = 0;
+      video.play().catch(() => {
+        canvas.dataset[datasetKey] = "blocked";
+      });
+    });
+    video.load();
+    const panel = part(group, new T.PlaneGeometry(width, height), material, 0, 0, 0.08);
+    panel.renderOrder = 2;
+    group.userData.video = video;
+    group.userData.videoMaterial = material;
+    group.userData.videoKey = datasetKey;
+    return panel;
+  }
+  function updateVideoPanel(world, stopIndex) {
+    if (!world.userData.video || !world.userData.videoMaterial) return;
+    const video = world.userData.video;
+    const material = world.userData.videoMaterial;
+    const key = world.userData.videoKey;
+    if (
+      canvas.dataset[key] === "loaded" &&
+      Number.isFinite(video.duration) &&
+      video.duration > 1
+    ) {
+      const shouldPlayVideo = !paused && Math.abs(current - stopIndex) < 1.15;
+      if (shouldPlayVideo && video.paused) {
+        video.play().catch(() => {
+          canvas.dataset[key] = "blocked";
+        });
+      } else if (!shouldPlayVideo && !video.paused) {
+        video.pause();
+      }
+      const fadeWindow = 0.9;
+      const remaining = video.duration - video.currentTime;
+      if (shouldPlayVideo && remaining < 0.08 && !world.userData.refreshingVideo) {
+        world.userData.refreshingVideo = true;
+        material.opacity = 0.12;
+        video.currentTime = 0;
+        video.play().catch(() => {
+          canvas.dataset[key] = "blocked";
+        });
+        setTimeout(() => {
+          world.userData.refreshingVideo = false;
+        }, 350);
+      } else {
+        const fadeIn = Math.min(1, video.currentTime / fadeWindow);
+        const fadeOut = Math.min(1, Math.max(0, remaining / fadeWindow));
+        material.opacity = Math.max(0.12, Math.min(fadeIn, fadeOut));
+      }
+    } else if (canvas.dataset[key] === "blocked") {
+      material.map = null;
+      material.color.setHex(0x111b23);
+      material.opacity = 0.78;
+    }
+  }
   function makeOriginGlobe() {
     const group = new T.Group();
-    scene.add(group);
+    earth.add(group);
+    const highlight = goldGlow.clone();
+    highlight.transparent = true;
+    highlight.opacity = 0;
+    const narsingdi = latLonPoint(23.92, 90.72, 3.34);
     part(
       group,
-      new T.SphereGeometry(4.5, 80, 64),
-      earthCloneMaterial,
-      0,
-      0,
-      0,
-    );
-    const narsingdi = latLonPoint(23.92, 90.72, 4.78);
-    part(
-      group,
-      new T.SphereGeometry(0.1, 16, 12),
-      goldGlow,
+      new T.SphereGeometry(0.025, 16, 12),
+      highlight,
       narsingdi.x,
       narsingdi.y,
       narsingdi.z,
     );
     const marker = part(
       group,
-      new T.TorusGeometry(0.42, 0.018, 8, 48),
-      goldGlow,
+      new T.TorusGeometry(0.13, 0.008, 8, 48),
+      highlight,
       narsingdi.x,
       narsingdi.y,
       narsingdi.z,
@@ -451,57 +582,246 @@
       new T.Vector3(0, 0, 1),
       narsingdi.clone().normalize(),
     );
+    group.userData.marker = marker;
+    group.userData.highlight = highlight;
+    // Simplified geographic boundary from johan/world.geo.json (Natural Earth).
+    fetch("/life/assets/bangladesh-border.geo.json")
+      .then(response => {
+        if (!response.ok) throw new Error("Boundary unavailable");
+        return response.json();
+      })
+      .then(data => {
+        const material = new T.LineBasicMaterial({ color: 0xffd57a, transparent: true, opacity: 0 });
+        data.features[0].geometry.coordinates.forEach(ring => {
+          const points = ring.map(([lon, lat]) => latLonPoint(lat, lon, 3.315));
+          group.add(new T.Line(new T.BufferGeometry().setFromPoints(points), material));
+        });
+        group.userData.borderMaterial = material;
+        canvas.dataset.bangladeshBorder = "loaded";
+        draw();
+      }).catch(() => { canvas.dataset.bangladeshBorder = "unavailable"; });
     return group;
   }
   function makeFpsWorld() {
     const group = new T.Group();
     scene.add(group);
-    part(group, new T.BoxGeometry(3.4, 5.5, 0.24), darkMetal, 0, 0, 0);
-    part(group, new T.BoxGeometry(3.05, 4.65, 0.28), glass, 0, 0.08, 0.08);
-    for (let i = 0; i < 13; i++) {
-      const x = (i % 5) * 0.75 - 1.5;
-      const y = Math.floor(i / 5) * 0.55 - 1.4;
-      part(
-        group,
-        new T.BoxGeometry(0.48, 0.24 + (i % 3) * 0.18, 0.55),
-        i % 2 ? metal : gold,
-        x,
-        y,
-        0.55,
-      );
+
+    const videoMaterial = new T.MeshBasicMaterial({
+      color: 0x111b23,
+      side: T.DoubleSide,
+      transparent: true,
+      opacity: 0.78,
+    });
+    const video = document.createElement("video");
+    video.src = "/life/assets/1971_hit_n_run_trimmed.mp4";
+    video.muted = true;
+    video.defaultMuted = true;
+    video.loop = false;
+    video.playsInline = true;
+    video.preload = "auto";
+    video.style.display = "none";
+    video.setAttribute("playsinline", "");
+    video.setAttribute("webkit-playsinline", "");
+    document.body.append(video);
+    video.addEventListener("loadeddata", () => {
+      const texture = new T.VideoTexture(video);
+      texture.colorSpace = T.SRGBColorSpace;
+      texture.minFilter = T.LinearFilter;
+      texture.magFilter = T.LinearFilter;
+      videoMaterial.map = texture;
+      videoMaterial.color.setHex(0xffffff);
+      videoMaterial.opacity = 1;
+      videoMaterial.needsUpdate = true;
+      canvas.dataset.hitRunVideo = "loaded";
+      draw();
+    });
+    video.addEventListener("ended", () => {
+      video.currentTime = 0;
+      video.play().catch(() => {
+        canvas.dataset.hitRunVideo = "blocked";
+      });
+    });
+    video.load();
+
+    const panel = part(
+      group,
+      new T.PlaneGeometry(5.8, 3.26),
+      videoMaterial,
+      0,
+      0,
+      0.08,
+    );
+    part(group, new T.BoxGeometry(6.15, 3.6, 0.16), darkMetal, 0, 0, -0.04);
+    panel.renderOrder = 2;
+    for (let i = 0; i < 8; i++) {
+      const top = i < 4;
+      const x = (i % 4) * 1.42 - 2.13;
+      const y = top ? 1.98 : -1.98;
+      part(group, new T.BoxGeometry(0.62, 0.09, 0.32), i % 2 ? metal : gold, x, y, 0.18);
     }
     const crosshair = new T.Group();
     group.add(crosshair);
-    part(crosshair, new T.TorusGeometry(0.82, 0.018, 8, 64), redGlow, 0, 0, 1.05);
-    part(crosshair, new T.BoxGeometry(2.2, 0.026, 0.026), redGlow, 0, 0, 1.05);
-    part(crosshair, new T.BoxGeometry(0.026, 2.2, 0.026), redGlow, 0, 0, 1.05);
+    part(crosshair, new T.TorusGeometry(0.64, 0.014, 8, 64), redGlow, 0, 0, 0.18);
+    part(crosshair, new T.BoxGeometry(1.72, 0.02, 0.02), redGlow, 0, 0, 0.18);
+    part(crosshair, new T.BoxGeometry(0.02, 1.72, 0.02), redGlow, 0, 0, 0.18);
+    crosshair.renderOrder = 3;
+    group.rotation.y = -0.18;
     group.userData.crosshair = crosshair;
+    group.userData.video = video;
+    group.userData.videoMaterial = videoMaterial;
     return group;
   }
   function makeBotWorld() {
     const group = new T.Group();
     scene.add(group);
-    part(group, new T.BoxGeometry(3.1, 2.2, 1.8), glass, 0, 0, 0);
-    part(group, new T.BoxGeometry(2.0, 0.9, 1.2), darkMetal, 0, -1.65, 0);
-    part(group, new T.SphereGeometry(0.18, 16, 12), greenGlow, -0.7, 0.25, 0.95);
-    part(group, new T.SphereGeometry(0.18, 16, 12), greenGlow, 0.7, 0.25, 0.95);
-    part(group, new T.CylinderGeometry(0.035, 0.035, 1.1, 8), metal, 0, 1.65, 0);
-    part(group, new T.SphereGeometry(0.17, 16, 12), goldGlow, 0, 2.23, 0);
+    attachVideoPanel(
+      group,
+      "/life/assets/bracubot-sample-conversation.mp4",
+      "bracuBotVideo",
+      7.2,
+      4.032,
+    );
+    part(group, new T.BoxGeometry(7.55, 4.38, 0.16), darkMetal, 0, 0, -0.04);
+    part(group, new T.SphereGeometry(0.06, 16, 12), greenGlow, -3.3, 2.1, 0.09);
+    part(group, new T.SphereGeometry(0.06, 16, 12), greenGlow, -3.05, 2.1, 0.09);
+    part(group, new T.CylinderGeometry(0.025, 0.025, 0.75, 8), metal, 0, 2.55, 0);
+    part(group, new T.SphereGeometry(0.14, 16, 12), goldGlow, 0, 2.95, 0);
     for (let i = 0; i < 3; i++) {
       const bubble = part(
         group,
-        new T.BoxGeometry(2.4 - i * 0.28, 0.52, 0.05),
+        new T.BoxGeometry(1.25 - i * 0.18, 0.32, 0.05),
         new T.MeshBasicMaterial({
           color: i === 0 ? 0xe6b95b : 0x8fd7a1,
           transparent: true,
-          opacity: 0.72,
+          opacity: 0.42,
         }),
-        2.55,
-        0.92 - i * 0.72,
-        0.25,
+        4.5,
+        1.15 - i * 0.48,
+        0.34,
       );
       bubble.rotation.y = -0.18;
     }
+    return group;
+  }
+  function makeNasaWorld() {
+    const group = new T.Group();
+    scene.add(group);
+    part(group, new T.SphereGeometry(0.62, 48, 36), goldGlow, 0, 0, 0);
+    const planets = [];
+    const colors = [0xa99c8d, 0xe4c489, 0x568ee8, 0xc97154, 0xc6a281, 0xe4d5a2, 0x80d3d6, 0x4267cf];
+    colors.forEach((color, i) => {
+      const radius = 1.1 + i * 0.49;
+      const path = part(group, new T.TorusGeometry(radius, 0.009, 6, 100),
+        new T.MeshBasicMaterial({ color: 0x687785, transparent: true, opacity: 0.4 }), 0, 0, 0);
+      path.rotation.x = Math.PI / 2;
+      const planet = part(group, new T.SphereGeometry(i > 3 ? 0.2 : 0.12, 24, 16),
+        i === 2 ? earthCloneMaterial : new T.MeshStandardMaterial({ color, roughness: 0.65 }), 0, 0, 0);
+      if (i === 5) {
+        const rings = part(planet, new T.TorusGeometry(0.34, 0.055, 8, 48), gold, 0, 0, 0);
+        rings.rotation.x = 1.2;
+      }
+      planets.push({ planet, radius, speed: 0.3 / Math.sqrt(i + 1), phase: i * 2.4 });
+    });
+    group.userData.planets = planets;
+    group.rotation.x = 0.55;
+    const orbit = part(
+      group,
+      new T.TorusGeometry(3.0, 0.018, 8, 96),
+      goldGlow,
+      0,
+      0,
+      0,
+    );
+    orbit.rotation.x = 1.2;
+    orbit.rotation.y = 0.35;
+    const satellite = new T.Group();
+    group.add(satellite);
+    part(satellite, new T.BoxGeometry(0.75, 0.42, 0.42), metal, 3, 0, 0);
+    part(satellite, new T.BoxGeometry(1.1, 0.03, 0.55), darkMetal, 2.2, 0, 0);
+    part(satellite, new T.BoxGeometry(1.1, 0.03, 0.55), darkMetal, 3.8, 0, 0);
+    group.userData.orbit = orbit;
+    group.userData.satellite = satellite;
+    satellite.visible = false;
+    orbit.visible = false;
+    return group;
+  }
+  function makeBontonWorld() {
+    const group = new T.Group();
+    scene.add(group);
+    part(group, new T.BoxGeometry(3.8, 1.05, 2.35), darkMetal, 0, -0.8, 0);
+    part(group, new T.BoxGeometry(2.7, 0.12, 1.7), metal, 0, -0.18, 0.18);
+    for (let i = 0; i < 4; i++) {
+      part(group, new T.SphereGeometry(0.08, 12, 8), greenGlow, -1.35 + i * 0.9, -0.18, 1.08);
+    }
+    for (let i = 0; i < 3; i++) {
+      const antenna = part(group, new T.CylinderGeometry(0.025, 0.025, 1.8, 8), metal, -1.4 + i * 1.4, 0.76, -0.25);
+      antenna.rotation.z = i === 1 ? 0 : (i - 1) * 0.25;
+      const signal = part(group, new T.TorusGeometry(0.55 + i * 0.3, 0.012, 6, 48), greenGlow, -1.4 + i * 1.4, 1.7, -0.25);
+      signal.rotation.x = 1.3;
+    }
+    const tunnel = part(group, new T.TorusGeometry(2.65, 0.035, 8, 100), blueGlow, 0, 0.25, -0.65);
+    tunnel.rotation.x = 1.45;
+    group.userData.tunnel = tunnel;
+    group.userData.flows = [];
+    for (let i = 0; i < 4; i++) {
+      const x = i % 2 ? 3.4 : -3.4;
+      const y = i < 2 ? 2.4 : -2.1;
+      part(group, new T.BoxGeometry(0.65, 1.1, 0.12), metal, x, y, 0);
+      part(group, new T.PlaneGeometry(0.5, 0.82), blueGlow, x, y, 0.07);
+      addFlow(group, new T.Vector3(x, y, 0), new T.Vector3(0, -0.5, 0), greenGlow, 4, i);
+    }
+    return group;
+  }
+  // Conceptual traffic paths illustrate flow without claiming a deployment topology.
+  function addFlow(group, start, end, material, count, phase) {
+    const curve = new T.QuadraticBezierCurve3(start,
+      start.clone().lerp(end, 0.5).add(new T.Vector3(0, 0.5, 0.5)), end);
+    const line = new T.Line(new T.BufferGeometry().setFromPoints(curve.getPoints(40)),
+      new T.LineBasicMaterial({ color: material.color, transparent: true, opacity: 0.3 }));
+    group.add(line);
+    line.userData.flowVisual = true;
+    group.userData.flows ||= [];
+    for (let i = 0; i < count; i++) {
+      const packet = part(group, new T.BoxGeometry(0.09, 0.09, 0.18), material, 0, 0, 0);
+      packet.userData.flowVisual = true;
+      group.userData.flows.push({ curve, packet, phase: i / count + phase * 0.13 });
+    }
+  }
+  function makeMessageWorld(pipeline) {
+    const group = new T.Group();
+    scene.add(group);
+    const core = part(group, pipeline ? new T.BoxGeometry(1.2, 2.5, 0.9) : new T.IcosahedronGeometry(0.9, 1),
+      metal, 0, 0, 0);
+    const ring = part(group, new T.TorusGeometry(1.5, 0.025, 8, 80), greenGlow, 0, 0, 0);
+    group.userData.core = core;
+    group.userData.ring = ring;
+    for (let i = 0; i < 4; i++) {
+      const y = (i - 1.5) * 1.4;
+      part(group, new T.BoxGeometry(0.6, 0.75, 0.18), [blueGlow, redGlow, goldGlow, greenGlow][i], -3.7, y, 0);
+      part(group, new T.BoxGeometry(0.65, 0.42, 0.5), darkMetal, 3.6, y, 0);
+      addFlow(group, new T.Vector3(-3.4, y, 0), new T.Vector3(-0.7, 0, 0),
+        [blueGlow, redGlow, goldGlow, greenGlow][i], pipeline ? 14 : 5, i);
+      addFlow(group, new T.Vector3(0.7, 0, 0), new T.Vector3(3.3, y, 0), greenGlow, 5, i);
+    }
+    return group;
+  }
+  function makeEdgeWorld() {
+    const group = new T.Group();
+    scene.add(group);
+    part(group, new T.CylinderGeometry(0.05, 0.18, 4.5, 12), metal, 0, 0, 0);
+    for (let i = 0; i < 3; i++) {
+      const ring = part(group, new T.TorusGeometry(0.5 + i * 0.45, 0.016, 8, 64),
+        greenGlow, 0, 1.9, 0);
+      ring.rotation.x = 0.8;
+    }
+    part(group, new T.BoxGeometry(0.7, 1.3, 0.15), metal, -3.3, -1.3, 0);
+    part(group, new T.PlaneGeometry(0.55, 1.1), blueGlow, -3.3, -1.3, 0.09);
+    part(group, new T.BoxGeometry(1, 2, 0.8), darkMetal, 3.1, -0.8, 0);
+    for (let i = 0; i < 5; i++) {
+      part(group, new T.BoxGeometry(0.7, 0.04, 0.04), goldGlow, 3.1, -1.5 + i * 0.32, 0.42);
+    }
+    addFlow(group, new T.Vector3(-3.3, -0.5, 0), new T.Vector3(0, 1.9, 0), blueGlow, 5, 0);
+    addFlow(group, new T.Vector3(0, 1.9, 0), new T.Vector3(3.1, 0.2, 0), greenGlow, 5, 1);
     return group;
   }
   function makeCoronaWorld() {
@@ -564,6 +884,8 @@
     const wave = part(group, new T.TorusGeometry(3.4, 0.018, 8, 96), greenGlow, 0, 0, 0);
     wave.rotation.x = 1.42;
     group.userData.wave = wave;
+    nodes.forEach(([x, y, z], i) => addFlow(group, new T.Vector3(-2.8, 0, 0),
+      new T.Vector3(x, y, z), i % 2 ? greenGlow : goldGlow, 5, i));
     return group;
   }
   function makeAwardWorld() {
@@ -588,18 +910,32 @@
     return group;
   }
   const originGlobe = makeOriginGlobe();
+  const originAnchor = latLonPoint(23.92, 90.72, 1).normalize();
+  const originAlignment = new T.Quaternion().setFromEuler(new T.Euler(
+    23.92 * Math.PI / 180, -Math.atan2(originAnchor.x, originAnchor.z), 0, "XYZ",
+  ));
+  const originFront = new T.Vector3(0, 0, 1);
+  const originFacing = new T.Vector3();
+  const launchOrientation = earth.quaternion.clone();
+  const originOrientation = new T.Quaternion();
+  const originSpin = new T.Quaternion();
   const fpsWorld = makeFpsWorld();
   const botWorld = makeBotWorld();
+  const nasaWorld = makeNasaWorld();
+  const bontonWorld = makeBontonWorld();
   const coronaWorld = makeCoronaWorld();
   const cloudWorld = makeCloudWorld();
+  const edgeWorld = makeEdgeWorld();
   const awardWorld = makeAwardWorld();
+  const freedomWorld = makeMessageWorld(false);
+  const pipelineWorld = makeMessageWorld(true);
   function loadCoronaModel() {
     const Loader = window.LIFE_GLTFLoader;
     if (!Loader || coronaWorld.userData.modelLoaded) return;
     coronaWorld.userData.modelLoaded = true;
     const fallback = [...coronaWorld.children];
     new Loader().load(
-      "./assets/corona_virus_3d_model.glb",
+      "/life/assets/corona_virus_3d_model.glb",
       (gltf) => {
         const model = gltf.scene;
         const box = new T.Box3().setFromObject(model);
@@ -635,34 +971,77 @@
   }
   addEventListener("life:gltf-loader-ready", loadCoronaModel);
   loadCoronaModel();
+  const blenderScenes = [
+    [bontonWorld, "bonton-router"],
+    [cloudWorld, "multicloud"],
+    [edgeWorld, "wavelength"],
+    [freedomWorld, "freedom2hear"],
+    [pipelineWorld, "message-pipeline"],
+  ];
+  function loadBlenderModels() {
+    const Loader = window.LIFE_GLTFLoader;
+    if (!Loader) return;
+    blenderScenes.forEach(([world, name]) => {
+      if (world.userData.blenderRequested) return;
+      world.userData.blenderRequested = true;
+      const fallback = world.children.filter(child => !child.userData.flowVisual);
+      new Loader().load("/life/assets/blender/" + name + ".glb", (gltf) => {
+        fallback.forEach(child => { child.visible = false; });
+        world.add(gltf.scene);
+        const key = new T.PointLight(0xdcecff, 65, 18, 2);
+        key.position.set(-3, 5, 5);
+        world.add(key);
+        const rim = new T.PointLight(0xffbc7b, 35, 14, 2);
+        rim.position.set(3, 2, -3);
+        world.add(rim);
+        world.userData.blenderModel = gltf.scene;
+        canvas.setAttribute("data-model-" + name, "loaded");
+        draw();
+      }, undefined, () => {
+        canvas.setAttribute("data-model-" + name, "fallback");
+      });
+    });
+  }
+  addEventListener("life:gltf-loader-ready", loadBlenderModels);
+  loadBlenderModels();
   [moon, redPlanet, station, giant, icePlanet, frontier].forEach((world) => {
     world.visible = false;
   });
 
   const worlds = [
     earthGroup,
-    originGlobe,
+    earthGroup,
     fpsWorld,
     botWorld,
+    nasaWorld,
+    bontonWorld,
     coronaWorld,
     cloudWorld,
+    edgeWorld,
     awardWorld,
+    freedomWorld,
+    pipelineWorld,
   ];
   const centers = [
     [7, 0, 0],
-    [-18, 8, -95],
+    [7, 0, 0],
     [22, -5, -205],
     [-20, 8, -320],
-    [25, -5, -450],
-    [-16, 6, -590],
-    [20, 0, -750],
+    [24, -5, -445],
+    [-18, 7, -570],
+    [23, -6, -700],
+    [-16, 6, -840],
+    [24, -4, -910],
+    [20, 0, -980],
+    [-18, 6, -1120],
+    [22, -4, -1260],
   ].map((point) => new T.Vector3(...point));
   worlds.forEach((world, i) => world.position.copy(centers[i]));
-  const distances = [16, 15, 18, 17, 24, 18, 25];
+  const distances = [16, 15, 18, 23, 22, 22, 24, 20, 23, 25, 23, 23];
   const arrivals = centers.map((center, i) =>
     center
       .clone()
-      .add(new T.Vector3(i === 4 || i === 6 ? -10 : -7, 1, distances[i])),
+      .add(new T.Vector3(i === 6 || i === 9 ? -10 : -7, 1, distances[i])),
   );
   const routes = arrivals.slice(1).map(
     (arrival, i) =>
@@ -681,10 +1060,15 @@
     "EARTH / LAUNCH",
     "GLOBE / NARSINGDI",
     "FPS WORLD / 2017",
-    "CHATBOT ORBIT / 2019",
+    "CHATBOT / 2019",
+    "NASA SPACE APPS / 2019",
+    "BONTON CONNECT / 2019",
     "PANDEMIC SHIFT / 2020",
     "MULTI-CLOUD / 2021",
+    "AWS WAVELENGTH / 2021",
     "AWARD GATE / 2022",
+    "FREEDOM2HEAR / 2023–2026",
+    "MESSAGE PIPELINE / 2023–2026",
   ];
   const flightLabel = document.createElement("div");
   flightLabel.className = "flight-label";
@@ -755,6 +1139,26 @@
     if (mobile) {
       camera.position.x += (1 - transit) * 2;
       camera.position.y += (1 - transit) * 3;
+      if ([3, 4, 5, 7, 8, 10, 11].includes(Math.round(current))) {
+        camera.position.x += (1 - transit) * 5;
+        camera.position.y += (1 - transit) * 3;
+        camera.position.z += (1 - transit) * (Math.round(current) === 3 ? 0 : 10);
+      }
+    }
+    // Launch and Origin share one globe; the first leg is a local camera move.
+    if (current < 1) {
+      camera.position.lerpVectors(arrivals[0], arrivals[1], smooth(current));
+      lookDirection.copy(forward);
+      if (mobile) {
+        camera.position.x += 2;
+        camera.position.y += 3;
+      }
+    }
+    if (mobile && current < 2) {
+      const originFrame = current < 1 ? smooth(current) : 1 - smooth(current - 1);
+      camera.position.x += 5 * originFrame;
+      camera.position.y += 3 * originFrame;
+      camera.position.z += 8 * originFrame;
     }
     if (!paused) {
       camera.position.x += pointerX;
@@ -765,12 +1169,87 @@
     camera.lookAt(lookTarget);
     camera.fov = (mobile ? 57 : 46) + transit * 10;
     camera.updateProjectionMatrix();
-    earth.rotation.y = 2.7 + time * 0.009;
+    const originProgress = smooth(Math.min(1, Math.max(0, current)));
+    originFacing.copy(camera.position).sub(earthGroup.position).normalize();
+    originOrientation.setFromUnitVectors(originFront, originFacing).multiply(originAlignment);
+    earth.quaternion.copy(launchOrientation).slerp(originOrientation, originProgress);
+    originSpin.setFromAxisAngle(orbitAxis, media.matches ? 0 : Math.PI * 2 * originProgress);
+    earth.quaternion.multiply(originSpin);
+    earth.scale.setScalar(1 + originProgress * 0.2);
+    atmosphere.scale.copy(earth.scale);
+    const reveal = smooth(Math.max(0, Math.min(1, (originProgress - 0.8) / 0.2)));
+    const pulse = media.matches ? 0.5 : (Math.sin(time * Math.PI * 2 / 3.6) + 1) / 2;
+    originGlobe.visible = reveal > 0;
+    originGlobe.userData.marker.scale.setScalar(1 + pulse * 0.25);
+    originGlobe.userData.highlight.opacity = reveal * (0.65 + pulse * 0.35);
+    if (originGlobe.userData.borderMaterial) originGlobe.userData.borderMaterial.opacity = reveal;
     atmosphere.visible = camera.position.distanceTo(centers[0]) < 100;
-    originGlobe.rotation.y = 2.7 + time * 0.006;
     fpsWorld.rotation.y = -0.18 + Math.sin(time * 0.55) * 0.045;
     fpsWorld.userData.crosshair.rotation.z = time * 0.24;
-    botWorld.rotation.y = 0.35 + Math.sin(time * 0.42) * 0.08;
+    if (fpsWorld.userData.video && fpsWorld.userData.videoMaterial) {
+      const video = fpsWorld.userData.video;
+      const material = fpsWorld.userData.videoMaterial;
+      if (
+        canvas.dataset.hitRunVideo === "loaded" &&
+        Number.isFinite(video.duration) &&
+        video.duration > 1
+      ) {
+        const shouldPlayVideo = !paused && Math.abs(current - 2) < 1.15;
+        if (shouldPlayVideo && video.paused) {
+          video.play().catch(() => {
+            canvas.dataset.hitRunVideo = "blocked";
+          });
+        } else if (!shouldPlayVideo && !video.paused) {
+          video.pause();
+        }
+        const fadeWindow = 0.9;
+        const remaining = video.duration - video.currentTime;
+        if (
+          shouldPlayVideo &&
+          remaining < 0.08 &&
+          !fpsWorld.userData.refreshingVideo
+        ) {
+          fpsWorld.userData.refreshingVideo = true;
+          material.opacity = 0.12;
+          video.currentTime = 0;
+          video.play().catch(() => {
+            canvas.dataset.hitRunVideo = "blocked";
+          });
+          setTimeout(() => {
+            fpsWorld.userData.refreshingVideo = false;
+          }, 350);
+        } else {
+          const fadeIn = Math.min(1, video.currentTime / fadeWindow);
+          const fadeOut = Math.min(1, Math.max(0, remaining / fadeWindow));
+          material.opacity = Math.max(0.12, Math.min(fadeIn, fadeOut));
+        }
+      } else if (canvas.dataset.hitRunVideo === "blocked") {
+        material.map = null;
+        material.color.setHex(0x111b23);
+        material.opacity = 0.78;
+      }
+    }
+    botWorld.rotation.y = -0.06 + Math.sin(time * 0.42) * 0.01;
+    updateVideoPanel(botWorld, 3);
+    nasaWorld.rotation.y = time * 0.012;
+    nasaWorld.userData.planets.forEach(({ planet, radius, speed, phase }) => {
+      planet.position.set(Math.cos(time * speed + phase) * radius, 0,
+        Math.sin(time * speed + phase) * radius);
+    });
+    [bontonWorld, cloudWorld, edgeWorld, freedomWorld, pipelineWorld].forEach((world) => {
+      world.userData.flows.forEach(({ curve, packet, phase }) => {
+        const progress = (time * 0.18 + phase + (world === pipelineWorld ? Math.sin(time * 0.7 + phase) * 0.07 : 0)) % 1;
+        packet.position.copy(curve.getPoint((progress + 1) % 1));
+      });
+    });
+    [freedomWorld, pipelineWorld].forEach((world) => {
+      world.rotation.y = -0.2 + Math.sin(time * 0.3) * 0.04;
+      world.userData.ring.rotation.y = time * 0.2;
+    });
+    nasaWorld.userData.orbit.rotation.z = time * 0.18;
+    nasaWorld.userData.satellite.rotation.z = time * 0.32;
+    bontonWorld.rotation.y = -0.25 + Math.sin(time * 0.4) * 0.04;
+    bontonWorld.userData.tunnel.rotation.z = time * 0.08;
     coronaWorld.rotation.y = time * 0.02;
     if (coronaWorld.userData.realModel) {
       coronaWorld.userData.realModel.rotation.y = -0.45 + time * 0.06;
