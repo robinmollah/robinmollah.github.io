@@ -96,7 +96,7 @@ header {
 .brand span,
 .mission-title,
 .resume {
-  font-size: 11px;
+  font-size: 14px;
 }
 .brand span {
   font-weight: 400;
@@ -122,7 +122,7 @@ header {
 .chapters a {
   text-decoration: none;
   text-transform: uppercase;
-  font-size: 10px;
+  font-size: 14px;
   color: #c4c7ca;
   text-shadow: 0 1px 6px #000;
   display: flex;
@@ -131,7 +131,7 @@ header {
 }
 .chapters a span {
   font-family: monospace;
-  font-size: 10px;
+  font-size: 14px;
 }
 .chapters a[aria-current] {
   color: var(--paper);
@@ -146,6 +146,17 @@ header {
 main {
   position: relative;
   z-index: 1;
+}
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
 }
 body::after {
   content: "";
@@ -165,8 +176,7 @@ body::after {
   bottom: 100px;
   left: 8%;
   z-index: 3;
-  font:
-    11px "Courier New",
+  font: 14px "Courier New",
     monospace;
   color: #d5d7da;
   pointer-events: none;
@@ -214,7 +224,7 @@ body:not(.scene-ready) .flight-label { display: none; }
 .mission-status,
 .small-note {
   font-family: "Courier New", monospace;
-  font-size: 11px;
+  font-size: 14px;
   font-weight: 400;
 }
 .eyebrow {
@@ -244,7 +254,7 @@ h1 .period {
   text-shadow: 0 0 18px color-mix(in srgb, var(--accent) 70%, transparent);
 }
 .profession {
-  font-size: 13px;
+  font-size: 14px;
 }
 .intro {
   font-size: 24px;
@@ -253,7 +263,7 @@ h1 .period {
 }
 .disciplines {
   color: var(--muted);
-  font-size: 10px;
+  font-size: 14px;
 }
 .disciplines span {
   margin: 0 8px;
@@ -262,7 +272,7 @@ h1 .period {
   display: inline-flex;
   gap: 60px;
   align-items: center;
-  font-size: 11px;
+  font-size: 14px;
   text-decoration: none;
   margin-top: 25px;
   border-bottom: 1px solid #ffffff60;
@@ -279,7 +289,7 @@ h1 .period {
   display: flex;
   align-items: center;
   gap: 10px;
-  font-size: 9px;
+  font-size: 14px;
 }
 .caption-line {
   width: 36px;
@@ -304,7 +314,7 @@ h1 .period {
   border-top: 1px solid var(--line);
   padding-top: 20px;
   color: var(--muted);
-  font-size: 9px;
+  font-size: 14px;
 }
 .copy {
   width: 100%;
@@ -336,7 +346,7 @@ h3 {
 }
 .copy .eyebrow {
   color: var(--accent);
-  font-size: 11px;
+  font-size: 14px;
 }
 .copy .lead {
   color: var(--paper);
@@ -352,12 +362,12 @@ h3 {
   margin-top: 35px;
 }
 .expertise span {
-  font-size: 12px;
+  font-size: 14px;
   line-height: 2.7;
 }
 .copy .small-note {
   margin-top: 30px;
-  font-size: 11px;
+  font-size: 14px;
 }
 .content-chapter {
   background: transparent;
@@ -378,8 +388,7 @@ h3 {
 }
 .moment-kicker,
 .evidence {
-  font:
-    10px "Courier New",
+  font: 14px "Courier New",
     monospace;
   text-transform: uppercase;
 }
@@ -492,7 +501,7 @@ h3 {
   background: transparent;
   border: 0;
   color: var(--accent);
-  font: bold 13px Georgia, serif;
+  font: bold 14px Georgia, serif;
   cursor: pointer;
 }
 .description-info::before {
@@ -563,19 +572,19 @@ h3 {
 .destination span {
   display: block;
   color: var(--muted);
-  font-size: 9px;
+  font-size: 14px;
   margin-top: 16px;
 }
 .timeline .role {
   color: #d9b47b;
-  font-size: 13px;
+  font-size: 14px;
   margin-bottom: 17px;
 }
 .timeline p {
   font-size: 15px;
 }
 .tech {
-  font-size: 10px;
+  font-size: 14px;
   color: #93999f;
 }
 .section-intro {
@@ -594,7 +603,7 @@ h3 {
   border: 0;
   border-bottom: 2px solid transparent;
   cursor: pointer;
-  font-size: 12px;
+  font-size: 14px;
 }
 .system-controls button[aria-pressed="true"] {
   color: var(--paper);
@@ -619,7 +628,7 @@ h3 {
 .system-node span {
   display: block;
   font-family: monospace;
-  font-size: 9px;
+  font-size: 14px;
   color: var(--muted);
   margin-bottom: 10px;
 }
@@ -676,7 +685,7 @@ h3 {
   border-top: 1px solid var(--line);
   margin-top: 25px;
   padding-top: 20px;
-  font: 9px monospace;
+  font: 14px monospace;
   color: var(--muted);
 }
 .system-story {
@@ -684,7 +693,7 @@ h3 {
   min-height: 185px;
 }
 .system-story > span {
-  font: 10px monospace;
+  font: 14px monospace;
   color: var(--accent);
 }
 .system-story h3 {
@@ -698,7 +707,7 @@ h3 {
   padding-top: 25px;
 }
 .principles p {
-  font-size: 13px;
+  font-size: 14px;
 }
 .principles strong {
   display: block;
@@ -726,7 +735,7 @@ summary::-webkit-details-marker {
 .project-number {
   grid-column: 1/-1;
   color: var(--muted);
-  font-size: 9px;
+  font-size: 14px;
   margin-bottom: 15px;
 }
 .project h3 {
@@ -734,7 +743,7 @@ summary::-webkit-details-marker {
   margin: 0;
 }
 .project-metric {
-  font-size: 10px;
+  font-size: 14px;
   color: var(--accent);
   align-self: center;
 }
@@ -764,7 +773,7 @@ summary::-webkit-details-marker {
   color: var(--muted);
 }
 .project-body > a {
-  font-size: 13px;
+  font-size: 14px;
   display: inline-block;
   margin-top: 20px;
 }
@@ -780,7 +789,7 @@ summary::-webkit-details-marker {
 }
 .lab-list > a > span {
   color: var(--accent);
-  font-size: 9px;
+  font-size: 14px;
 }
 .lab-list h3 {
   margin-top: 28px;
@@ -808,12 +817,160 @@ summary::-webkit-details-marker {
   gap: 28px;
 }
 .contact-links a {
-  font-size: 13px;
+  font-size: 14px;
 }
 .copy .continues {
   margin-top: 90px;
-  font-size: 10px;
+  font-size: 14px;
   color: var(--muted);
+}
+.next-chapter {
+  isolation: isolate;
+}
+.next-space {
+  width: min(1120px, calc(100% - 180px));
+  margin: 0 auto;
+  perspective: 1500px;
+}
+.next-space > .eyebrow {
+  margin-bottom: 48px;
+  text-align: center;
+  text-shadow: 0 2px 18px #000;
+}
+.next-cards {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 18px;
+  align-items: stretch;
+  transform-style: preserve-3d;
+}
+.next-card {
+  --base-rotate: 0deg;
+  --base-y: 0px;
+  --depth: 0px;
+  --tilt-x: 0deg;
+  --tilt-y: 0deg;
+  --card-accent: #d9b47b;
+  position: relative;
+  min-height: 310px;
+  padding: 28px;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  border: 1px solid color-mix(in srgb, var(--card-accent) 48%, #ffffff1a);
+  border-radius: 6px;
+  background:
+    linear-gradient(145deg, #202329d9 0%, #101318ed 52%, #080a0ee8 100%);
+  box-shadow:
+    0 34px 80px #000b,
+    inset 0 1px 0 #ffffff24,
+    inset 0 -1px 0 #000;
+  color: var(--paper);
+  text-decoration: none;
+  transform-style: preserve-3d;
+  transform:
+    rotateX(var(--tilt-x))
+    rotateY(calc(var(--base-rotate) + var(--tilt-y)))
+    translateY(var(--base-y))
+    translateZ(var(--depth));
+  transition:
+    transform 420ms cubic-bezier(0.2, 0.8, 0.2, 1),
+    border-color 300ms ease,
+    box-shadow 420ms ease;
+}
+.next-card::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(
+      circle at var(--shine-x, 50%) var(--shine-y, 20%),
+      color-mix(in srgb, var(--card-accent) 22%, transparent),
+      transparent 44%
+    ),
+    linear-gradient(115deg, #ffffff14, transparent 25% 76%, #ffffff0b);
+  opacity: 0.72;
+  pointer-events: none;
+  transition: opacity 300ms ease;
+}
+.next-card::after {
+  content: "";
+  position: absolute;
+  left: 28px;
+  right: 28px;
+  top: 65px;
+  height: 1px;
+  background: linear-gradient(90deg, var(--card-accent), transparent);
+  opacity: 0.62;
+  pointer-events: none;
+}
+.next-card:nth-child(1) {
+  --base-rotate: 8deg;
+  --base-y: 10px;
+  --depth: -16px;
+}
+.next-card:nth-child(2) {
+  --base-y: -9px;
+  --depth: 28px;
+}
+.next-card:nth-child(3) {
+  --base-rotate: -8deg;
+  --base-y: 10px;
+  --depth: -16px;
+}
+.next-card-profile {
+  --card-accent: #88bfff;
+}
+.next-card-tools {
+  --card-accent: #8fd7a1;
+}
+.next-card:hover,
+.next-card:focus-visible {
+  --base-y: -16px;
+  --depth: 48px;
+  border-color: color-mix(in srgb, var(--card-accent) 82%, white);
+  box-shadow:
+    0 42px 100px #000d,
+    0 0 34px color-mix(in srgb, var(--card-accent) 18%, transparent),
+    inset 0 1px 0 #ffffff38;
+}
+.next-card:hover::before,
+.next-card:focus-visible::before {
+  opacity: 1;
+}
+.next-card:focus-visible {
+  outline-offset: 8px;
+}
+.next-card-index,
+.next-card-arrow {
+  position: relative;
+  z-index: 1;
+  font: 14px "Courier New", monospace;
+  color: var(--card-accent);
+  transform: translateZ(26px);
+}
+.next-card-arrow {
+  position: absolute;
+  top: 24px;
+  right: 27px;
+  font-size: 24px;
+  color: var(--paper);
+  transition: transform 300ms ease, color 300ms ease;
+}
+.next-card:hover .next-card-arrow,
+.next-card:focus-visible .next-card-arrow {
+  color: var(--card-accent);
+  transform: translate3d(4px, -4px, 34px);
+}
+.next-card-title {
+  position: relative;
+  z-index: 1;
+  max-width: 250px;
+  margin-top: auto;
+  font-size: 30px;
+  line-height: 1.08;
+  font-weight: 400;
+  transform: translateZ(34px);
 }
 .mission-status {
   position: fixed;
@@ -825,7 +982,7 @@ summary::-webkit-details-marker {
   justify-content: space-between;
   align-items: center;
   padding: 15px 5%;
-  font-size: 9px;
+  font-size: 14px;
   background: #050608eb;
   border-top: 1px solid var(--line);
   color: var(--muted);
@@ -837,7 +994,7 @@ summary::-webkit-details-marker {
   border: 0;
   background: none;
   color: var(--muted);
-  font-size: 10px;
+  font-size: 14px;
   cursor: pointer;
   padding: 6px;
 }
@@ -891,8 +1048,10 @@ summary::-webkit-details-marker {
     gap: 8px;
   }
   .chapters a {
-    font-size: 9px;
+    font-size: 14px;
     gap: 5px;
+    flex: 0 0 auto;
+    white-space: nowrap;
   }
   .chapters a[aria-current]::after {
     display: none;
@@ -922,16 +1081,26 @@ summary::-webkit-details-marker {
   .frontier h2 {
     font-size: 60px;
   }
+  .next-card {
+    min-height: 270px;
+    padding: 24px;
+  }
+  .next-space {
+    width: 100%;
+  }
+  .next-card-title {
+    font-size: 25px;
+  }
 }
 @media (max-width: 600px) {
   header {
     height: 75px;
   }
   .brand span {
-    font-size: 9px;
+    font-size: 14px;
   }
   .resume {
-    font-size: 10px;
+    font-size: 14px;
   }
   .chapters {
     top: 75px;
@@ -941,7 +1110,7 @@ summary::-webkit-details-marker {
     overflow: auto;
   }
   .chapters a {
-    font-size: 9px;
+    font-size: 14px;
   }
   .chapters a span {
     display: none;
@@ -965,14 +1134,14 @@ summary::-webkit-details-marker {
     max-width: 100%;
   }
   .profession {
-    font-size: 11px;
+    font-size: 14px;
   }
   .intro {
     font-size: 21px;
     margin-top: 24px;
   }
   .disciplines {
-    font-size: 9px;
+    font-size: 14px;
   }
   .disciplines span {
     margin: 0 4px;
@@ -989,7 +1158,7 @@ summary::-webkit-details-marker {
   .launch-bottom {
     left: 6%;
     right: 6%;
-    font-size: 8px;
+    font-size: 14px;
   }
   .launch-bottom span:first-child {
     max-width: 140px;
@@ -1024,25 +1193,25 @@ summary::-webkit-details-marker {
   }
   .system-controls button {
     padding: 14px 9px;
-    font-size: 11px;
+    font-size: 14px;
     flex: 1;
   }
   .system-map {
     grid-template-columns: 1fr 16px 1fr 16px 1fr;
   }
   .system-node {
-    font-size: 12px;
+    font-size: 14px;
     padding: 14px 8px;
     min-height: 80px;
   }
   .system-node span {
-    font-size: 8px;
+    font-size: 14px;
   }
   .system-branches {
     gap: 10px;
   }
   .system-storage {
-    font-size: 8px;
+    font-size: 14px;
   }
   .system-story {
     min-height: 230px;
@@ -1055,7 +1224,7 @@ summary::-webkit-details-marker {
     gap: 10px;
   }
   .principles p {
-    font-size: 13px;
+    font-size: 14px;
   }
   .project h3 {
     font-size: 25px;
@@ -1089,10 +1258,46 @@ summary::-webkit-details-marker {
     font-size: 32px;
   }
   .mission-status {
-    font-size: 8px;
+    font-size: 14px;
   }
   .mission-status button {
-    font-size: 9px;
+    font-size: 14px;
+  }
+  .next-space > .eyebrow {
+    margin-bottom: 26px;
+    text-align: left;
+  }
+  .next-cards {
+    grid-template-columns: 1fr;
+    gap: 12px;
+  }
+  .next-card,
+  .next-card:nth-child(1),
+  .next-card:nth-child(2),
+  .next-card:nth-child(3) {
+    --base-rotate: 0deg;
+    --base-y: 0px;
+    --depth: 0px;
+    min-height: 150px;
+    padding: 22px;
+    transform: none;
+  }
+  .next-card:hover,
+  .next-card:focus-visible {
+    transform: translateY(-4px);
+  }
+  .next-card::after {
+    left: 22px;
+    right: 22px;
+    top: 55px;
+  }
+  .next-card-title {
+    max-width: 230px;
+    font-size: 23px;
+  }
+  .next-card-arrow {
+    top: 18px;
+    right: 22px;
   }
   #origin .copy {
     padding: 20px 0;
@@ -1130,6 +1335,11 @@ summary::-webkit-details-marker {
     animation: none;
   }
   .system-node {
+    transition: none;
+  }
+  .next-card,
+  .next-card::before,
+  .next-card-arrow {
     transition: none;
   }
 }

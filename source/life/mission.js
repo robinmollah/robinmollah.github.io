@@ -46,6 +46,24 @@
     });
     update();
   });
+  document.querySelectorAll(".next-card").forEach((card) => {
+    card.addEventListener("pointermove", (event) => {
+      if (event.pointerType !== "mouse") return;
+      const bounds = card.getBoundingClientRect();
+      const x = (event.clientX - bounds.left) / bounds.width - 0.5;
+      const y = (event.clientY - bounds.top) / bounds.height - 0.5;
+      card.style.setProperty("--tilt-x", `${(-y * 7).toFixed(2)}deg`);
+      card.style.setProperty("--tilt-y", `${(x * 9).toFixed(2)}deg`);
+      card.style.setProperty("--shine-x", `${((x + 0.5) * 100).toFixed(1)}%`);
+      card.style.setProperty("--shine-y", `${((y + 0.5) * 100).toFixed(1)}%`);
+    });
+    card.addEventListener("pointerleave", () => {
+      card.style.removeProperty("--tilt-x");
+      card.style.removeProperty("--tilt-y");
+      card.style.removeProperty("--shine-x");
+      card.style.removeProperty("--shine-y");
+    });
+  });
   const chapters = [...document.querySelectorAll(".chapter")];
   const links = [...document.querySelectorAll(".chapters a")];
   const media = matchMedia("(prefers-reduced-motion: reduce)");
@@ -909,6 +927,54 @@
     group.userData.gate = gate;
     return group;
   }
+  function makeNextWorld() {
+    const group = new T.Group();
+    scene.add(group);
+    const core = part(
+      group,
+      new T.IcosahedronGeometry(0.72, 2),
+      new T.MeshBasicMaterial({ color: 0xf4d397 }),
+      0,
+      0.2,
+      0,
+    );
+    const rings = [1.8, 2.75, 3.7].map((radius, index) => {
+      const ringMaterial = new T.MeshBasicMaterial({
+        color: [0xe6b95b, 0x7fb3ff, 0x8fd7a1][index],
+        transparent: true,
+        opacity: 0.65 - index * 0.12,
+      });
+      const halo = part(
+        group,
+        new T.TorusGeometry(radius, 0.028 - index * 0.004, 8, 120),
+        ringMaterial,
+        0,
+        0.2,
+        0,
+      );
+      halo.rotation.set(1.15 + index * 0.2, index * 0.25, index * 0.18);
+      return halo;
+    });
+    const nodes = [];
+    for (let i = 0; i < 18; i++) {
+      const angle = (i / 18) * Math.PI * 2;
+      const radius = 4.6 + (i % 3) * 0.42;
+      nodes.push(
+        part(
+          group,
+          new T.SphereGeometry(i % 3 === 0 ? 0.085 : 0.045, 10, 8),
+          [goldGlow, blueGlow, greenGlow][i % 3],
+          Math.cos(angle) * radius,
+          Math.sin(angle) * radius * 0.58 + 0.2,
+          Math.sin(angle * 2) * 0.7,
+        ),
+      );
+    }
+    group.userData.core = core;
+    group.userData.rings = rings;
+    group.userData.nodes = nodes;
+    return group;
+  }
   const originGlobe = makeOriginGlobe();
   const originAnchor = latLonPoint(23.92, 90.72, 1).normalize();
   const originAlignment = new T.Quaternion().setFromEuler(new T.Euler(
@@ -929,6 +995,7 @@
   const awardWorld = makeAwardWorld();
   const freedomWorld = makeMessageWorld(false);
   const pipelineWorld = makeMessageWorld(true);
+  const nextWorld = makeNextWorld();
   function loadCoronaModel() {
     const Loader = window.LIFE_GLTFLoader;
     if (!Loader || coronaWorld.userData.modelLoaded) return;
@@ -1021,6 +1088,7 @@
     awardWorld,
     freedomWorld,
     pipelineWorld,
+    nextWorld,
   ];
   const centers = [
     [7, 0, 0],
@@ -1035,9 +1103,10 @@
     [20, 0, -980],
     [-18, 6, -1120],
     [22, -4, -1260],
+    [4, 1, -1405],
   ].map((point) => new T.Vector3(...point));
   worlds.forEach((world, i) => world.position.copy(centers[i]));
-  const distances = [16, 15, 18, 23, 22, 22, 24, 20, 23, 25, 23, 23];
+  const distances = [16, 15, 18, 23, 22, 22, 24, 20, 23, 25, 23, 23, 24];
   const arrivals = centers.map((center, i) =>
     center
       .clone()
@@ -1069,6 +1138,7 @@
     "AWARD GATE / 2022",
     "FREEDOM2HEAR / 2023–2026",
     "MESSAGE PIPELINE / 2023–2026",
+    "NEXT / CONTINUE THE STORY",
   ];
   const flightLabel = document.createElement("div");
   flightLabel.className = "flight-label";
@@ -1245,6 +1315,15 @@
     [freedomWorld, pipelineWorld].forEach((world) => {
       world.rotation.y = -0.2 + Math.sin(time * 0.3) * 0.04;
       world.userData.ring.rotation.y = time * 0.2;
+    });
+    nextWorld.rotation.y = Math.sin(time * 0.22) * 0.08;
+    nextWorld.userData.core.rotation.set(time * 0.16, time * 0.24, time * 0.1);
+    nextWorld.userData.core.scale.setScalar(1 + Math.sin(time * 1.1) * 0.08);
+    nextWorld.userData.rings.forEach((halo, index) => {
+      halo.rotation.z += delta * (index % 2 ? -0.08 : 0.06);
+    });
+    nextWorld.userData.nodes.forEach((node, index) => {
+      node.scale.setScalar(0.8 + (Math.sin(time * 1.3 + index) + 1) * 0.22);
     });
     nasaWorld.userData.orbit.rotation.z = time * 0.18;
     nasaWorld.userData.satellite.rotation.z = time * 0.32;
