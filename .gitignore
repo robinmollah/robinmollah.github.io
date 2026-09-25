@@ -5,5 +5,6 @@ db.json
 node_modules/
 .deploy*/
 .idea/
+.claude/
 public/
 *.lock

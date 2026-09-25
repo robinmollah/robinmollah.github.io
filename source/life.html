@@ -1,0 +1,1535 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Robin Mollah — Career Space Mission</title>
+  <meta name="description" content="11+ years of software engineering. A cinematic mission through the work.">
+  <meta name="robots" content="index, follow">
+  <link rel="canonical" href="https://robinmollah.com/life">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@300;400;500;700&family=IBM+Plex+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg: #000000;
+      --dim: #0a0e14;
+      --muted: #1c2633;
+      --border: #2a3a50;
+      --ghost: #4a5a6e;
+      --pale: #7a90a8;
+      --light: #aabece;
+      --white: #d8e8f2;
+      --pure: #f0f6fc;
+      --accent: #4a9eff;
+      --amber: #e8902a;
+      --warm: #ffc060;
+      --green: #3ddc84;
+      --mono: 'IBM Plex Mono', 'Courier New', monospace;
+      --sans: 'IBM Plex Sans', system-ui, sans-serif;
+    }
+
+    html { scroll-behavior: auto; }
+
+    body {
+      background: var(--bg);
+      color: var(--white);
+      font-family: var(--mono);
+      overflow-x: hidden;
+      height: 1400vh;
+      width: 100%;
+    }
+
+    /* ── CANVAS ──────────────────────────────────────────── */
+    #space-canvas {
+      position: fixed;
+      inset: 0;
+      z-index: 0;
+      width: 100%;
+      height: 100%;
+      display: block;
+    }
+
+    /* ── LOADING ─────────────────────────────────────────── */
+    #loading {
+      position: fixed;
+      inset: 0;
+      z-index: 900;
+      background: var(--bg);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 24px;
+      transition: opacity 0.9s ease;
+    }
+    #loading.fade-out { opacity: 0; pointer-events: none; }
+
+    .ld-eyebrow {
+      font-size: 0.58rem;
+      letter-spacing: 0.22em;
+      color: var(--ghost);
+      text-transform: uppercase;
+    }
+    .ld-bar-wrap {
+      width: 180px;
+      height: 1px;
+      background: var(--border);
+    }
+    .ld-bar {
+      height: 1px;
+      background: var(--accent);
+      width: 0%;
+      transition: width 0.4s ease;
+    }
+    .ld-items {
+      display: flex;
+      flex-direction: column;
+      gap: 7px;
+      width: 180px;
+    }
+    .ld-item {
+      font-size: 0.58rem;
+      letter-spacing: 0.1em;
+      color: var(--border);
+      display: flex;
+      justify-content: space-between;
+      transition: color 0.3s;
+    }
+    .ld-item.done { color: var(--accent); }
+
+    /* ── HUD ─────────────────────────────────────────────── */
+    #hud {
+      position: fixed;
+      bottom: 28px;
+      left: 50%;
+      transform: translateX(-50%);
+      z-index: 20;
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      opacity: 0;
+      transition: opacity 0.8s ease;
+      pointer-events: none;
+    }
+    #hud.visible { opacity: 1; }
+
+    .hud-label {
+      font-size: 0.54rem;
+      letter-spacing: 0.2em;
+      color: var(--ghost);
+      text-transform: uppercase;
+      white-space: nowrap;
+    }
+    .hud-sep { width: 32px; height: 1px; background: var(--border); }
+    .hud-track {
+      width: 72px;
+      height: 1px;
+      background: var(--border);
+    }
+    .hud-fill {
+      height: 1px;
+      background: var(--accent);
+      width: 0%;
+    }
+
+    /* ── NAV ─────────────────────────────────────────────── */
+    #mnav {
+      position: fixed;
+      top: 50%;
+      right: 24px;
+      transform: translateY(-50%);
+      z-index: 20;
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+      opacity: 0;
+      transition: opacity 0.8s ease;
+    }
+    #mnav.visible { opacity: 1; }
+
+    .ndot {
+      width: 4px;
+      height: 4px;
+      border-radius: 50%;
+      background: var(--border);
+      cursor: pointer;
+      transition: background 0.25s, transform 0.25s;
+      position: relative;
+    }
+    .ndot:hover, .ndot.active {
+      background: var(--accent);
+      transform: scale(1.6);
+    }
+    .ndot::before {
+      content: attr(data-label);
+      position: absolute;
+      right: 13px;
+      top: 50%;
+      transform: translateY(-50%);
+      font-size: 0.52rem;
+      letter-spacing: 0.12em;
+      color: var(--ghost);
+      white-space: nowrap;
+      opacity: 0;
+      transition: opacity 0.2s;
+    }
+    .ndot:hover::before { opacity: 1; }
+
+    /* ── PANELS ──────────────────────────────────────────── */
+    .panel {
+      position: fixed;
+      inset: 0;
+      z-index: 10;
+      display: flex;
+      opacity: 0;
+      pointer-events: none;
+    }
+    .panel.alive { pointer-events: auto; }
+
+    /* Text shadow for contrast without boxes */
+    .panel {
+      text-shadow:
+        0 0 6px rgba(0,0,10,0.99),
+        0 0 18px rgba(0,0,10,0.92),
+        0 2px 40px rgba(0,0,10,0.75);
+    }
+    #p00 { text-align: center; }
+
+    /* alignment variants */
+    .pc  { align-items: center; justify-content: center; text-align: center; }
+    .pl  { align-items: center; justify-content: flex-start; padding-left: max(6vw, 40px); }
+    .pr  { align-items: center; justify-content: flex-end;  padding-right: max(6vw, 40px); }
+    .pbl { align-items: flex-end; justify-content: flex-start; padding: 0 max(6vw,40px) 10vh; }
+
+    /* ── TYPOGRAPHY ──────────────────────────────────────── */
+    .eyebrow {
+      font-size: 0.56rem;
+      font-weight: 500;
+      letter-spacing: 0.24em;
+      color: var(--accent);
+      text-transform: uppercase;
+      margin-bottom: 10px;
+    }
+    .eyebrow.amber { color: var(--amber); }
+
+    .display {
+      font-size: clamp(2.4rem, 5.5vw, 5.5rem);
+      font-weight: 700;
+      letter-spacing: 0.01em;
+      line-height: 0.92;
+      color: var(--pure);
+      text-transform: uppercase;
+      margin-bottom: 22px;
+    }
+    .display.lg { font-size: clamp(3.2rem, 7.5vw, 8rem); }
+    .display.md { font-size: clamp(1.8rem, 3.5vw, 3.4rem); }
+    .display.sm { font-size: clamp(1.4rem, 2.8vw, 2.6rem); }
+
+    .body {
+      font-family: var(--sans);
+      font-size: clamp(0.88rem, 1.1vw, 1.05rem);
+      font-weight: 300;
+      line-height: 1.75;
+      color: var(--light);
+      max-width: 500px;
+    }
+
+    .rule { width: 28px; height: 1px; background: var(--border); margin: 18px 0; }
+
+    .tagrow { display: flex; flex-wrap: wrap; gap: 7px; margin-top: 18px; }
+    .tag {
+      font-size: 0.54rem;
+      letter-spacing: 0.14em;
+      color: var(--pale);
+      border: 1px solid var(--border);
+      padding: 4px 9px;
+      text-transform: uppercase;
+    }
+    .tag.hi { color: var(--accent); border-color: var(--accent); }
+    .tag.warn { color: var(--amber); border-color: var(--amber); }
+
+    /* ── M00 — LAUNCH ────────────────────────────────────── */
+    .m00-name {
+      font-size: clamp(2.8rem, 7vw, 7.5rem);
+      font-weight: 700;
+      letter-spacing: 0.06em;
+      color: var(--pure);
+      text-transform: uppercase;
+      line-height: 0.9;
+      margin-bottom: 6px;
+    }
+    .m00-title {
+      font-size: clamp(0.65rem, 1.1vw, 0.9rem);
+      font-weight: 300;
+      letter-spacing: 0.3em;
+      color: var(--pale);
+      text-transform: uppercase;
+      margin-bottom: 36px;
+    }
+    .m00-meta {
+      font-size: 0.58rem;
+      letter-spacing: 0.18em;
+      color: var(--ghost);
+      margin-bottom: 6px;
+    }
+    .m00-scroll {
+      font-size: 0.58rem;
+      letter-spacing: 0.22em;
+      color: var(--accent);
+      text-transform: uppercase;
+      margin-top: 36px;
+      animation: blink 2.2s ease-in-out infinite;
+    }
+    @keyframes blink {
+      0%, 100% { opacity: 0.4; }
+      50% { opacity: 1; }
+    }
+
+    /* ── M01 — ORIGIN ────────────────────────────────────── */
+    .skill-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 13px;
+      margin-top: 24px;
+    }
+    .skill-item {
+      display: flex;
+      gap: 9px;
+      align-items: flex-start;
+    }
+    .skill-dot {
+      width: 3px;
+      height: 3px;
+      border-radius: 50%;
+      background: var(--accent);
+      margin-top: 5px;
+      flex-shrink: 0;
+    }
+    .skill-text {
+      font-size: 0.65rem;
+      letter-spacing: 0.12em;
+      color: var(--pale);
+      text-transform: uppercase;
+    }
+
+    /* ── M02 — EXPERIENCE ────────────────────────────────── */
+    .dest-inner { max-width: 500px; }
+    .dest-num {
+      font-size: 0.54rem;
+      letter-spacing: 0.2em;
+      color: var(--amber);
+      text-transform: uppercase;
+      margin-bottom: 5px;
+    }
+    .dest-company {
+      font-size: clamp(1.5rem, 3.2vw, 3rem);
+      font-weight: 700;
+      color: var(--pure);
+      text-transform: uppercase;
+      line-height: 0.93;
+      letter-spacing: 0.03em;
+    }
+    .dest-role {
+      font-size: 0.62rem;
+      letter-spacing: 0.14em;
+      color: var(--pale);
+      text-transform: uppercase;
+      margin-top: 10px;
+    }
+    .dest-period {
+      font-size: 0.55rem;
+      letter-spacing: 0.12em;
+      color: var(--ghost);
+      margin-top: 3px;
+    }
+    .achievements { margin-top: 22px; display: flex; flex-direction: column; gap: 11px; }
+    .ach {
+      display: flex;
+      gap: 13px;
+      align-items: flex-start;
+    }
+    .ach-dash { font-size: 0.56rem; color: var(--accent); flex-shrink: 0; margin-top: 3px; }
+    .ach-text {
+      font-family: var(--sans);
+      font-size: 0.86rem;
+      line-height: 1.65;
+      color: var(--light);
+      font-weight: 300;
+    }
+
+    /* ── M03 — SYSTEMS ───────────────────────────────────── */
+    .sys-inner { max-width: 520px; }
+    .sys-quote {
+      font-size: clamp(1.5rem, 2.8vw, 2.6rem);
+      font-weight: 700;
+      line-height: 1.1;
+      color: var(--pure);
+      text-transform: uppercase;
+      letter-spacing: 0.02em;
+      margin-bottom: 20px;
+    }
+    .sys-wrap {
+      margin-top: 28px;
+      width: min(440px, 88vw);
+      height: 240px;
+    }
+    #sys-canvas {
+      width: 100%;
+      height: 100%;
+      display: block;
+    }
+
+    /* ── M04 — PROJECTS ──────────────────────────────────── */
+    .proj-inner { max-width: 500px; }
+    .proj-title {
+      font-size: clamp(1.4rem, 2.8vw, 2.6rem);
+      font-weight: 700;
+      color: var(--pure);
+      text-transform: uppercase;
+      line-height: 0.93;
+      letter-spacing: 0.03em;
+      margin-bottom: 6px;
+    }
+    .proj-type {
+      font-size: 0.54rem;
+      letter-spacing: 0.18em;
+      color: var(--amber);
+      text-transform: uppercase;
+      margin-bottom: 20px;
+    }
+    .proj-block { margin-bottom: 14px; }
+    .proj-lbl {
+      font-size: 0.52rem;
+      letter-spacing: 0.18em;
+      color: var(--ghost);
+      text-transform: uppercase;
+      margin-bottom: 3px;
+    }
+    .proj-val {
+      font-family: var(--sans);
+      font-size: 0.86rem;
+      line-height: 1.65;
+      color: var(--light);
+      font-weight: 300;
+    }
+    .impact {
+      font-size: clamp(1.4rem, 2.5vw, 2.2rem);
+      font-weight: 700;
+      color: var(--green);
+      letter-spacing: -0.01em;
+      margin-bottom: 3px;
+    }
+
+    /* ── M05 — LAB ───────────────────────────────────────── */
+    .lab-items { display: flex; flex-direction: column; gap: 22px; max-width: 480px; }
+    .lab-item { border-left: 1px solid var(--border); padding-left: 16px; }
+    .lab-id {
+      font-size: 0.53rem;
+      letter-spacing: 0.2em;
+      color: var(--ghost);
+      margin-bottom: 4px;
+    }
+    .lab-name {
+      font-size: 0.96rem;
+      font-weight: 700;
+      color: var(--pure);
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+      margin-bottom: 5px;
+    }
+    .lab-status {
+      font-size: 0.52rem;
+      letter-spacing: 0.16em;
+      padding: 2px 7px;
+      border: 1px solid;
+      display: inline-block;
+      text-transform: uppercase;
+      margin-bottom: 8px;
+    }
+    .lab-status.active { color: var(--green); border-color: var(--green); }
+    .lab-status.proto { color: var(--amber); border-color: var(--amber); }
+    .lab-desc {
+      font-family: var(--sans);
+      font-size: 0.82rem;
+      line-height: 1.65;
+      color: var(--pale);
+      font-weight: 300;
+    }
+
+    /* ── M06 — NEXT FRONTIER ─────────────────────────────── */
+    .frontier-inner { max-width: 600px; text-align: center; }
+    .frontier-hed {
+      font-size: clamp(1.8rem, 4vw, 4rem);
+      font-weight: 700;
+      line-height: 1.05;
+      color: var(--pure);
+      text-transform: uppercase;
+      letter-spacing: 0.03em;
+      margin-bottom: 10px;
+    }
+    .frontier-sub {
+      font-size: clamp(1rem, 2vw, 2rem);
+      font-weight: 300;
+      color: var(--pale);
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      margin-bottom: 44px;
+    }
+    .clinks {
+      display: flex;
+      flex-direction: column;
+      gap: 11px;
+      align-items: center;
+      margin-bottom: 36px;
+    }
+    .clink {
+      font-size: 0.62rem;
+      letter-spacing: 0.2em;
+      color: var(--pale);
+      text-decoration: none;
+      text-transform: uppercase;
+      border-bottom: 1px solid var(--border);
+      padding-bottom: 2px;
+      transition: color 0.2s, border-color 0.2s;
+    }
+    .clink:hover { color: var(--accent); border-color: var(--accent); }
+    .mission-end {
+      font-size: 0.56rem;
+      letter-spacing: 0.22em;
+      color: var(--ghost);
+      text-transform: uppercase;
+    }
+
+    /* ── RESPONSIVE ──────────────────────────────────────── */
+    @media (max-width: 768px) {
+      .pl { padding-left: max(5vw, 24px); }
+      .pr { padding-right: max(5vw, 24px); justify-content: flex-start; align-items: flex-start; padding-top: 15vh; }
+      #mnav { display: none; }
+      .skill-grid { grid-template-columns: 1fr; }
+      body { height: 1700vh; }
+    }
+
+    /* ── ROCKET ──────────────────────────────────────────── */
+    #rocket-canvas {
+      position: fixed;
+      inset: 0;
+      z-index: 15;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      opacity: 0;
+      transition: opacity 0.3s ease;
+    }
+    #rocket-canvas.active { opacity: 1; }
+    #whitewash {
+      position: fixed;
+      inset: 0;
+      z-index: 16;
+      background: #ffffff;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.6s ease;
+    }
+    #whitewash.flash { opacity: 1; }
+    #whitewash.gone  { opacity: 0; }
+
+    /* media slot placeholder */
+    .media-slot {
+      margin-top: 20px;
+      padding: 14px 18px;
+      border: 1px solid var(--border);
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .media-label {
+      font-size: 0.55rem;
+      letter-spacing: 0.18em;
+      color: var(--ghost);
+      text-transform: uppercase;
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .panel { transition: opacity 0.1s; }
+      #loading { transition: none; }
+      .m00-scroll { animation: none; opacity: 0.7; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- Loading Screen -->
+<div id="loading">
+  <div class="ld-eyebrow">Initializing Mission</div>
+  <div class="ld-bar-wrap"><div class="ld-bar" id="ld-bar"></div></div>
+  <div class="ld-items">
+    <div class="ld-item" id="ld-env">ENVIRONMENT<span>—</span></div>
+    <div class="ld-item" id="ld-sc">SPACECRAFT<span>—</span></div>
+    <div class="ld-item" id="ld-data">MISSION DATA<span>—</span></div>
+  </div>
+</div>
+
+<!-- WebGL Canvas -->
+<canvas id="space-canvas"></canvas>
+
+<!-- Rocket launch overlay -->
+<canvas id="rocket-canvas"></canvas>
+<div id="whitewash"></div>
+
+<!-- HUD -->
+<div id="hud">
+  <span class="hud-label" id="hud-label">MISSION 00</span>
+  <div class="hud-sep"></div>
+  <div class="hud-track"><div class="hud-fill" id="hud-fill"></div></div>
+</div>
+
+<!-- Nav -->
+<nav id="mnav" aria-label="Mission chapters">
+  <div class="ndot" data-t="0"    data-label="LAUNCH"></div>
+  <div class="ndot" data-t="0.07" data-label="ORIGINS"></div>
+  <div class="ndot" data-t="0.15" data-label="FIRST CODE"></div>
+  <div class="ndot" data-t="0.22" data-label="UNIVERSITY"></div>
+  <div class="ndot" data-t="0.43" data-label="EXPERIENCE"></div>
+  <div class="ndot" data-t="0.65" data-label="SYSTEMS"></div>
+  <div class="ndot" data-t="0.74" data-label="PROJECTS"></div>
+  <div class="ndot" data-t="0.88" data-label="LAB"></div>
+  <div class="ndot" data-t="0.94" data-label="CONTACT"></div>
+</nav>
+
+<!-- Mission panels — content loaded from life/ directory -->
+<section class="panel pc"  id="p00"      aria-label="Launch"></section>
+<section class="panel pl"  id="p01"      aria-label="Origins"></section>
+<section class="panel pr"  id="p_game"   aria-label="First Code"></section>
+<section class="panel pl"  id="p_brac_a" aria-label="BRAC University"></section>
+<section class="panel pr"  id="p_brac_b" aria-label="NASA Space Apps"></section>
+<section class="panel pl"  id="p_brac_c" aria-label="BRACU Bot"></section>
+<section class="panel pr"  id="p02a"     aria-label="Bonton Connect"></section>
+<section class="panel pl"  id="p02b"     aria-label="Eagle 3D Streaming"></section>
+<section class="panel pr"  id="p02c"     aria-label="GoBubble AI"></section>
+<section class="panel pl"  id="p03"      aria-label="Systems"></section>
+<section class="panel pr"  id="p04a"     aria-label="9x Scale"></section>
+<section class="panel pl"  id="p04b"     aria-label="AI Infrastructure"></section>
+<section class="panel pl"  id="p05"      aria-label="The Lab"></section>
+<section class="panel pc"  id="p06"      aria-label="Next Frontier"></section>
+
+<script>
+(function () {
+  const missions = [
+    ['p00','life/m00.html'], ['p01','life/m01.html'],
+    ['p_game','life/m_game.html'],
+    ['p_brac_a','life/m_brac_a.html'], ['p_brac_b','life/m_brac_b.html'], ['p_brac_c','life/m_brac_c.html'],
+    ['p02a','life/m02a.html'], ['p02b','life/m02b.html'], ['p02c','life/m02c.html'],
+    ['p03','life/m03.html'],
+    ['p04a','life/m04a.html'], ['p04b','life/m04b.html'],
+    ['p05','life/m05.html'], ['p06','life/m06.html'],
+  ];
+  Promise.all(missions.map(([id, url]) =>
+    fetch(url).then(r => r.text()).then(html => {
+      document.getElementById(id).innerHTML = html;
+    })
+  )).catch(console.warn);
+})();
+</script>
+
+<script src="https://unpkg.com/three@0.160.0/build/three.min.js"></script>
+<script>
+(function () {
+  'use strict';
+
+  // ── Loading ──────────────────────────────────────────────
+  const ldBar  = document.getElementById('ld-bar');
+  const ldEnv  = document.getElementById('ld-env');
+  const ldSc   = document.getElementById('ld-sc');
+  const ldData = document.getElementById('ld-data');
+
+  function setLoad(pct, el) {
+    ldBar.style.width = pct + '%';
+    if (el) el.classList.add('done');
+  }
+
+  document.documentElement.style.overflow = 'hidden';
+
+  // ── Renderer ─────────────────────────────────────────────
+  const canvas   = document.getElementById('space-canvas');
+  const renderer = new THREE.WebGLRenderer({ canvas, antialias: true, alpha: false });
+  renderer.setPixelRatio(Math.min(devicePixelRatio, 2));
+  renderer.setClearColor(0x000002, 1);
+  renderer.setSize(innerWidth, innerHeight);
+
+  const scene  = new THREE.Scene();
+  scene.fog    = new THREE.FogExp2(0x000002, 0.0018);
+
+  const camera = new THREE.PerspectiveCamera(55, innerWidth / innerHeight, 0.1, 800);
+  camera.position.set(0, 12, 38);
+
+  setLoad(18, ldEnv);
+
+  // ── Lighting ─────────────────────────────────────────────
+  scene.add(new THREE.AmbientLight(0x0d1a2e, 2.5));
+  const sun = new THREE.DirectionalLight(0xfff0e0, 1.6);
+  sun.position.set(80, 50, 100);
+  scene.add(sun);
+
+  // ── Stars ─────────────────────────────────────────────────
+  function makeStars(n, rMin, rMax, sz, cx, cy, cz) {
+    const pos = new Float32Array(n * 3);
+    for (let i = 0; i < n; i++) {
+      const r = rMin + Math.random() * (rMax - rMin);
+      const th = Math.random() * Math.PI * 2;
+      const ph = Math.acos(2 * Math.random() - 1);
+      pos[i * 3]     = cx + r * Math.sin(ph) * Math.cos(th);
+      pos[i * 3 + 1] = cy + r * Math.sin(ph) * Math.sin(th);
+      pos[i * 3 + 2] = cz + r * Math.cos(ph);
+    }
+    const geo = new THREE.BufferGeometry();
+    geo.setAttribute('position', new THREE.BufferAttribute(pos, 3));
+    return new THREE.Points(geo, new THREE.PointsMaterial({
+      color: 0xffffff, size: sz, sizeAttenuation: true,
+      transparent: true, opacity: 0.9,
+    }));
+  }
+  scene.add(makeStars(2800, 100, 480, 0.24, 0, 0, -145));
+  scene.add(makeStars(500,  25,  80, 0.10, 0, 0, -145));
+
+  // ── Earth texture (canvas) ─────────────────────────────────
+  function createEarthTexture() {
+    const W = 2048, H = 1024;
+    const off = document.createElement('canvas');
+    off.width = W; off.height = H;
+    const ctx = off.getContext('2d');
+
+    function px(lon, lat) { return [(lon + 180) / 360 * W, (90 - lat) / 180 * H]; }
+
+    function fill(pts, col) {
+      ctx.beginPath();
+      pts.forEach((pt, i) => { const [x, y] = px(...pt); i ? ctx.lineTo(x, y) : ctx.moveTo(x, y); });
+      ctx.closePath(); ctx.fillStyle = col; ctx.fill();
+    }
+    function strk(pts, col, w) {
+      ctx.beginPath();
+      pts.forEach((pt, i) => { const [x, y] = px(...pt); i ? ctx.lineTo(x, y) : ctx.moveTo(x, y); });
+      ctx.strokeStyle = col; ctx.lineWidth = w; ctx.stroke();
+    }
+
+    // Ocean
+    ctx.fillStyle = '#0b2e50'; ctx.fillRect(0, 0, W, H);
+
+    const G1 = '#246624', G2 = '#2c6e2c', G3 = '#306030';
+
+    // Africa
+    fill([[-17,37],[-5,37],[15,38],[14,34],[25,30],[30,22],[38,20],[42,11],[42,0],[38,-7],[35,-18],[25,-32],[18,-35],[12,-35],[8,-22],[3,5],[0,10],[-5,6],[-12,3],[-17,12],[-17,37]], G2);
+
+    // Europe
+    fill([[-10,37],[5,44],[15,44],[22,42],[29,42],[26,58],[18,60],[10,56],[4,52],[-5,48],[-9,44],[-10,37]], G3);
+
+    // Eurasia main (Russia + Central/East Asia — excludes subcontinent)
+    fill([[29,42],[42,40],[52,38],[62,38],[72,38],[78,31],[74,34],[68.2,37],[66,30],[66,25],[62,25],[58,20],[54,22],[50,28],[48,38],[42,40],[38,42],[35,60],[30,64],[40,68],[60,73],[80,73],[100,77],[120,78],[140,76],[160,65],[180,68],[180,73],[170,65],[160,60],[150,58],[142,55],[138,50],[132,46],[128,38],[126,26],[120,24],[112,28],[105,32],[97,28],[96.5,27.5],[92.7,26.4],[88,27],[78,31],[72,38]], G2);
+
+    // Southeast Asia
+    fill([[100,6],[104,2],[108,0],[116,4],[118,6],[116,8],[112,8],[106,4],[100,6]], G3);
+    fill([[106,-7],[112,-7],[120,-8],[116,-4],[108,-4],[106,-7]], G3);
+    fill([[108,-2],[120,2],[128,2],[128,8],[120,8],[112,4],[108,2],[108,-2]], G3);
+
+    // Australia
+    fill([[114,-22],[122,-18],[128,-14],[136,-12],[140,-16],[145,-20],[150,-26],[152,-30],[148,-38],[144,-40],[138,-36],[132,-32],[126,-30],[122,-26],[118,-26],[114,-28],[114,-22]], G2);
+
+    // South America
+    fill([[-80,12],[-74,10],[-66,2],[-52,-4],[-38,-10],[-34,-14],[-36,-22],[-44,-28],[-50,-34],[-56,-40],[-62,-46],[-68,-54],[-72,-50],[-74,-42],[-70,-34],[-60,-22],[-50,-12],[-42,-3],[-50,4],[-62,6],[-70,5],[-78,8],[-80,12]], G2);
+
+    // North America
+    fill([[-140,60],[-128,54],[-124,48],[-120,35],[-110,30],[-100,25],[-90,18],[-84,10],[-80,10],[-76,20],[-72,42],[-64,45],[-60,50],[-64,56],[-70,62],[-80,62],[-90,70],[-100,72],[-110,72],[-120,68],[-132,64],[-140,60]], G3);
+
+    // Greenland
+    fill([[-44,84],[-22,84],[-18,75],[-22,68],[-32,64],[-46,64],[-54,68],[-54,76],[-44,84]], G3);
+
+    // ── SOUTH ASIA — detailed ──────────────────────────────
+    // Indian subcontinent (all, including Bangladesh area)
+    fill([
+      [68.2,37],[74,34],[78,31],[88,27],[92.7,26.4],[96.5,27.5],
+      [97.5,24],[95,22],[93.5,22],[92.5,23.7],[92.5,22],[91.0,21.4],
+      [89.8,21.6],[88.0,23.0],[87.5,22],[86.5,20.5],[82,18],
+      [80.5,13.5],[77.5,8.2],[76.2,8.5],[72.5,9],[72.5,22],
+      [69.1,22.5],[66,25],[66,30],[68.2,37]
+    ], G1);
+
+    // Pakistan
+    fill([[62,25],[60,22],[62,22],[66,22],[68.5,24],[69.1,22.5],[72.5,22],[73,20],[76,20],[77,25],[78,31],[74,34],[68.2,37],[66,30],[66,25],[62,25]], G3);
+
+    // Myanmar
+    fill([[92.5,23.7],[96.5,27.5],[98,25],[100,20],[99,18],[98,16],[98.5,10],[99.5,6],[98.5,5],[97,7],[96,10],[95.5,14],[95,18],[93.5,22],[92.5,23.7]], G3);
+
+    // Nepal strip
+    fill([[80,28.5],[84,27.5],[88,27],[84,27.0],[80,28.0]], '#2e7030');
+
+    // Sri Lanka
+    fill([[79.9,9.9],[81,8.6],[81.8,7.5],[81.5,6.8],[80,6.0],[79.7,7.5],[79.9,9.9]], G2);
+
+    // Bangladesh — real OSM polygon (555 pts, RDP ε=0.012)
+    const BD = [
+      [88.008,24.668],[88.082,24.626],[88.126,24.509],[88.324,24.434],[88.498,24.321],[88.652,24.294],[88.691,24.317],[88.737,24.251],
+      [88.745,24.193],[88.708,24.171],[88.699,24.091],[88.722,24.042],[88.747,24.032],[88.723,24.002],[88.74,23.986],[88.737,23.919],
+      [88.67,23.868],[88.619,23.879],[88.575,23.863],[88.6,23.817],[88.554,23.785],[88.579,23.762],[88.556,23.649],[88.591,23.638],
+      [88.578,23.603],[88.641,23.608],[88.658,23.548],[88.724,23.512],[88.743,23.481],[88.799,23.499],[88.789,23.447],[88.765,23.449],
+      [88.746,23.396],[88.763,23.368],[88.735,23.341],[88.745,23.308],[88.73,23.32],[88.726,23.299],[88.711,23.313],[88.696,23.302],
+      [88.725,23.248],[88.769,23.245],[88.79,23.219],[88.811,23.222],[88.812,23.257],[88.824,23.234],[88.907,23.236],[88.914,23.214],
+      [88.943,23.206],[88.975,23.224],[88.996,23.213],[88.98,23.212],[88.98,23.183],[88.962,23.193],[88.939,23.177],[88.9,23.111],
+      [88.868,23.101],[88.88,23.007],[88.845,23.009],[88.871,22.979],[88.86,22.943],[88.894,22.952],[88.911,22.88],[88.945,22.881],
+      [88.969,22.845],[88.959,22.797],[88.912,22.758],[88.927,22.719],[88.962,22.694],[88.927,22.652],[88.935,22.619],[88.96,22.617],
+      [88.939,22.59],[88.942,22.56],[88.996,22.469],[89.0,22.43],[88.972,22.411],[88.992,22.391],[88.985,22.326],[89.024,22.299],
+      [88.996,22.286],[89.071,22.196],[89.07,22.15],[89.098,22.154],[89.041,22.1],[89.085,21.987],[89.074,21.93],[89.026,21.914],
+      [89.044,21.859],[89.03,21.788],[89.166,21.569],[89.185,21.436],[89.371,21.41],[90.77,21.437],[91.833,21.249],[91.856,21.094],
+      [91.992,20.923],[92.111,20.689],[92.104,20.597],[92.149,20.464],[92.258,20.38],[92.403,20.379],[92.429,20.555],[92.341,20.679],
+      [92.369,20.704],[92.33,20.844],[92.274,20.934],[92.259,21.078],[92.202,21.123],[92.199,21.161],[92.175,21.162],[92.22,21.233],
+      [92.199,21.326],[92.259,21.362],[92.27,21.429],[92.324,21.419],[92.342,21.467],[92.38,21.48],[92.425,21.433],[92.439,21.365],
+      [92.502,21.356],[92.517,21.388],[92.559,21.383],[92.597,21.244],[92.68,21.297],[92.651,21.359],[92.609,21.585],[92.609,21.817],
+      [92.634,21.875],[92.61,21.929],[92.603,22.062],[92.563,22.128],[92.578,22.144],[92.605,22.123],[92.611,22.138],[92.552,22.409],
+      [92.551,22.514],[92.522,22.56],[92.538,22.576],[92.529,22.665],[92.513,22.733],[92.474,22.747],[92.451,22.892],[92.433,22.886],
+      [92.42,22.919],[92.402,22.912],[92.371,22.936],[92.392,23.056],[92.358,23.103],[92.368,23.127],[92.346,23.236],[92.404,23.241],
+      [92.364,23.323],[92.379,23.362],[92.357,23.372],[92.357,23.411],[92.317,23.472],[92.314,23.556],[92.287,23.596],[92.296,23.621],
+      [92.273,23.642],[92.291,23.701],[92.279,23.726],[92.239,23.726],[92.215,23.654],[92.221,23.691],[92.172,23.721],[92.172,23.742],
+      [92.149,23.739],[92.12,23.696],[92.079,23.679],[92.068,23.648],[92.001,23.673],[91.976,23.736],[91.951,23.731],[91.928,23.682],
+      [91.967,23.486],[91.934,23.466],[91.94,23.439],[91.9,23.442],[91.841,23.409],[91.836,23.373],[91.76,23.3],[91.81,23.165],
+      [91.813,23.099],[91.836,23.092],[91.806,23.063],[91.774,23.069],[91.78,23.029],[91.769,23.041],[91.721,22.988],[91.645,22.985],
+      [91.618,22.938],[91.606,22.972],[91.577,22.967],[91.544,23.0],[91.552,23.038],[91.532,23.04],[91.531,23.092],[91.504,23.129],
+      [91.517,23.146],[91.493,23.157],[91.509,23.185],[91.475,23.195],[91.486,23.21],[91.453,23.22],[91.472,23.228],[91.444,23.247],
+      [91.455,23.261],[91.418,23.261],[91.416,23.284],[91.41,23.258],[91.396,23.266],[91.406,23.249],[91.391,23.246],[91.4,23.232],
+      [91.385,23.228],[91.378,23.184],[91.412,23.064],[91.371,23.072],[91.348,23.103],[91.325,23.159],[91.327,23.254],[91.302,23.292],
+      [91.314,23.307],[91.291,23.319],[91.321,23.361],[91.293,23.352],[91.249,23.49],[91.218,23.499],[91.225,23.515],[91.202,23.521],
+      [91.214,23.551],[91.196,23.549],[91.163,23.596],[91.16,23.663],[91.2,23.646],[91.21,23.688],[91.158,23.69],[91.151,23.712],
+      [91.167,23.748],[91.219,23.735],[91.228,23.75],[91.254,23.837],[91.23,23.886],[91.248,23.913],[91.238,23.926],[91.277,23.922],
+      [91.266,23.945],[91.283,23.977],[91.302,23.972],[91.303,23.994],[91.381,23.978],[91.398,24.05],[91.376,24.105],[91.586,24.072],
+      [91.594,24.097],[91.643,24.111],[91.66,24.227],[91.687,24.161],[91.761,24.141],[91.75,24.241],[91.817,24.209],[91.845,24.226],
+      [91.845,24.19],[91.872,24.173],[91.88,24.14],[91.906,24.138],[91.948,24.264],[91.922,24.333],[91.959,24.354],[91.996,24.322],
+      [91.972,24.383],[91.997,24.391],[92.044,24.373],[92.122,24.381],[92.138,24.424],[92.169,24.423],[92.162,24.528],[92.215,24.503],
+      [92.232,24.53],[92.249,24.655],[92.298,24.736],[92.281,24.745],[92.29,24.788],[92.274,24.828],[92.244,24.843],[92.249,24.886],
+      [92.234,24.902],[92.298,24.916],[92.4,24.849],[92.455,24.874],[92.484,24.863],[92.499,24.906],[92.49,24.949],[92.451,24.94],
+      [92.47,24.964],[92.421,24.967],[92.428,25.031],[92.342,25.052],[92.333,25.08],[92.311,25.07],[92.227,25.096],[92.193,25.14],
+      [92.146,25.142],[92.063,25.187],[91.976,25.168],[91.915,25.182],[91.775,25.163],[91.752,25.176],[91.742,25.143],[91.704,25.16],
+      [91.692,25.138],[91.638,25.123],[91.602,25.143],[91.613,25.176],[91.471,25.135],[91.469,25.153],[91.287,25.185],[91.268,25.207],
+      [91.074,25.199],[90.863,25.158],[90.78,25.186],[90.733,25.155],[90.666,25.166],[90.663,25.198],[90.642,25.175],[90.509,25.175],
+      [90.441,25.145],[90.33,25.194],[90.112,25.225],[89.981,25.281],[89.967,25.304],[89.949,25.293],[89.907,25.308],[89.877,25.285],
+      [89.831,25.296],[89.841,25.316],[89.816,25.391],[89.853,25.467],[89.852,25.539],[89.882,25.622],[89.851,25.713],[89.828,25.729],
+      [89.842,25.761],[89.817,25.815],[89.833,25.87],[89.887,25.945],[89.825,25.946],[89.871,25.979],[89.834,26.013],[89.836,25.983],
+      [89.82,25.988],[89.808,26.045],[89.796,26.022],[89.799,26.042],[89.774,26.038],[89.798,26.06],[89.795,26.088],[89.756,26.109],
+      [89.766,26.129],[89.747,26.159],[89.682,26.163],[89.701,26.173],[89.674,26.202],[89.692,26.213],[89.679,26.238],[89.672,26.22],
+      [89.634,26.23],[89.649,26.191],[89.628,26.185],[89.656,26.181],[89.649,26.165],[89.609,26.18],[89.61,26.155],[89.591,26.157],
+      [89.604,26.118],[89.63,26.119],[89.596,26.099],[89.609,26.089],[89.63,26.107],[89.65,26.063],[89.605,26.064],[89.613,26.053],
+      [89.579,26.026],[89.577,25.969],[89.54,25.97],[89.544,26.006],[89.43,26.012],[89.424,26.048],[89.393,26.007],[89.349,26.01],
+      [89.281,26.05],[89.282,26.066],[89.254,26.064],[89.267,26.092],[89.23,26.124],[89.155,26.138],[89.157,26.163],[89.136,26.18],
+      [89.141,26.236],[89.1,26.28],[89.105,26.316],[89.123,26.287],[89.136,26.32],[89.084,26.323],[89.101,26.337],[89.079,26.363],
+      [89.093,26.394],[88.994,26.413],[88.983,26.447],[88.957,26.459],[88.945,26.425],[88.926,26.431],[88.927,26.408],[88.905,26.409],
+      [88.919,26.359],[88.953,26.365],[88.952,26.332],[88.961,26.352],[89.001,26.33],[88.982,26.309],[88.995,26.292],[89.007,26.305],
+      [89.018,26.29],[89.022,26.309],[89.04,26.277],[89.046,26.296],[89.061,26.291],[89.051,26.242],[88.953,26.242],[88.927,26.283],
+      [88.898,26.289],[88.862,26.273],[88.878,26.234],[88.842,26.231],[88.813,26.256],[88.819,26.295],[88.793,26.31],[88.749,26.309],
+      [88.746,26.289],[88.666,26.263],[88.675,26.32],[88.748,26.321],[88.735,26.328],[88.746,26.347],[88.705,26.333],[88.681,26.38],
+      [88.702,26.389],[88.67,26.397],[88.686,26.413],[88.624,26.435],[88.623,26.471],[88.594,26.471],[88.592,26.45],[88.56,26.458],
+      [88.557,26.485],[88.526,26.481],[88.521,26.511],[88.489,26.51],[88.485,26.541],[88.436,26.545],[88.409,26.636],[88.332,26.482],
+      [88.352,26.448],[88.372,26.488],[88.486,26.46],[88.524,26.36],[88.482,26.35],[88.458,26.377],[88.435,26.336],[88.403,26.329],
+      [88.415,26.315],[88.385,26.313],[88.35,26.282],[88.351,26.22],[88.242,26.189],[88.177,26.148],[88.159,26.08],[88.183,26.073],
+      [88.17,26.046],[88.182,26.025],[88.139,26.013],[88.122,25.947],[88.086,25.917],[88.094,25.874],[88.111,25.867],[88.115,25.798],
+      [88.152,25.776],[88.184,25.802],[88.21,25.786],[88.237,25.81],[88.269,25.808],[88.266,25.783],[88.374,25.717],[88.371,25.697],
+      [88.454,25.665],[88.445,25.597],[88.5,25.584],[88.494,25.559],[88.533,25.542],[88.54,25.509],[88.609,25.517],[88.649,25.497],
+      [88.647,25.478],[88.699,25.471],[88.723,25.502],[88.766,25.496],[88.759,25.527],[88.81,25.523],[88.84,25.458],[88.814,25.411],
+      [88.841,25.398],[88.841,25.364],[88.884,25.326],[88.906,25.338],[88.93,25.304],[89.009,25.303],[89.008,25.265],[88.989,25.275],
+      [88.956,25.255],[88.961,25.209],[88.937,25.211],[88.948,25.177],[88.923,25.164],[88.875,25.179],[88.844,25.214],[88.806,25.171],
+      [88.769,25.19],[88.749,25.177],[88.709,25.208],[88.613,25.204],[88.564,25.175],[88.558,25.193],[88.499,25.211],[88.463,25.195],
+      [88.439,25.208],[88.461,25.147],[88.46,25.069],[88.417,24.974],[88.394,24.962],[88.396,24.938],[88.343,24.87],[88.264,24.886],
+      [88.263,24.92],[88.223,24.962],[88.137,24.938],[88.162,24.851],[88.145,24.854],[88.132,24.819],[88.109,24.813],[88.104,24.781],
+      [88.068,24.771],[88.063,24.725],[88.008,24.668]
+    ];
+    fill(BD, '#4aaa38');
+
+    // ── BORDERS ───────────────────────────────────────────
+    strk([[68.2,37],[73,33],[77.5,30],[72.5,22],[68.5,24],[66,22],[60,22]], 'rgba(255,255,255,0.18)', 1.2);
+    strk([[78,31],[80,29],[84,28],[88,27],[92.7,26.4],[96.5,27.5]], 'rgba(255,255,255,0.18)', 1.2);
+    strk([[97.5,24],[95,22],[92.5,23.7]], 'rgba(255,255,255,0.15)', 1.2);
+
+    // Bangladesh border — thin gold, clearly distinct from the green land fill
+    strk(BD, 'rgba(255,215,50,0.96)', 1.5);
+
+    return new THREE.CanvasTexture(off);
+  }
+
+  // ── Earth ──────────────────────────────────────────────────
+  const earthGroup = new THREE.Group();
+  scene.add(earthGroup);
+
+  const earthTex = createEarthTexture();
+  const earth = new THREE.Mesh(
+    new THREE.SphereGeometry(5, 64, 64),
+    new THREE.MeshPhongMaterial({
+      map: earthTex,
+      emissive: 0x050e18,
+      emissiveIntensity: 0.2,
+      specular: 0x1a4060,
+      shininess: 12,
+    })
+  );
+  earthGroup.add(earth);
+
+  // Atmosphere glow
+  earthGroup.add(new THREE.Mesh(
+    new THREE.SphereGeometry(5.8, 32, 32),
+    new THREE.MeshBasicMaterial({
+      color: 0x1a90ff, transparent: true, opacity: 0.07,
+      side: THREE.BackSide, blending: THREE.AdditiveBlending, depthWrite: false,
+    })
+  ));
+
+  // Clouds layer
+  const clouds = new THREE.Mesh(
+    new THREE.SphereGeometry(5.14, 32, 32),
+    new THREE.MeshBasicMaterial({
+      color: 0xffffff, transparent: true, opacity: 0.055,
+      blending: THREE.AdditiveBlending, depthWrite: false,
+    })
+  );
+  earthGroup.add(clouds);
+
+  // ── Moon ───────────────────────────────────────────────────
+  const moon = new THREE.Mesh(
+    new THREE.SphereGeometry(1.2, 24, 24),
+    new THREE.MeshPhongMaterial({ color: 0x888888, emissive: 0x1a1a1a, emissiveIntensity: 0.2, shininess: 4 })
+  );
+  moon.position.set(-13, 3, -6);
+  scene.add(moon);
+
+  setLoad(36, ldSc);
+
+  // ── Career planets ─────────────────────────────────────────
+  function makePlanet(r, col, emCol, px, py, pz) {
+    const m = new THREE.Mesh(
+      new THREE.SphereGeometry(r, 48, 48),
+      new THREE.MeshPhongMaterial({ color: col, emissive: emCol, emissiveIntensity: 0.2, shininess: 18 })
+    );
+    m.position.set(px, py, pz);
+    scene.add(m);
+    // glow
+    const g = new THREE.Mesh(
+      new THREE.SphereGeometry(r * 1.28, 16, 16),
+      new THREE.MeshBasicMaterial({
+        color: col, transparent: true, opacity: 0.055,
+        side: THREE.BackSide, blending: THREE.AdditiveBlending, depthWrite: false,
+      })
+    );
+    g.position.set(px, py, pz);
+    scene.add(g);
+    return m;
+  }
+
+  const bontonP  = makePlanet(2.5, 0xb5631d, 0x5c2e0a,  -22,  5, -44);
+  const eagleP   = makePlanet(3.0, 0x1a6b8a, 0x081e28,   -8, -6, -80);
+  const gobubbleP = makePlanet(3.5, 0x5c3d9f, 0x201545,   22,  4, -114);
+
+  // ── Systems node network (3D) ──────────────────────────────
+  const sysGroup = new THREE.Group();
+  sysGroup.position.set(0, 2, -152);
+  scene.add(sysGroup);
+
+  const nodeCoords = [
+    [-7, 5, 0], [-2, 5, 0], [0, 2, 0],       // CLIENT, LB, API
+    [-4, -1, 2], [4, -1, -2],                  // SVC-A, SVC-B
+    [-4, -5, 2], [4, -5, -2],                  // DB, CACHE
+    [0, -2, -4], [0, -6, -5],                  // QUEUE, WORKER
+    [7, 2, 0],                                  // OBS
+  ].map(c => new THREE.Vector3(...c));
+
+  const edgePairs = [
+    [0,1],[1,2],[2,3],[2,4],[3,5],[3,6],[4,7],[7,8],[0,9],[2,9],[3,9],[4,9]
+  ];
+
+  const nodeMat   = new THREE.MeshBasicMaterial({ color: 0x4a9eff });
+  const nodeMatOr = new THREE.MeshBasicMaterial({ color: 0xe8902a });
+  const nGeo      = new THREE.SphereGeometry(0.16, 10, 10);
+
+  nodeCoords.forEach((pos, i) => {
+    const m = new THREE.Mesh(nGeo, i === 0 || i === 9 ? nodeMatOr : nodeMat);
+    m.position.copy(pos);
+    sysGroup.add(m);
+  });
+
+  const lineVerts = [];
+  edgePairs.forEach(([a, b]) => {
+    lineVerts.push(...nodeCoords[a].toArray(), ...nodeCoords[b].toArray());
+  });
+  const lGeo = new THREE.BufferGeometry();
+  lGeo.setAttribute('position', new THREE.BufferAttribute(new Float32Array(lineVerts), 3));
+  sysGroup.add(new THREE.LineSegments(lGeo,
+    new THREE.LineBasicMaterial({ color: 0x163050, transparent: true, opacity: 0.75 })
+  ));
+
+  // Flow particles along edges
+  const flowParticles = edgePairs.map(([a, b]) => {
+    const m = new THREE.Mesh(new THREE.SphereGeometry(0.07, 5, 5), nodeMat.clone());
+    m.userData = { a, b, t: Math.random(), sp: 0.006 + Math.random() * 0.007 };
+    sysGroup.add(m);
+    return m;
+  });
+
+  // ── BRAC University planet ──────────────────────────────────
+  // Positioned near the Origin section, orbiting Earth
+  const bracGroup = new THREE.Group();
+  scene.add(bracGroup);
+  const bracP = new THREE.Mesh(
+    new THREE.SphereGeometry(1.8, 48, 48),
+    new THREE.MeshPhongMaterial({ color: 0x9b2335, emissive: 0x3a0810, emissiveIntensity: 0.3, shininess: 20 })
+  );
+  bracGroup.add(bracP);
+  // Canvas label texture showing "BRAC"
+  (function() {
+    const bc = document.createElement('canvas');
+    bc.width = 512; bc.height = 512;
+    const bx = bc.getContext('2d');
+    bx.fillStyle = '#8b1c2c'; bx.fillRect(0, 0, 512, 512);
+    // Simple cross lines like BRAC logo style
+    bx.strokeStyle = 'rgba(255,255,255,0.15)'; bx.lineWidth = 1;
+    for (let i = 0; i < 512; i += 32) { bx.beginPath(); bx.moveTo(i,0); bx.lineTo(i,512); bx.stroke(); bx.beginPath(); bx.moveTo(0,i); bx.lineTo(512,i); bx.stroke(); }
+    bx.fillStyle = '#ffffff';
+    bx.font = 'bold 88px IBM Plex Mono, monospace';
+    bx.textAlign = 'center'; bx.textBaseline = 'middle';
+    bx.fillText('BRAC', 256, 220);
+    bx.font = '36px IBM Plex Mono, monospace';
+    bx.fillStyle = 'rgba(255,220,220,0.9)';
+    bx.fillText('UNIVERSITY', 256, 310);
+    bx.font = '26px IBM Plex Mono, monospace';
+    bx.fillStyle = 'rgba(255,200,200,0.6)';
+    bx.fillText('DHAKA, BD', 256, 360);
+    bracP.material.map = new THREE.CanvasTexture(bc);
+    bracP.material.needsUpdate = true;
+  })();
+  // Glow ring around BRAC planet
+  const bracRing = new THREE.Mesh(
+    new THREE.TorusGeometry(2.4, 0.06, 8, 64),
+    new THREE.MeshBasicMaterial({ color: 0xff6688, transparent: true, opacity: 0.35, blending: THREE.AdditiveBlending, depthWrite: false })
+  );
+  bracRing.rotation.x = Math.PI * 0.35;
+  bracGroup.add(bracRing);
+  // Position: orbiting near Earth, visible from Origin section
+  bracGroup.position.set(10, 4, -2);
+
+  // ── Project worlds ─────────────────────────────────────────
+  const proj1 = makePlanet(2.2, 0x2e5c4f, 0x0d1e18, -18,  8, -188);
+  const proj2 = makePlanet(2.8, 0x3d5a8a, 0x121e30,  16, -5, -204);
+
+  // ── Lab structure ──────────────────────────────────────────
+  const labGroup = new THREE.Group();
+  labGroup.position.set(-18, 22, -255);
+  scene.add(labGroup);
+
+  const labEdgesGeo = new THREE.EdgesGeometry(new THREE.OctahedronGeometry(3.2, 0));
+  labGroup.add(new THREE.LineSegments(labEdgesGeo,
+    new THREE.LineBasicMaterial({ color: 0x4a9eff, transparent: true, opacity: 0.55 })
+  ));
+  labGroup.add(new THREE.Mesh(
+    new THREE.OctahedronGeometry(1.4, 0),
+    new THREE.MeshBasicMaterial({
+      color: 0x4a9eff, transparent: true, opacity: 0.07,
+      blending: THREE.AdditiveBlending, depthWrite: false,
+    })
+  ));
+
+  // ── Final star ─────────────────────────────────────────────
+  const finalPos = new THREE.Vector3(0, 0, -318);
+  const finalStar = new THREE.Mesh(
+    new THREE.SphereGeometry(11, 32, 32),
+    new THREE.MeshBasicMaterial({
+      color: 0xfff4e0, transparent: true, opacity: 0.88,
+      blending: THREE.AdditiveBlending, depthWrite: false,
+    })
+  );
+  finalStar.position.copy(finalPos);
+  scene.add(finalStar);
+
+  [16, 24, 36].forEach((r, i) => {
+    const c = new THREE.Mesh(
+      new THREE.SphereGeometry(r, 14, 14),
+      new THREE.MeshBasicMaterial({
+        color: 0xffe090, transparent: true, opacity: [0.06, 0.03, 0.012][i],
+        blending: THREE.AdditiveBlending, depthWrite: false,
+      })
+    );
+    c.position.copy(finalPos);
+    scene.add(c);
+  });
+
+  setLoad(72, ldData);
+
+  // ── Camera path ────────────────────────────────────────────
+  const camPath = new THREE.CatmullRomCurve3([
+    new THREE.Vector3(0,  14,  32),   // launch — facing Bangladesh (90°E)
+    new THREE.Vector3(0,  3.2, 7.5),  // dive to Bangladesh (fast zoom)
+    new THREE.Vector3(0,  3.0, 7.2),  // hold on Bangladesh
+    new THREE.Vector3(-4,  6,  15),   // pull back
+    new THREE.Vector3(-14, 8,  22),   // orbit
+    new THREE.Vector3(-22, 6,  -8),   // depart
+    new THREE.Vector3(-4,  -3, -70),
+    new THREE.Vector3(-14, -8, -84),
+    new THREE.Vector3(26,   7,-108),
+    new THREE.Vector3(12,  12,-130),
+    new THREE.Vector3(2,    4,-147),
+    new THREE.Vector3(-6,   8,-165),
+    new THREE.Vector3(-22, 28,-236),
+    new THREE.Vector3(-14, 20,-258),
+    new THREE.Vector3(0,   12,-278),
+    new THREE.Vector3(0,   8, -295),  // stop well outside final star
+  ], false, 'catmullrom', 0.4);
+
+  const lookPath = new THREE.CatmullRomCurve3([
+    new THREE.Vector3(0,   0,   0),   // Earth center
+    new THREE.Vector3(0, 1.95, 4.6),  // Bangladesh surface — dive direct
+    new THREE.Vector3(0, 1.95, 4.6),  // hold on Bangladesh
+    new THREE.Vector3(0,   0,   0),   // Earth center (pull back)
+    new THREE.Vector3(0,   0,   0),   // Earth center
+    new THREE.Vector3(-22, 5, -44),   // Bonton planet
+    new THREE.Vector3(-8, -6, -80),
+    new THREE.Vector3(-8, -6, -80),
+    new THREE.Vector3(22,  4,-114),
+    new THREE.Vector3(22,  4,-114),
+    new THREE.Vector3(0,   2,-152),
+    new THREE.Vector3(0,   2,-152),
+    new THREE.Vector3(-18, 22,-255),
+    new THREE.Vector3(-18, 22,-255),
+    new THREE.Vector3(0,   0,-318),
+    new THREE.Vector3(0,   0,-318),
+  ], false, 'catmullrom', 0.4);
+
+  // ── Missions ──────────────────────────────────────────────
+  const MISSIONS = [
+    { id:'p00',      s:0,    e:0.06, label:'00 / LAUNCH'       },
+    { id:'p01',      s:0.06, e:0.14, label:'01 / ORIGINS'      },
+    { id:'p_game',   s:0.14, e:0.22, label:'02 / FIRST CODE'   },
+    { id:'p_brac_a', s:0.22, e:0.29, label:'03 / UNIVERSITY'   },
+    { id:'p_brac_b', s:0.29, e:0.36, label:'03b / NASA EON'    },
+    { id:'p_brac_c', s:0.36, e:0.43, label:'03c / BRACU BOT'   },
+    { id:'p02a',     s:0.43, e:0.51, label:'04 / BONTON'       },
+    { id:'p02b',     s:0.51, e:0.58, label:'05 / EAGLE 3D'     },
+    { id:'p02c',     s:0.58, e:0.65, label:'06 / GOBUBBLE'     },
+    { id:'p03',      s:0.65, e:0.74, label:'07 / SYSTEMS'      },
+    { id:'p04a',     s:0.74, e:0.81, label:'08 / 9× SCALE'     },
+    { id:'p04b',     s:0.81, e:0.88, label:'09 / AI INFRA'     },
+    { id:'p05',      s:0.88, e:0.94, label:'10 / LAB'          },
+    { id:'p06',      s:0.94, e:1.00, label:'11 / NEXT FRONTIER'},
+  ];
+
+  const panelEls = MISSIONS.map(m => ({ ...m, el: document.getElementById(m.id) }));
+
+  function panelOpacity(t, s, e) {
+    const f = 0.022;
+    if (t < s - f || t > e + f) return 0;
+    if (t < s) return (t - (s - f)) / f;
+    if (t > e) return 1 - (t - e) / f;
+    return 1;
+  }
+
+  // ── Systems 2D canvas ─────────────────────────────────────
+  // Lazy-init: sys-canvas lives inside m03.html fetched async
+  let sysCanvas = null, sysCtx = null;
+  function getSys() {
+    if (!sysCanvas) {
+      sysCanvas = document.getElementById('sys-canvas');
+      if (sysCanvas) sysCtx = sysCanvas.getContext('2d');
+    }
+    return !!sysCanvas;
+  }
+
+  const SNODES = [
+    { x:0.10, y:0.18, lbl:'CLIENTS'  },
+    { x:0.30, y:0.18, lbl:'L BALANCER' },
+    { x:0.52, y:0.18, lbl:'API GW'   },
+    { x:0.88, y:0.30, lbl:'OBS'      },
+    { x:0.35, y:0.55, lbl:'SVC A'    },
+    { x:0.66, y:0.55, lbl:'SVC B'    },
+    { x:0.20, y:0.86, lbl:'DB'       },
+    { x:0.52, y:0.86, lbl:'CACHE'    },
+    { x:0.80, y:0.86, lbl:'WORKERS'  },
+  ];
+  const SEDGES = [[0,1],[1,2],[2,4],[2,5],[2,3],[4,6],[5,7],[5,8],[4,3],[5,3]];
+  const sFlows = SEDGES.map(([a, b]) => ({
+    a, b, t: Math.random(), sp: 0.004 + Math.random() * 0.004
+  }));
+
+  function resizeSys() {
+    if (!getSys()) return;
+    const W = sysCanvas.offsetWidth, H = sysCanvas.offsetHeight;
+    const dpr = devicePixelRatio;
+    sysCanvas.width  = W * dpr;
+    sysCanvas.height = H * dpr;
+    sysCtx.setTransform(dpr, 0, 0, dpr, 0, 0);
+  }
+
+  function drawSys() {
+    if (!getSys()) return;
+    const W = sysCanvas.offsetWidth, H = sysCanvas.offsetHeight;
+    sysCtx.clearRect(0, 0, W, H);
+
+    SEDGES.forEach(([a, b]) => {
+      const na = SNODES[a], nb = SNODES[b];
+      sysCtx.beginPath();
+      sysCtx.moveTo(na.x * W, na.y * H);
+      sysCtx.lineTo(nb.x * W, nb.y * H);
+      sysCtx.strokeStyle = 'rgba(74,158,255,0.16)';
+      sysCtx.lineWidth = 1;
+      sysCtx.stroke();
+    });
+
+    sFlows.forEach(fl => {
+      fl.t = (fl.t + fl.sp) % 1;
+      const na = SNODES[fl.a], nb = SNODES[fl.b];
+      sysCtx.beginPath();
+      sysCtx.arc(
+        (na.x + (nb.x - na.x) * fl.t) * W,
+        (na.y + (nb.y - na.y) * fl.t) * H,
+        2.2, 0, Math.PI * 2
+      );
+      sysCtx.fillStyle = '#4a9eff';
+      sysCtx.fill();
+    });
+
+    SNODES.forEach((n, i) => {
+      const x = n.x * W, y = n.y * H;
+      sysCtx.beginPath();
+      sysCtx.arc(x, y, 4.5, 0, Math.PI * 2);
+      sysCtx.fillStyle = i === 0 ? '#100a00' : '#050e1c';
+      sysCtx.strokeStyle = i === 0 ? '#e8902a' : '#4a9eff';
+      sysCtx.lineWidth = 1;
+      sysCtx.fill(); sysCtx.stroke();
+
+      const fs = Math.max(7, Math.min(8.5, W * 0.019));
+      sysCtx.fillStyle = 'rgba(180,200,220,0.8)';
+      sysCtx.font = `${fs}px IBM Plex Mono, monospace`;
+      sysCtx.textAlign = 'center';
+      sysCtx.fillText(n.lbl, x, y - 9);
+    });
+  }
+
+  // ── Scroll ─────────────────────────────────────────────────
+  let scrollTarget = 0, scrollCur = 0;
+  const lookCur = new THREE.Vector3(0, 0, 0);
+  const prefRM = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  window.addEventListener('scroll', () => {
+    const max = document.body.scrollHeight - innerHeight;
+    scrollTarget = Math.max(0, Math.min(window.scrollY / max, 1));
+  }, { passive: true });
+
+  function jumpTo(t) {
+    const max = document.body.scrollHeight - innerHeight;
+    window.scrollTo({ top: t * max, behavior: 'smooth' });
+  }
+
+  document.querySelectorAll('.ndot').forEach(d => {
+    d.addEventListener('click', () => jumpTo(parseFloat(d.dataset.t)));
+  });
+
+  // ── Mouse parallax + hover ─────────────────────────────────
+  let mouseRaw = { x: 0, y: 0 };
+  let mouseSmooth = { x: 0, y: 0 };
+  document.addEventListener('mousemove', e => {
+    mouseRaw.x = (e.clientX / innerWidth  - 0.5) * 2;
+    mouseRaw.y = (e.clientY / innerHeight - 0.5) * 2;
+  });
+
+  const raycaster  = new THREE.Raycaster();
+  const mousePick  = new THREE.Vector2();
+  const hoverMeshes = [earth, bontonP, eagleP, gobubbleP, bracP, proj1, proj2];
+  let   hoveredMesh = null;
+
+  // ── Render loop ────────────────────────────────────────────
+  const hudLabel = document.getElementById('hud-label');
+  const hudFill  = document.getElementById('hud-fill');
+  const navDots  = document.querySelectorAll('.ndot');
+  let   tick     = 0;
+
+  function animate() {
+    requestAnimationFrame(animate);
+    tick += 0.005;
+
+    const lerpT = prefRM ? 1 : 0.055;
+    scrollCur += (scrollTarget - scrollCur) * lerpT;
+    const p = scrollCur;
+
+    // Camera movement
+    const camTarget  = camPath.getPoint(p);
+    const lookTarget = lookPath.getPoint(p);
+    // Smooth mouse for parallax
+    mouseSmooth.x += (mouseRaw.x - mouseSmooth.x) * 0.05;
+    mouseSmooth.y += (mouseRaw.y - mouseSmooth.y) * 0.05;
+    camera.position.lerp(camTarget, prefRM ? 1 : 0.08);
+    // Parallax: offset camera slightly from path based on mouse position
+    camera.position.x += mouseSmooth.x * 0.6;
+    camera.position.y -= mouseSmooth.y * 0.3;
+    lookCur.lerp(lookTarget, prefRM ? 1 : 0.08);
+    camera.lookAt(lookCur);
+
+    // Hover: raycast against planet meshes
+    mousePick.set(mouseRaw.x, -mouseRaw.y);
+    raycaster.setFromCamera(mousePick, camera);
+    const hits = raycaster.intersectObjects(hoverMeshes, false);
+    const hit  = hits.length > 0 ? hits[0].object : null;
+    if (hit !== hoveredMesh) {
+      if (hoveredMesh) {
+        hoveredMesh.scale.setScalar(1);
+        hoveredMesh.material.emissiveIntensity = hoveredMesh.userData.baseEmissive ?? 0.2;
+      }
+      hoveredMesh = hit;
+      if (hoveredMesh) {
+        hoveredMesh.userData.baseEmissive = hoveredMesh.userData.baseEmissive ?? hoveredMesh.material.emissiveIntensity;
+      }
+      document.body.style.cursor = hit ? 'pointer' : '';
+    }
+    if (hoveredMesh) {
+      hoveredMesh.scale.lerp(new THREE.Vector3(1.12, 1.12, 1.12), 0.1);
+      hoveredMesh.material.emissiveIntensity += (0.7 - hoveredMesh.material.emissiveIntensity) * 0.1;
+    }
+
+    // Earth rotation
+    // π/2 offset aligns Bangladesh (90°E) toward +Z (camera start) at tick=0
+    // Slow rotation during zoom-in (p<0.08) so Bangladesh stays centered
+    earthGroup.rotation.y = Math.PI * 0.5 + tick * (p < 0.08 ? 0.015 : 0.10);
+    clouds.rotation.y     = tick * 0.16;
+
+    // Moon orbit
+    moon.position.x = -13 + Math.sin(tick * 0.07) * 2;
+    moon.position.z = -6  + Math.cos(tick * 0.07) * 2;
+
+    // Planet rotation
+    bontonP.rotation.y   = tick * 0.07;
+    eagleP.rotation.y    = tick * 0.055;
+    gobubbleP.rotation.y   = tick * 0.045;
+    bracP.rotation.y       = tick * 0.09;
+    bracGroup.rotation.y   = tick * 0.04; // orbit Earth slowly
+    proj1.rotation.y       = tick * 0.06;
+    proj2.rotation.y       = tick * 0.05;
+
+    // Lab
+    labGroup.rotation.y = tick * 0.14;
+    labGroup.rotation.z = tick * 0.07;
+
+    // Final star pulse
+    const pulse = 1 + Math.sin(tick * 0.6) * 0.015;
+    finalStar.scale.setScalar(pulse);
+
+    // Flow particles (3D scene)
+    flowParticles.forEach(fp => {
+      fp.userData.t = (fp.userData.t + fp.userData.sp) % 1;
+      fp.position.lerpVectors(nodeCoords[fp.userData.a], nodeCoords[fp.userData.b], fp.userData.t);
+    });
+
+    // Systems group idle sway
+    sysGroup.rotation.y = Math.sin(tick * 0.08) * 0.06;
+    sysGroup.rotation.x = Math.sin(tick * 0.05) * 0.03;
+
+    // Update panels
+    let activeLabel = 'MISSION 00 / LAUNCH';
+    panelEls.forEach(m => {
+      if (!m.el) return;
+      const op = panelOpacity(p, m.s, m.e);
+      m.el.style.opacity = op;
+      m.el.classList.toggle('alive', op > 0.05);
+      if (op > 0.5) activeLabel = m.label;
+    });
+
+    // Systems canvas — only when visible
+    const sysOp = parseFloat(document.getElementById('p03').style.opacity || 0);
+    if (sysOp > 0.02) drawSys();
+
+    // HUD
+    hudLabel.textContent = activeLabel;
+    hudFill.style.width  = (p * 100).toFixed(1) + '%';
+
+    // Nav dots
+    navDots.forEach(d => {
+      const t  = parseFloat(d.dataset.t);
+      const ts = [0, 0.09, 0.22, 0.50, 0.65, 0.84, 0.92];
+      const te = [0.09, 0.22, 0.50, 0.65, 0.84, 0.92, 1.00];
+      const idx = ts.indexOf(t);
+      d.classList.toggle('active', idx >= 0 && p >= ts[idx] && p < te[idx]);
+    });
+
+    renderer.render(scene, camera);
+  }
+
+  // ── Resize ─────────────────────────────────────────────────
+  window.addEventListener('resize', () => {
+    renderer.setSize(innerWidth, innerHeight);
+    camera.aspect = innerWidth / innerHeight;
+    camera.updateProjectionMatrix();
+    resizeSys();
+  });
+
+  // ── Rocket launch ──────────────────────────────────────────
+  const rocketCanvas  = document.getElementById('rocket-canvas');
+  const rocketCtx     = rocketCanvas.getContext('2d');
+  let   rocketActive  = false;
+  let   rocketT       = 0; // 0→1 over ~2.2s
+  const ROCKET_DUR    = 2200; // ms
+  let   rocketStart   = 0;
+  const flames        = [];
+
+  function initFlames(cx, cy) {
+    flames.length = 0;
+    for (let i = 0; i < 120; i++) {
+      flames.push({
+        x: cx + (Math.random() - 0.5) * 18,
+        y: cy,
+        vx: (Math.random() - 0.5) * 2.5,
+        vy: Math.random() * 4 + 2,
+        life: Math.random(),
+        maxLife: 0.5 + Math.random() * 0.8,
+        size: 3 + Math.random() * 8,
+        hue: 20 + Math.random() * 40,
+      });
+    }
+  }
+
+  function drawRocket(ts) {
+    if (!rocketActive) return;
+    rocketT = Math.min((ts - rocketStart) / ROCKET_DUR, 1);
+
+    const W = rocketCanvas.width  / devicePixelRatio;
+    const H = rocketCanvas.height / devicePixelRatio;
+    rocketCtx.clearRect(0, 0, W, H);
+
+    // Rocket travels from bottom centre upward and off screen
+    const startY = H * 0.88;
+    const cx     = W * 0.5;
+    const rktY   = startY - rocketT * (H * 1.25);
+    const ease   = rocketT < 0.5 ? 2 * rocketT * rocketT : 1 - Math.pow(-2 * rocketT + 2, 2) / 2;
+    const bodyH  = 54;
+    const bodyW  = 16;
+
+    // ── Exhaust plume ─────────────────────────
+    flames.forEach(f => {
+      f.life += 0.045;
+      if (f.life > f.maxLife) {
+        f.x = cx + (Math.random() - 0.5) * 16;
+        f.y = rktY + bodyH * 0.5 + 4;
+        f.vx = (Math.random() - 0.5) * 2.5;
+        f.vy = Math.random() * 5 + 2;
+        f.life = 0;
+        f.maxLife = 0.4 + Math.random() * 0.7;
+        f.size = 3 + Math.random() * 9;
+        f.hue = 15 + Math.random() * 45;
+      }
+      const t  = f.life / f.maxLife;
+      const fx = f.x + f.vx * f.life * 18;
+      const fy = (rktY + bodyH * 0.5 + 4) + f.vy * f.life * 22;
+      const sz = f.size * (1 - t * 0.6);
+      const al = (1 - t) * 0.9;
+      const rg = rocketCtx.createRadialGradient(fx, fy, 0, fx, fy, sz * 2.5);
+      rg.addColorStop(0, `hsla(${f.hue}, 100%, 90%, ${al})`);
+      rg.addColorStop(0.4, `hsla(${f.hue + 20}, 100%, 60%, ${al * 0.7})`);
+      rg.addColorStop(1, `hsla(${f.hue + 40}, 100%, 40%, 0)`);
+      rocketCtx.beginPath();
+      rocketCtx.arc(fx, fy, sz * 2.5, 0, Math.PI * 2);
+      rocketCtx.fillStyle = rg;
+      rocketCtx.fill();
+    });
+
+    // ── Rocket body ───────────────────────────
+    // Fuselage
+    const bodyGrad = rocketCtx.createLinearGradient(cx - bodyW, rktY, cx + bodyW, rktY);
+    bodyGrad.addColorStop(0, '#c0c8d8');
+    bodyGrad.addColorStop(0.35, '#ffffff');
+    bodyGrad.addColorStop(0.65, '#e8eef8');
+    bodyGrad.addColorStop(1, '#8898a8');
+    rocketCtx.fillStyle = bodyGrad;
+    rocketCtx.beginPath();
+    rocketCtx.roundRect(cx - bodyW * 0.5, rktY - bodyH * 0.5, bodyW, bodyH, 4);
+    rocketCtx.fill();
+
+    // Nose cone
+    rocketCtx.fillStyle = '#e82030';
+    rocketCtx.beginPath();
+    rocketCtx.moveTo(cx - bodyW * 0.5, rktY - bodyH * 0.5);
+    rocketCtx.lineTo(cx + bodyW * 0.5, rktY - bodyH * 0.5);
+    rocketCtx.lineTo(cx, rktY - bodyH * 0.5 - 24);
+    rocketCtx.closePath();
+    rocketCtx.fill();
+
+    // Fins
+    [[1],[-1]].forEach(([s]) => {
+      rocketCtx.fillStyle = '#9b2335';
+      rocketCtx.beginPath();
+      rocketCtx.moveTo(cx + s * bodyW * 0.5, rktY + bodyH * 0.5 - 4);
+      rocketCtx.lineTo(cx + s * (bodyW * 0.5 + 14), rktY + bodyH * 0.5 + 8);
+      rocketCtx.lineTo(cx + s * bodyW * 0.5, rktY + bodyH * 0.5 - 16);
+      rocketCtx.closePath();
+      rocketCtx.fill();
+    });
+
+    // Window
+    rocketCtx.beginPath();
+    rocketCtx.arc(cx, rktY - bodyH * 0.12, 5, 0, Math.PI * 2);
+    rocketCtx.fillStyle = '#7ad4ff';
+    rocketCtx.fill();
+    rocketCtx.strokeStyle = '#888';
+    rocketCtx.lineWidth = 1;
+    rocketCtx.stroke();
+
+    // ── Shock rings ────────────────────────────
+    if (rocketT < 0.3) {
+      const ringAl = (0.3 - rocketT) / 0.3 * 0.6;
+      [30, 55, 80].forEach((r, i) => {
+        const rr = r + rocketT * 60 * (i + 1);
+        rocketCtx.beginPath();
+        rocketCtx.arc(cx, startY, rr, 0, Math.PI * 2);
+        rocketCtx.strokeStyle = `rgba(255,180,60,${ringAl * (1 - i * 0.3)})`;
+        rocketCtx.lineWidth = 2 - i * 0.5;
+        rocketCtx.stroke();
+      });
+    }
+
+    if (rocketT >= 1) {
+      rocketActive = false;
+      rocketCanvas.classList.remove('active');
+      rocketCtx.clearRect(0, 0, W, H);
+      return;
+    }
+    requestAnimationFrame(drawRocket);
+  }
+
+  function launchRocket() {
+    if (rocketActive) return;
+    rocketActive = true;
+    rocketStart  = performance.now();
+    const W = innerWidth, H = innerHeight;
+    rocketCanvas.width  = W * devicePixelRatio;
+    rocketCanvas.height = H * devicePixelRatio;
+    rocketCtx.scale(devicePixelRatio, devicePixelRatio);
+    rocketCanvas.classList.add('active');
+    initFlames(W * 0.5, H * 0.88);
+    requestAnimationFrame(drawRocket);
+  }
+
+  // Fire rocket on first scroll past 2%
+  let rocketFired = false;
+  window.addEventListener('scroll', () => {
+    if (!rocketFired && window.scrollY > innerHeight * 0.48) {
+      rocketFired = true;
+      launchRocket();
+    }
+  }, { passive: true });
+
+  // ── Boot ───────────────────────────────────────────────────
+  setLoad(90);
+  resizeSys();
+
+  setTimeout(() => {
+    setLoad(100);
+    const loadEl = document.getElementById('loading');
+    loadEl.classList.add('fade-out');
+    document.getElementById('hud').classList.add('visible');
+    document.getElementById('mnav').classList.add('visible');
+    document.documentElement.style.overflow = '';
+    setTimeout(() => { loadEl.style.display = 'none'; }, 1000);
+    requestAnimationFrame(animate);
+  }, 900);
+
+})();
+</script>
+</body>
+</html>

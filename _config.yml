@@ -109,6 +109,8 @@ code_dir: downloads/code
 i18n_dir: :lang
 skip_render:
   - lab.html
+  - life.html
+  - life/**
   - work.html
   - headshot.png
   - index.html

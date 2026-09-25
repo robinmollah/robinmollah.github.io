@@ -1284,7 +1284,7 @@
     #lab-hint    { animation: labPulse 2.4s ease infinite, labFadeUp 1s ease 1s both; z-index: 102; }
   </style>
 </head>
-<body>
+<body class="lab-active">
 
   <!-- ── Lab intro (full-screen particle scene) ─────────────────────── -->
   <section id="lab-intro" aria-label="Interactive intro">
@@ -1704,8 +1704,6 @@
   <script src="https://unpkg.com/three@0.160.0/build/three.min.js"></script>
   <script>
   (function () {
-    document.body.classList.add('lab-active');
-
     const labEl  = document.getElementById('lab-intro');
     const canvas = document.getElementById('lab-canvas');
     const renderer = new THREE.WebGLRenderer({ canvas, antialias: true, alpha: true });
@@ -1771,7 +1769,8 @@
     });
 
     // ── Fly-through ────────────────────────────────────────────────────
-    let flying = false, flyProgress = 0;
+    let flying = false, flyDone = false, flyStart = 0;
+    const FLY_MS = 950;
 
     const overlay = document.createElement('div');
     Object.assign(overlay.style, {
@@ -1807,29 +1806,28 @@
     const BX = 55, BY = 37, BZ = 40;
     const BASE_THRESH = 9, MOUSE_RADIUS = 22;
 
-    function animate() {
+    function animate(now) {
       requestAnimationFrame(animate);
       tick += 0.007;
 
       if (flying) {
-        flyProgress = Math.min(flyProgress + 0.018, 1);
+        if (!flyStart) flyStart = now;
+        const flyProgress = Math.min((now - flyStart) / FLY_MS, 1);
         const ease = flyProgress * flyProgress * (3 - 2 * flyProgress);
         camera.position.z = 58 - ease * 90;
         if (flyProgress > 0.4) {
           overlay.style.opacity = Math.min((flyProgress - 0.4) / 0.6, 1).toFixed(3);
         }
-        if (flyProgress >= 1) {
-          // Reveal the portfolio — remove scroll blockers first
+        if (flyProgress >= 1 && !flyDone) {
+          flyDone = true;
           window.removeEventListener('wheel',      onWheel);
           window.removeEventListener('touchstart', onTouchStart);
           window.removeEventListener('touchmove',  onTouchMove);
           window.removeEventListener('touchend',   onTouchEnd);
-          labEl.style.opacity  = '0';
+          labEl.style.opacity   = '0';
           overlay.style.opacity = '0';
           document.body.classList.remove('lab-active');
           setTimeout(() => { labEl.style.display = 'none'; overlay.remove(); }, 650);
-          renderer.render(scene, camera);
-          return;
         }
         camera.lookAt(0, 0, 0);
         renderer.render(scene, camera);
