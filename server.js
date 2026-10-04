@@ -7,26 +7,30 @@ const app = express();
 const port = Number(process.env.PORT || 8000);
 const posts = new Map(getPosts().map((post) => [post.slug, post]));
 
-app.get('/blog/', (req, res) => {
-  const list = [...posts.values()].map(({ title, date, slug }) => `<article><h2><a href="/blog/${slug}/">${title}</a></h2><p class="muted">${date.slice(0, 4)}</p></article>`).join('\n');
-  res.send(ejs.render(template, { title: 'Blog', description: 'Engineering notes by Robin Mollah.', body: `<h1>Engineering notes</h1><p class="muted">Rendered from Markdown by EJS in development mode.</p>${list}` }));
+app.get('/archive/', (req, res) => {
+  const list = [...posts.values()].map(({ title, date, slug }) => `<article><h2><a href="/archive/${slug}/">${title}</a></h2><p class="muted">${date.slice(0, 4)}</p></article>`).join('\n');
+  res.send(ejs.render(template, { title: 'Archive', description: 'Archived engineering notes by Robin Mollah.', body: `<h1>Archive</h1><p class="muted">Rendered from Markdown by EJS in development mode.</p>${list}` }));
 });
+
+app.get('/blog/', (req, res) => res.redirect('/archive/'));
+app.get('/blog/:slug/', (req, res) => res.redirect(`/archive/${req.params.slug}/`));
+app.get('/blog/:slug', (req, res) => res.redirect(`/archive/${req.params.slug}/`));
 
 function renderPost(req, res, next) {
   const post = posts.get(req.params.slug);
   if (!post) return next();
-  res.send(renderMarkdownPage(post.source, '/blog/').html);
+  res.send(renderMarkdownPage(post.source, '/archive/').html);
 }
 
-app.get('/blog/:slug/', renderPost);
-app.get('/blog/:slug', renderPost);
+app.get('/archive/:slug/', renderPost);
+app.get('/archive/:slug', renderPost);
 
-app.get('/blog/:slug/:asset', (req, res, next) => {
+app.get('/archive/:slug/:asset', (req, res, next) => {
   const post = posts.get(req.params.slug);
   if (!post) return next();
   const asset = path.basename(req.params.asset);
-  const file = path.join(root, 'content', 'posts', path.basename(post.file, '.md'), asset);
-  if (!file.startsWith(path.join(root, 'content', 'posts')) || !fs.existsSync(file)) return next();
+  const file = path.join(root, 'content', 'archive', path.basename(post.file, '.md'), asset);
+  if (!file.startsWith(path.join(root, 'content', 'archive')) || !fs.existsSync(file)) return next();
   res.sendFile(file);
 });
 

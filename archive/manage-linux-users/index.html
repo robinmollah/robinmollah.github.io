@@ -1,0 +1,53 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Personal cheat sheet | Manage Linux users | Robin Mollah</title>
+  <meta name="description" content="Personal cheat sheet | Manage Linux users">
+  <link rel="stylesheet" href="/site.css">
+</head>
+<body>
+  <nav>
+    <a href="/">Robin Mollah</a>
+    <a href="/archive/">Archive</a>
+    <a href="/about/">About</a>
+    <a href="/tools/">Tools</a>
+    <a href="/work.html">Work</a>
+    <a href="/contact/">Contact</a>
+  </nav>
+  <main><p><a href="/archive/">← All engineering notes</a></p><article><h1>Personal cheat sheet | Manage Linux users</h1><p class="muted">2021-09-22 13:45:39</p><h1>Create a new user</h1>
+<h2>Add a new user</h2>
+<pre><code class="language-shell">sudo adduser robin
+</code></pre>
+<!--more-->
+<h2>Create user and home directory</h2>
+<pre><code class="language-shell">sudo useradd -m -s /bin/bash robin
+</code></pre>
+<p>Here, the <code>-m</code> flag creates the home directory for the user.</p>
+<p>Interesting fact: If there is no home directory created for the user, the user can&#39;t login using the GUI.</p>
+<h2>Add user to sudo group</h2>
+<pre><code class="language-shell">sudo usermod -aG sudo robin
+</code></pre>
+<p>Note: If the user is not added to the sudo-er list, user cannot run the <code>sudo</code> commands.</p>
+<h2>Change user password</h2>
+<pre><code class="language-shell">sudo passwd robin
+</code></pre>
+<h2>Delete a user</h2>
+<pre><code class="language-shell">sudo deluser robin
+</code></pre>
+<h2>Delete a user with home directory</h2>
+<pre><code class="language-shell">sudo deluser --remove-home robin
+</code></pre>
+<h2>Change user name</h2>
+<pre><code class="language-shell">sudo usermod -l newname oldname
+</code></pre>
+<h2>Change user home directory</h2>
+<pre><code class="language-shell">sudo usermod -d /new/home/dir -m username
+</code></pre>
+<h2>Change user shell</h2>
+<pre><code class="language-shell">sudo usermod -s /bin/bash robin
+</code></pre>
+</article></main>
+</body>
+</html>

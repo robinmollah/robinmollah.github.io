@@ -11,7 +11,7 @@ npm install
 npm run dev
 ```
 
-Open <http://localhost:8000>. The blog is at <http://localhost:8000/blog/>.
+Open <http://localhost:8000>. The archive is at <http://localhost:8000/archive/>.
 
 ## Production build
 

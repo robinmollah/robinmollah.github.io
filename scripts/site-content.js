@@ -33,10 +33,10 @@ function renderMarkdownPage(file, backLink = '') {
 }
 
 function getPosts() {
-  return fs.readdirSync(path.join(root, 'content', 'posts'))
+  return fs.readdirSync(path.join(root, 'content', 'archive'))
     .filter((file) => file.endsWith('.md'))
     .map((file) => {
-      const source = path.join(root, 'content', 'posts', file);
+      const source = path.join(root, 'content', 'archive', file);
       const { attributes } = readMarkdown(source);
       return { file, source, title: attributes.title || path.basename(file, '.md'), date: attributes.date || '', slug: slugify(path.basename(file, '.md')) };
     })

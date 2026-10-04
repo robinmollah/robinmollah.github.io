@@ -1,0 +1,62 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Generating Lets Encrypt SSL certificate using Certbot | Robin Mollah</title>
+  <meta name="description" content="Generating Lets Encrypt SSL certificate using Certbot">
+  <link rel="stylesheet" href="/site.css">
+</head>
+<body>
+  <nav>
+    <a href="/">Robin Mollah</a>
+    <a href="/archive/">Archive</a>
+    <a href="/about/">About</a>
+    <a href="/tools/">Tools</a>
+    <a href="/work.html">Work</a>
+    <a href="/contact/">Contact</a>
+  </nav>
+  <main><p><a href="/archive/">← All engineering notes</a></p><article><h1>Generating Lets Encrypt SSL certificate using Certbot</h1><p class="muted">2022-11-13 05:45:08</p><p>Let&#39;s Encrypt allows to generate a free SSL certificate for almost anyone who owns a domain. Generating an SSL certificate
+is very easy when you are behind a NGINX server or the IP Address is directly pointing to the server you are IN.
+It gets a bit tricky in other cases. You have to use the certbot&#39;s DNS challenge verifying ownership of the domain. Here
+are the steps:</p>
+<!--more-->
+
+<h3>Install certbot</h3>
+<pre><code>sudo apt-add-repository ppa:certbot/certbot
+sudo apt install certbot
+</code></pre>
+<h3>Requesting a certificate</h3>
+<p>Here I am requesting an wildcard SSL certificate for <code>*.robin.engineer</code>. You can try using your domain.</p>
+<pre><code>sudo certbot certonly --manual --preferred-challenges dns -d *.robin.engineer
+</code></pre>
+<p>You will see an output like the following:</p>
+<pre><code>Requesting a certificate for *.robin.engineer
+
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+Please deploy a DNS TXT record under the name:
+
+_acme-challenge.robin.engineer.
+
+with the following value:
+
+YFIQf3EDS1PG17pJ3hGiAS3xEtwr4CSA2noBbFYe2Yc
+
+Before continuing, verify the TXT record has been deployed. Depending on the DNS
+provider, this may take some time, from a few seconds to multiple minutes. You can
+check if it has finished deploying with aid of online tools, such as the Google
+Admin Toolbox: https://toolbox.googleapps.com/apps/dig/#TXT/_acme-challenge.robin.engineer.
+Look for one or more bolded line(s) below the line &#39;;ANSWER&#39;. It should show the
+value(s) you&#39;ve just added.
+</code></pre>
+<h3>Automation of adding DNS record</h3>
+<p>In my case, I needed to add DNS record to the Azure platform. To add DNS record, you can run the following command:</p>
+<pre><code>az network dns record-set txt add-record --resource-group myresourcegroup --zone-name robin.engineer --record-set-name _acme-challenge.robin.engineer --value &quot;YFIQf3EDS1PG17pJ3hGiAS3xEtwr4CSA2noBbFYe2Yc&quot;
+</code></pre>
+<h4>Helpful commands regarding DNS record automation</h4>
+<p>List zone list:</p>
+<pre><code class="language-shell">az network dns zone list --query &quot;[].name&quot;
+</code></pre>
+</article></main>
+</body>
+</html>
