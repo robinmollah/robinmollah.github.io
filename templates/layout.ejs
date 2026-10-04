@@ -1,0 +1,21 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title><%= title %> | Robin Mollah</title>
+  <% if (description) { %><meta name="description" content="<%= description %>"><% } %>
+  <link rel="stylesheet" href="/site.css">
+</head>
+<body>
+  <nav>
+    <a href="/">Robin Mollah</a>
+    <a href="/blog/">Blog</a>
+    <a href="/about/">About</a>
+    <a href="/tools/">Tools</a>
+    <a href="/work.html">Work</a>
+    <a href="/contact/">Contact</a>
+  </nav>
+  <main><%- body %></main>
+</body>
+</html>

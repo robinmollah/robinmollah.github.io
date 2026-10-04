@@ -1,0 +1,14 @@
+{
+  "name": "robinmollah-static-site",
+  "private": true,
+  "scripts": {
+    "build": "node scripts/build.js",
+    "dev": "node server.js",
+    "serve": "python3 -m http.server 8000"
+  },
+  "dependencies": {
+    "ejs": "^3.1.10",
+    "express": "^5.1.0",
+    "marked": "^15.0.12"
+  }
+}

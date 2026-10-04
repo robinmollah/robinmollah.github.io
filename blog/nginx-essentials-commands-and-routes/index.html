@@ -8,37 +8,54 @@
   <link rel="stylesheet" href="/site.css">
 </head>
 <body>
-  <nav><a href="/">Robin Mollah</a><a href="/blog/">Blog</a><a href="/about/">About</a><a href="/tools/">Tools</a><a href="/work.html">Work</a><a href="/contact/">Contact</a></nav>
-  <main><p><a href="/blog/">← All engineering notes</a></p><article><h1>Nginx essential cheatsheet</h1><p class="muted">2022-12-06 00:45:09</p><p>Nginx saves it's logs, configs, binaries in different folder in different operating system. Every time I struggle to find them in different locations. Also, the commands are different. I have curated these in this document based on Ubuntu, Macbook and CentOS(coming soon). Moreover, there are some frequently encountered issues and solution.</p>
+  <nav>
+    <a href="/">Robin Mollah</a>
+    <a href="/blog/">Blog</a>
+    <a href="/about/">About</a>
+    <a href="/tools/">Tools</a>
+    <a href="/work.html">Work</a>
+    <a href="/contact/">Contact</a>
+  </nav>
+  <main><p><a href="/blog/">← All engineering notes</a></p><article><h1>Nginx essential cheatsheet</h1><p class="muted">2022-12-06 00:45:09</p><p>Nginx saves it&#39;s logs, configs, binaries in different folder in different operating system. Every time I struggle to find them in different locations.
+Also, the commands are different. I have curated these in this document based on Ubuntu, Macbook and CentOS(coming soon).
+Moreover, there are some frequently encountered issues and solution.</p>
 <!--more-->
-
-<h3 id="root-config-file-location">Root config file location</h3>
-<p>Mac: <code>/usr/local/etc/nginx/nginx.conf</code><br> Ubuntu: <code>/etc/nginx/nginx.conf</code></p>
-<h3 id="log-file-location">Log file location</h3>
+<h3>Root config file location</h3>
+<p>Mac: <code>/usr/local/etc/nginx/nginx.conf</code><br>
+Ubuntu: <code>/etc/nginx/nginx.conf</code></p>
+<h3>Log file location</h3>
 <p>You may need to uncomment a line in the config file to actually get error dump in the file. You may wish to keep it clean periodically.</p>
-<p>Mac: <code>/usr/local/Cellar/nginx/1.23.2/logs/error.log</code><br> Ubuntu: <code>access_log /var/log/nginx/access.log</code> <code>error_log /var/log/nginx/error.log</code></p>
-<h3 id="commands">Commands</h3>
-<h4 id="test-config-files">Test config files</h4>
+<p>Mac: <code>/usr/local/Cellar/nginx/1.23.2/logs/error.log</code><br>
+Ubuntu: <code>access_log /var/log/nginx/access.log</code>
+<code>error_log /var/log/nginx/error.log</code></p>
+<h3>Commands</h3>
+<h4>Test config files</h4>
 <p>Mac: <code>sudo nginx -t</code></p>
-<h4 id="reload-config-files">Reload config files</h4>
-<p>Mac: <code>sudo nginx -s reload</code><br> Linux: <code>sudo systemctl reload nginx</code><br> <code>sudo service nginx reload</code></p>
-<h4 id="stop-nginx">Stop nginx</h4>
-<p>Mac: <code>sudo nginx -s stop</code> Ubuntu: <code>sudo systemctl start nginx</code></p>
-<h4 id="start-nginx">Start nginx</h4>
-<p>Mac: <code>sudo nginx</code><br> Linux: <code>sudo systemctl start nginx</code></p>
-<h4 id="restart-nginx">Restart nginx</h4>
-<p>Linux: <code>sudo systemctl restart nginx</code><br> <code>sudo /etc/init.d/nginx restart</code></p>
-<h3 id="troubleshooting">Troubleshooting</h3>
-<h4 id="upstream-sent-too-big-header-while-reading-response-header-from-upstream">upstream sent too big header while reading response header from upstream</h4>
+<h4>Reload config files</h4>
+<p>Mac: <code>sudo nginx -s reload</code><br>
+Linux: <code>sudo systemctl reload nginx</code><br>
+<code>sudo service nginx reload</code></p>
+<h4>Stop nginx</h4>
+<p>Mac: <code>sudo nginx -s stop</code>
+Ubuntu: <code>sudo systemctl start nginx</code></p>
+<h4>Start nginx</h4>
+<p>Mac: <code>sudo nginx</code><br>
+Linux: <code>sudo systemctl start nginx</code></p>
+<h4>Restart nginx</h4>
+<p>Linux: <code>sudo systemctl restart nginx</code><br>
+<code>sudo /etc/init.d/nginx restart</code></p>
+<h3>Troubleshooting</h3>
+<h4>upstream sent too big header while reading response header from upstream</h4>
 <p>It occurs in a reverse proxy block. To fix this issue, find the reverse proxy block and add the following statements.</p>
 <pre><code>location / {
     proxy_pass http://127.0.0.1:8080;
     proxy_busy_buffers_size 512k;
     proxy_buffers 4 512k;
     proxy_buffer_size 256k;
-}</code></pre>
-<h4 id="rewrite-based-on-a-part-of-url">Rewrite based on a part of URL</h4>
-<p>I actually don't try to use the <code>rewrite</code> statement until it's really necessary. Here are some examples, that can be achieved using <code>rewrite</code> and regex based location block both.</p>
+}
+</code></pre>
+<h4>Rewrite based on a part of URL</h4>
+<p>I actually don&#39;t try to use the <code>rewrite</code> statement until it&#39;s really necessary. Here are some examples, that can be achieved using <code>rewrite</code> and regex based location block both.</p>
 <pre><code>location ~ /server1/(.*)$ {
     proxy_pass http://127.0.0.1:3050/$1;
     proxy_http_version 1.1;
@@ -53,11 +70,13 @@ location ~ /server2/(.*)$ {
     proxy_set_header Upgrade $http_upgrade;
     proxy_set_header Connection &quot;upgrade&quot;;
     proxy_read_timeout 86400s;
-}</code></pre>
-<h4 id="rewrite">Rewrite</h4>
-<pre class="shell"><code>rewrite regex URL [flag];</code></pre>
+}
+</code></pre>
+<h4>Rewrite</h4>
+<pre><code class="language-shell">rewrite regex URL [flag];
+</code></pre>
 <p>Using <code>rewrite</code> URL(not tested),</p>
-<pre class="shell"><code>location /server1/ {
+<pre><code class="language-shell">location /server1/ {
     rewrite ^/server1/(.*)$ /$1 last;
     proxy_pass http://127.0.0.1:3050/;
     proxy_http_version 1.1;
@@ -73,9 +92,12 @@ location /server2/ {
     proxy_set_header Upgrade $http_upgrade;
     proxy_set_header Connection &quot;upgrade&quot;;
     proxy_read_timeout 86400s;
-}</code></pre>
+}
+</code></pre>
 <p>Above blocks can be merged, will update it later.</p>
-<p>Above config sends <code>http://example.com/server1/robin</code> request to a service running in the 3050 port, like <code>LOCALHOST:3050/robin</code>. Also, sends <code>http://example.com/server2/robin</code> request to a service running in the 3052 port, like <code>LOCALHOST:3052/robin</code>. Note: It's not redirection.</p>
+<p>Above config sends <code>http://example.com/server1/robin</code> request to a service running in the 3050 port, like <code>LOCALHOST:3050/robin</code>.
+Also, sends <code>http://example.com/server2/robin</code> request to a service running in the 3052 port, like <code>LOCALHOST:3052/robin</code>.
+Note: It&#39;s not redirection.</p>
 </article></main>
 </body>
 </html>

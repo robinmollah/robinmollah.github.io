@@ -8,19 +8,28 @@
   <link rel="stylesheet" href="/site.css">
 </head>
 <body>
-  <nav><a href="/">Robin Mollah</a><a href="/blog/">Blog</a><a href="/about/">About</a><a href="/tools/">Tools</a><a href="/work.html">Work</a><a href="/contact/">Contact</a></nav>
-  <main><p><a href="/blog/">← All engineering notes</a></p><article><h1>Maintaining extra large binary files with Git and GCS</h1><p class="muted">2022-07-22 16:29:21</p><h5 id="writing-in-progress">[Writing in progress]</h5>
-<h3 id="index">Index</h3>
+  <nav>
+    <a href="/">Robin Mollah</a>
+    <a href="/blog/">Blog</a>
+    <a href="/about/">About</a>
+    <a href="/tools/">Tools</a>
+    <a href="/work.html">Work</a>
+    <a href="/contact/">Contact</a>
+  </nav>
+  <main><p><a href="/blog/">← All engineering notes</a></p><article><h1>Maintaining extra large binary files with Git and GCS</h1><p class="muted">2022-07-22 16:29:21</p><h5>[Writing in progress]</h5>
+<h3>Index</h3>
 <ul>
 <li>Overview</li>
 <li>Limits of existing git servers</li>
 <li>Gitea</li>
 <li>Method of integration with GCS</li>
 </ul>
-<p>Git is not good for version controlling large binary files. Especially if they are frequently making a huge historical changes. The repository size increases rapidly. It exponentially increases the time to clone the repository to a new machine or instance.</p>
+<p>Git is not good for version controlling large binary files. Especially if they are frequently making a huge historical changes.
+The repository size increases rapidly. It exponentially increases the time to clone the repository to a new machine or instance.</p>
 <p>There is a maximum file and repository limits in Git systems as well.</p>
-<p>Besides, we don't get a lot of benefits of Git for binary files. For example, we can't merge the changes from different branches. We cannot have a meaningful history of the changes.</p>
-<h3 id="in-this-article-i-will-be-discussing-the-size-issues-and-their-solutions-only">In this article I will be discussing the size issues and their solutions only.</h3>
+<p>Besides, we don&#39;t get a lot of benefits of Git for binary files. For example, we can&#39;t merge the changes from different branches.
+We cannot have a meaningful history of the changes.</p>
+<h3>In this article I will be discussing the size issues and their solutions only.</h3>
 <p>In this table, I am showing the comparison between some popular Git systems and their maximum allowed size.</p>
 <table>
 <thead>
@@ -31,8 +40,7 @@
 <th>GitLab</th>
 </tr>
 </thead>
-<tbody>
-<tr>
+<tbody><tr>
 <td>Single file limit</td>
 <td>normally: <strong>100 MB</strong><br>With LFS: <strong>2GB</strong></td>
 <td></td>
@@ -44,13 +52,13 @@
 <td>normally: <strong>2 GB</strong><br>With LFS and paid upto <strong>4GB</strong></td>
 <td></td>
 </tr>
-</tbody>
-</table>
+</tbody></table>
 <!--more-->
-
-<p>However, one solution could be deploying your own git server. It is very easy to deploy your own git server, without the above limits using <a href="https://gitea.io/">Gitea</a>. You will still need to use Git LFS for extra large files and the issue of cloning and maintaining is still there.</p>
+<p>However, one solution could be deploying your own git server. It is very easy to deploy your own git server, without the above 
+limits using <a href="https://gitea.io/">Gitea</a>. You will still need to use Git LFS for extra large files and the issue of cloning and maintaining
+is still there.</p>
 <p>So, experiencing all above methods, I have found we can integrate GitHub with GCS and a bit of scripting to make it work seamlessly.</p>
-<h3 id="how-it-works">How it works?</h3>
+<h3>How it works?</h3>
 <p>In brief, binary files are ignored from the Git system. But while committing a change and tagged with <code>bin-updated</code>, it get uploaded in a GCS bucket.</p>
 <p>Prerequisite knowledge:</p>
 <ul>
@@ -59,19 +67,25 @@
 <li>gcloud : Used to authenticate to gcloud.</li>
 <li>gsutil : Upload file to GCS.</li>
 </ul>
-<h3 id="setting-up-gcs">Setting up GCS</h3>
+<h3>Setting up GCS</h3>
 <ul>
-<li>Login to GCS <code>gcloud auth login</code></li>
-<li><a href="https://cloud.google.com/storage/docs/creating-buckets#storage-create-bucket-cli">Create a bucket</a> <code>gsutil mb gs://BUCKET_NAME</code></li>
-<li><a href="https://cloud.google.com/storage/docs/uploading-objects#gsutil">Upload to GCS</a> <code>gsutil cp &lt;file_path&gt; gs://&lt;bucket_name&gt;/&lt;file_name&gt;</code></li>
-<li><a href="https://cloud.google.com/storage/docs/downloading-objects#gsutil">Download from GCS</a> <code>gsutil cp gs://&lt;bucket_name&gt;/&lt;file_name&gt; &lt;file_path&gt;</code></li>
+<li>Login to GCS
+<code>gcloud auth login</code></li>
+<li><a href="https://cloud.google.com/storage/docs/creating-buckets#storage-create-bucket-cli">Create a bucket</a>
+<code>gsutil mb gs://BUCKET_NAME</code></li>
+<li><a href="https://cloud.google.com/storage/docs/uploading-objects#gsutil">Upload to GCS</a>
+<code>gsutil cp &lt;file_path&gt; gs://&lt;bucket_name&gt;/&lt;file_name&gt;</code></li>
+<li><a href="https://cloud.google.com/storage/docs/downloading-objects#gsutil">Download from GCS</a>
+<code>gsutil cp gs://&lt;bucket_name&gt;/&lt;file_name&gt; &lt;file_path&gt;</code></li>
 </ul>
-<h3 id="scripting-git-hooks">Scripting Git Hooks</h3>
-<h4 id="on-client-side">On client side:</h4>
-<p><strong><a href="https://stackoverflow.com/questions/4196148/git-pre-push-hooks">pre-push hook</a>:</strong> The script uploads the file to GCS and leaves a text file in that files location with extension <code>.cloud</code> containing the gcs path of the file.</p>
-<h4 id="on-server-side">On server side:</h4>
-<p><strong><a href="https://stackoverflow.com/questions/28106011/understanding-git-hook-post-receive-hook">post-receive hook</a>:</strong> The script finds all files with <code>.cloud</code> extension and downloads from the gcs bucket in that folder.</p>
-<h4 id="reference">Reference</h4>
+<h3>Scripting Git Hooks</h3>
+<h4>On client side:</h4>
+<p><strong><a href="https://stackoverflow.com/questions/4196148/git-pre-push-hooks">pre-push hook</a>:</strong>
+The script uploads the file to GCS and leaves a text file in that files location with extension <code>.cloud</code> containing the gcs path of the file.</p>
+<h4>On server side:</h4>
+<p><strong><a href="https://stackoverflow.com/questions/28106011/understanding-git-hook-post-receive-hook">post-receive hook</a>:</strong>
+The script finds all files with <code>.cloud</code> extension and downloads from the gcs bucket in that folder.</p>
+<h4>Reference</h4>
 <ul>
 <li><a href="https://docs.github.com/en/repositories/working-with-files/managing-large-files/about-large-files-on-github">GitHub limits</a></li>
 <li><a href="https://support.atlassian.com/bitbucket-cloud/docs/reduce-repository-size/">BitBucket limits</a></li>

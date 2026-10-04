@@ -24,6 +24,8 @@ jobs:
     steps:
       - name: Check out the site
         uses: actions/checkout@v4
+      - name: Build static HTML
+        run: npm ci && npm run build
       - name: Configure GitHub Pages
         uses: actions/configure-pages@v5
       - name: Upload static site

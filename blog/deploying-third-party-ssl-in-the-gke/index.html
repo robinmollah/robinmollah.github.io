@@ -8,10 +8,17 @@
   <link rel="stylesheet" href="/site.css">
 </head>
 <body>
-  <nav><a href="/">Robin Mollah</a><a href="/blog/">Blog</a><a href="/about/">About</a><a href="/tools/">Tools</a><a href="/work.html">Work</a><a href="/contact/">Contact</a></nav>
-  <main><p><a href="/blog/">← All engineering notes</a></p><article><h1>Deploying third party SSL in the GKE</h1><p class="muted">2022-11-08 13:45:39</p><h2 id="prerequisite">Prerequisite</h2>
+  <nav>
+    <a href="/">Robin Mollah</a>
+    <a href="/blog/">Blog</a>
+    <a href="/about/">About</a>
+    <a href="/tools/">Tools</a>
+    <a href="/work.html">Work</a>
+    <a href="/contact/">Contact</a>
+  </nav>
+  <main><p><a href="/blog/">← All engineering notes</a></p><article><h1>Deploying third party SSL in the GKE</h1><p class="muted">2022-11-08 13:45:39</p><h2>Prerequisite</h2>
 <p>You already have the fullchain and private key of the SSL certificate. How to use them to access a deployment.</p>
-<h3 id="kubernetes-resources">Kubernetes resources</h3>
+<h3>Kubernetes resources</h3>
 <p>We will need the following resources:</p>
 <ul>
 <li>A deployment (WebServer) <strong>[Pre-requisite]</strong></li>
@@ -21,9 +28,11 @@
 </ul>
 <!--more-->
 
-<h4 id="upload-ssl-certificate-as-secret">Upload SSL Certificate as secret</h4>
-<p>Example of HAML:<br> ssl.yml</p>
-<pre class="yaml"><code>apiVersion: v1
+
+<h4>Upload SSL Certificate as secret</h4>
+<p>Example of HAML:<br>
+ssl.yml</p>
+<pre><code class="language-yaml">apiVersion: v1
 data:
   tls.crt: {{fullchain.pem_content_base64_encoded}}
   tls.key: {{privkey.pem_content_base64_encoded}}
@@ -31,12 +40,15 @@ kind: Secret
 metadata:
   name: secret_name_for_ssl
   namespace: default
-type: kubernetes.io/tls</code></pre>
+type: kubernetes.io/tls
+</code></pre>
 <p>In the <code>tls.crt</code> and <code>tls.key</code> value, put base64 encoded string of fullchain.pem and privkey.pem files contents.</p>
-<p>Run <code>kubectl apply -f ssl.yml</code> <strong>Do not add this file in the git, as it contains sensitive certificate credentials.</strong></p>
-<h4 id="nodeport-service---deployment">NodePort Service -&gt; Deployment</h4>
-<p>Example HAML: nodeport.yml</p>
-<pre class="yaml"><code>apiVersion: &quot;v1&quot;
+<p>Run <code>kubectl apply -f ssl.yml</code>
+<strong>Do not add this file in the git, as it contains sensitive certificate credentials.</strong></p>
+<h4>NodePort Service -&gt; Deployment</h4>
+<p>Example HAML:
+nodeport.yml</p>
+<pre><code class="language-yaml">apiVersion: &quot;v1&quot;
 kind: &quot;Service&quot;
 metadata:
   name: &quot;nodeport_service_name&quot;
@@ -50,11 +62,13 @@ spec:
       targetPort: 80
   selector:
     app: &quot;deployment_name&quot;
-  type: &quot;NodePort&quot;</code></pre>
+  type: &quot;NodePort&quot;
+</code></pre>
 <p>Run <code>kubectl apply -f nodeport.yml</code></p>
-<h4 id="ingress---nodeport-service">Ingress -&gt; NodePort Service</h4>
-<p>Example HAML: ingress.yml</p>
-<pre class="yaml"><code>apiVersion: networking.k8s.io/v1
+<h4>Ingress -&gt; NodePort Service</h4>
+<p>Example HAML:
+ingress.yml</p>
+<pre><code class="language-yaml">apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
   name: &quot;ingress_name&quot;
@@ -65,9 +79,10 @@ spec:
     service:
       name: nodeport_service_name
       port:
-        number: 80</code></pre>
+        number: 80
+</code></pre>
 <p>Run <code>kubectl apply -f ingress.yml</code></p>
-<h4 id="known-issues">Known issues</h4>
+<h4>Known issues</h4>
 <p>It takes some time to get the SSL certificate available to the ingress.</p>
 </article></main>
 </body>
