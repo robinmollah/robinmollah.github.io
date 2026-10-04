@@ -1,0 +1,35 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>What you need to know about AWS Lambda before using it. | Robin Mollah</title>
+  <meta name="description" content="What you need to know about AWS Lambda before using it.">
+  <link rel="stylesheet" href="/site.css">
+</head>
+<body>
+  <nav><a href="/">Robin Mollah</a><a href="/blog/">Blog</a><a href="/about/">About</a><a href="/tools/">Tools</a><a href="/work.html">Work</a><a href="/contact/">Contact</a></nav>
+  <main><p><a href="/blog/">← All engineering notes</a></p><article><h1>What you need to know about AWS Lambda before using it.</h1><p class="muted">2021-08-25 17:11:46</p><p>Lambda is a Function-as-a-Service program of AWS. It has a lot of awesome features. We deployed some of our API's that was written in NodeJS to Lambda. In this article, I will share my experience of migrating frm Express also I will go through the benefits and disadvantages of Lambda. Please note that, this article is not about introduction to Lambda rather than a review on it.</p>
+<h2 id="migrating-from-express-to-lambda">Migrating from Express to Lambda</h2>
+<p>There are several ways you can migrate from Express to Lambda. The fastest way is using <strong>aws serverless express</strong> node module. But using this method <strong>creates some difficulties to manage API Gateway tool</strong>. When using Express in Lambda, API Gateway tool lose the ability to manage individuals routes. It redirects all requests to Express. API Gateway tools provides a lot of benefits for managing routes including Authorization, staging, documentation, and easy to add, delete or rename the routes by button clicks.</p>
+<!--more-->
+
+<p>Another approach is, practically breaking down the project into several parts. It is a time-consuming process if you have never thought about it at the beginning of development. In most cases, every route will produce a new function.</p>
+<h2 id="benefits-of-lambda">Benefits of Lambda</h2>
+<h3 id="nice-collaboration-with-other-aws-services">Nice collaboration with other AWS Services</h3>
+<p>I have used API Gateway and EventBridge with Lambda. But, Lambda function can be triggered from a large ranging sources like SNS, SQS, S3 Events, DynamoDB, Apache Kafka, Several IoT and third party triggers. It also enables to add destinations to another Lambda(chaining), SNS Topic, SQS Queue or EventBridge.</p>
+<h3 id="fine-grip-on-the-execution-and-security">Fine grip on the execution and security</h3>
+<p>Lambda gives wide range of control over the API including authentication, execution environment and security. As, you can assign specific IAM permissions to each function, you can also add a custom policy to the function. Usually, when running in the server, the whole server is using a single API KEY of same IAM account. Also, Lambda offers several ways for authentication of API Gateways.</p>
+<h3 id="team-collaboration">Team collaboration</h3>
+<p>Lambda can be written in several languages and separately. Suppose, I love working with NodeJS. But, I want to have a simple function from my friend who only works with Python or Java. He can write a Python function, and it works smoothly with other NodeJS applications.</p>
+<h2 id="disadvantages">Disadvantages</h2>
+<h3 id="debugging">Debugging</h3>
+<p>When other AWS Services are used in Lambda functions, there are some difficulties to debug. Lambda functions need to be provided some roles and permissions. In local environment, usually permissions are Admin level. The easies way to debug Lambda function is to write a test JSON file and run it using that JSON file. Now, creating and managing those test cases becomes another task. Then, when we are using the Lambda function behind a API Gateway, we need to write a test case for each API. So, getting a properly unit tested environment requires a good amount of management. It is possible to run the function in local docker environment, but that doesn't take into account the permissions of the function and it also takes a lot of time to run.</p>
+<h3 id="management-of-functions">Management of functions</h3>
+<p>When your project grows, and the number of functions increases, it is very hard to maintain many functions separately. So, in this stage, you can think about merging some functions together, because there is no option to make folders. But, you can make put as many Javascript function you want then write some internal codes to execute them depending on the type of trigger. API Gateway has a nice looking view to do that.</p>
+<h3 id="version-control-system">Version Control System</h3>
+<p>It is quite hard to manage Version Controls of Lambda. If your functions are small then a repository is a too large subject to maintain them. Even, if you maintain a version control system, it doesn't really help to move it to another AWS Account for easy deployment. Because still you will need to go to the AWS Console to do other stuffs.</p>
+<p>To tackle this scenario, I have written another blog on <code>CloudFormation</code>. For better decision-making you can see the differences between CloudFormation and Terraform in <a href="https://cloudonaut.io/cloudformation-vs-terraform/">this blog</a>.</p>
+</article></main>
+</body>
+</html>

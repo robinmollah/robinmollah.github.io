@@ -1,0 +1,68 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Uploading extra large files to S3 | Robin Mollah</title>
+  <meta name="description" content="Uploading extra large files to S3">
+  <link rel="stylesheet" href="/site.css">
+</head>
+<body>
+  <nav><a href="/">Robin Mollah</a><a href="/blog/">Blog</a><a href="/about/">About</a><a href="/tools/">Tools</a><a href="/work.html">Work</a><a href="/contact/">Contact</a></nav>
+  <main><p><a href="/blog/">← All engineering notes</a></p><article><h1>Uploading extra large files to S3</h1><p class="muted">2021-12-26 01:52:14</p><p>In this article, I will be discussing 3 approaches we have followed to upload large files to S3. As requirements increased, we had to face some issues in different methods we have faced and finally came out with the highest possible performance in S3. We have tried the following methods</p>
+<ul>
+<li>Streaming through multer-s3</li>
+<li>Single PUT Request</li>
+<li>Single POST Request</li>
+<li>Multipart Upload</li>
+</ul>
+<!--more-->
+
+<h2 id="multer-s3"><a href="https://www.npmjs.com/package/multer-s3">Multer-S3</a></h2>
+<p>This is the quickest way to implement the upload to S3. The file is streamed through an intermediary server provisioned by us. Multer-S3 is a simple middleware that takes care of permission related stuffs and other managements required.</p>
+<h3 id="pros">Pros</h3>
+<ul>
+<li>Fastest to implement</li>
+</ul>
+<p>[[Insert image explaining the architecture]]</p>
+<h3 id="cons">Cons</h3>
+<h4 id="intermediary-server-bottlenecks-bandwidth">Intermediary server bottlenecks bandwidth</h4>
+<p>Intermediary server needs to have a lot of upload and download speed. And eventually, the server is always a breaking point. The upload speed can be severely affected when number of uploaders increase.</p>
+<h4 id="no-considerable-file-size-limit-for-our-requirements">No considerable file size limit [for our requirements]</h4>
+<h4 id="cannot-a-resume-an-interrupted-upload">Cannot a resume an interrupted upload</h4>
+<p>Upload can be interrupted for network issues. It needs to be started from the beginning when using Multer-S3.</p>
+<h2 id="put-request">PUT Request</h2>
+<p>We will need to generate a signed URL from S3 and then upload the file to S3. So, you will need to have a backend server that will contain a function to retrieve a signed URL to upload a file. You will be able to mention expiry time, content type and other for that URL. In our case, we have deployed this function in AWS Lambda.</p>
+<p>[[Insert image explaining the architecture]]</p>
+<h3 id="pros-1">Pros</h3>
+<h4 id="no-need-to-worry-about-the-intermediary-server">No need to worry about the intermediary server</h4>
+<p>It directly uploads from browser to S3.</p>
+<h3 id="cons-1">Cons</h3>
+<h4 id="cannot-resume-a-failed-upload">Cannot resume a failed upload</h4>
+<p>If upload is failed due to network issues, we have to start from the beginning. Also, network needs to be stable for the duration of the upload. As the file size is long, the time period is also very long.</p>
+<h4 id="file-size-limited-to-2-gb">File size limited to 2 GB</h4>
+<h4 id="browser-gets-stuck-when-uploading-large-files">Browser gets stuck when uploading large files</h4>
+<p>It sends data by XMLHttpRequest. So, the browser loads the whole file in memory before uploading it.</p>
+<h2 id="post-request">POST Request</h2>
+<p>The process of generating signed URL is more like the PUT Request. In a single POST request we can send upto 2 GB/5 GB file. Finally, we have used this method to upload the file to S3 in conjunction with multipart upload strategy.</p>
+<h3 id="pros-2">Pros</h3>
+<h4 id="browser-dont-get-stuck-when-uploading-large-files">Browser don't get stuck when uploading large files</h4>
+<p>Unlike PUT request using XMLHttpRequest(a javascript Object), we can use HTML Form method POST to upload the files. So, the browser doesn't get stuck.</p>
+<h2 id="multipart-upload">Multipart Upload</h2>
+<p>The multipart upload can utilize maximum bandwidth from client side by opening multiple connections to S3. The implementation is complexer than others. You can check the <a href="https://docs.aws.amazon.com/AmazonS3/latest/userguide/mpuoverview.html">official link</a> for more details. In this blog, I am going to discuss the implementation of multipart upload strategy in brief.</p>
+<p>We had to make some changes in the backend. We had to start multipart upload. It gives us a UPLOAD_ID. Instead of generating one pre-signed URL, we had to generate a pre-signed URL for each part of the file. Then we will need to send the pre-signed URL to the client. Each part will be uploaded using that link, directly to S3. Finally, after all parts have been successfully uploaded, we will complete the multipart upload using the ETAGs of each part.</p>
+<p>[[Insert image explaining the architecture]]</p>
+<p>Known size related limitations of S3 Multipart Upload <a href="https://docs.aws.amazon.com/AmazonS3/latest/userguide/qfacts.html">https://docs.aws.amazon.com/AmazonS3/latest/userguide/qfacts.html</a></p>
+<h3 id="pros-3">Pros</h3>
+<h4 id="no-need-to-worry-about-the-intermediary-server-1">No need to worry about the intermediary server</h4>
+<h4 id="no-need-to-worry-about-the-file-size-upto--tb">No need to worry about the file size [upto * TB]</h4>
+<h4 id="resumable-upload">Resumable upload</h4>
+<p>If upload is interrupted due to network issues, we can resume the upload and upload specific.</p>
+<h4 id="utilise-all-bandwidth-from-client-side">Utilise all bandwidth from client side</h4>
+<p>We will be able to create multiple connections to S3 at once. Creating more than 1500 connections at a time might create problem. From my experiments, I would recommend using around <strong>15 connections</strong></p>
+<h3 id="more-tunings">More tunings</h3>
+<p>We had to find optimum CHUNK SIZE and simultaneous connection number. Also, we have used Transfer Acceleration for the upload and download. The client side code was served by CloudFront.</p>
+<p>I would like to mention that later on we have moved to GCS(Google Cloud Storage) because of the speed of download. GCS download speed is almost 5 times faster than S3. GCS has a lot of advantages over S3 like Multi region, dual region and specific regions. Also, depending on the interval of downloading files, there are 4 archive systems. Checkout this blog for more details.</p>
+</article></main>
+</body>
+</html>
