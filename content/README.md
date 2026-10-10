@@ -20,4 +20,4 @@ description: A short description for search and link previews.
 ---
 ```
 
-Published HTML belongs at the repository root or inside a route directory such as `archive/`. Markdown stays under `content/` so it is never mistaken for a page that the browser should serve directly.
+Published HTML belongs at the repository root or inside a route directory such as `blog/` or `archive/`. Markdown stays under `content/` so it is never mistaken for a page that the browser should serve directly.

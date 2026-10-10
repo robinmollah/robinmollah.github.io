@@ -1,0 +1,49 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title><%= title %> | Robin Mollah</title>
+  <meta name="description" content="A scene-by-scene comparison of local AI image models.">
+  <link rel="stylesheet" href="/site.css">
+  <link rel="stylesheet" href="/comparison.css">
+</head>
+<body>
+  <nav><a href="/">Robin Mollah</a><a href="/blog/">Blog</a><a href="/archive/">Archive</a><a href="/about/">About</a><a href="/tools/">Tools</a><a href="/work.html">Work</a><a href="/contact/">Contact</a></nav>
+  <main class="comparison-page">
+    <p><a href="/blog/">← Back to blog</a></p>
+    <h1><%= title %></h1>
+    <div class="comparison-intro"><%- intro %></div>
+    <section class="comparison-controls" aria-label="Choose models to compare">
+      <label>Left model<select id="left-model"><% models.forEach((model) => { %><option value="<%= model.key %>" <%= model.key === 'qwen' ? 'selected' : '' %>><%= model.name %></option><% }) %></select></label>
+      <button type="button" id="swap-models" title="Swap model columns">Swap</button>
+      <label>Right model<select id="right-model"><% models.forEach((model) => { %><option value="<%= model.key %>" <%= model.key === 'flux-klein' ? 'selected' : '' %>><%= model.name %></option><% }) %></select></label>
+    </section>
+    <div class="comparison-table-wrap">
+      <table class="comparison-table">
+        <thead><tr><th scope="col">Scene</th><th scope="col" id="left-heading"></th><th scope="col" id="right-heading"></th></tr></thead>
+        <tbody><% scenes.forEach((scene) => { %><tr><th scope="row"><%= scene.label %></th><td data-scene="<%= scene.id %>" data-side="left"></td><td data-scene="<%= scene.id %>" data-side="right"></td></tr><% }) %></tbody>
+      </table>
+    </div>
+  </main>
+  <script>
+    const comparisonData = <%- dataJson %>;
+    const modelByKey = Object.fromEntries(comparisonData.models.map((model) => [model.key, model]));
+    const leftSelect = document.querySelector('#left-model');
+    const rightSelect = document.querySelector('#right-model');
+    const imageMarkup = (images, model) => images.length ? `<div class="model-name">${model.name}<small>${model.detail}</small></div><div class="image-grid">${images.map((image) => `<figure><a href="${image.url}" target="_blank" rel="noopener"><img src="${image.url}" alt="${model.name}, ${image.label}" loading="lazy"></a><figcaption>${image.label}</figcaption></figure>`).join('')}</div>` : `<div class="empty-model">No output for ${model.name} in this scene.</div>`;
+    function renderComparison() {
+      const selected = { left: leftSelect.value, right: rightSelect.value };
+      for (const side of ['left', 'right']) {
+        const model = modelByKey[selected[side]];
+        document.querySelector(`#${side}-heading`).textContent = model.name;
+        document.querySelectorAll(`[data-side="${side}"]`).forEach((cell) => { cell.innerHTML = imageMarkup(comparisonData.scenes.find((scene) => scene.id === cell.dataset.scene).models[model.key], model); });
+      }
+    }
+    leftSelect.addEventListener('change', renderComparison);
+    rightSelect.addEventListener('change', renderComparison);
+    document.querySelector('#swap-models').addEventListener('click', () => { const value = leftSelect.value; leftSelect.value = rightSelect.value; rightSelect.value = value; renderComparison(); });
+    renderComparison();
+  </script>
+</body>
+</html>

@@ -1,0 +1,20 @@
+.comparison-page { width: min(1500px, calc(100% - 40px)); }
+.comparison-intro { max-width: 780px; margin-bottom: 28px; }
+.comparison-controls { display: flex; align-items: end; gap: 14px; flex-wrap: wrap; margin: 26px 0; padding: 18px; border: 1px solid var(--line); border-radius: 10px; background: rgba(255,255,255,.38); }
+.comparison-controls label { display: grid; gap: 6px; min-width: min(280px, 100%); font-size: .78rem; font-weight: 700; text-transform: uppercase; letter-spacing: .08em; }
+.comparison-controls select, #swap-models { min-height: 42px; padding: 8px 12px; border: 1px solid var(--line); border-radius: 6px; background: var(--white, #fffdf8); color: inherit; font: inherit; }
+#swap-models { cursor: pointer; font-weight: 700; }
+.comparison-table-wrap { overflow-x: auto; border: 1px solid var(--line); border-radius: 10px; }
+.comparison-table { min-width: 900px; border-collapse: collapse; width: 100%; }
+.comparison-table th, .comparison-table td { vertical-align: top; padding: 14px; border-right: 1px solid var(--line); border-bottom: 1px solid var(--line); }
+.comparison-table thead th { position: sticky; top: 0; z-index: 1; background: var(--ink); color: var(--white, #fffdf8); text-align: left; }
+.comparison-table tbody > tr > th { width: 110px; background: rgba(51,122,114,.08); white-space: nowrap; }
+.model-name { font-weight: 800; margin-bottom: 10px; }
+.model-name small { display: block; color: var(--muted); font-size: .76rem; font-weight: 500; }
+.image-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 10px; }
+.image-grid figure { margin: 0; }
+.image-grid img { display: block; width: 100%; aspect-ratio: 16 / 9; object-fit: cover; border-radius: 6px; background: #e8e1d3; transition: transform 160ms ease, box-shadow 160ms ease; }
+.image-grid img:hover { transform: translateY(-2px); box-shadow: 0 8px 20px rgba(18,36,44,.18); }
+.image-grid figcaption { margin-top: 4px; color: var(--muted); font-size: .72rem; }
+.empty-model { color: var(--muted); font-size: .9rem; }
+@media (max-width: 700px) { .comparison-page { width: min(100% - 24px, 1500px); } .comparison-controls { align-items: stretch; } #swap-models { width: 100%; } }
